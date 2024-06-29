@@ -11,16 +11,14 @@ namespace VoxelEngine{
 
 	void ChunkLoader::loadChunks() {
 		
-		for(auto pair : chunk_map) {
-			Chunk* chunk = pair.second;
-			chunk->load(pair.first.x, pair.first.y, shader);
+		for(auto& pair : chunk_map) {
+			pair.second->load();
 		}
 
 	}
 	void ChunkLoader::renderChunks() {
-		for (auto pair : chunk_map) {
-			Chunk* chunk = pair.second;
-			chunk->render();
+		for (auto& pair : chunk_map) {
+			pair.second->render(shader);
 		}
 	}
 

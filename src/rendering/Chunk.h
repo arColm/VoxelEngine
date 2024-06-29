@@ -11,16 +11,16 @@
 namespace VoxelEngine {
 	class Chunk {
 	public:
-		Chunk(int x, int y);
+		Chunk(int x, int z);
 		~Chunk();
 
-		void load(int chunkX, int chunkZ, Shader* shader);
-		void render();
+		void load();
+		void render(Shader* shader);
 		void addBlock(float x, float y,float z, BlockType block);
 		void setBlock(float x, float y, float z, BlockType block);
 
 	private:
-		int x, y;
+		int x, z;
 		static const int HEIGHT = 64,
 			WIDTH = 16;
 		GLuint VAO;

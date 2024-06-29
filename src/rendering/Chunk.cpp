@@ -7,9 +7,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace VoxelEngine {
-	Chunk::Chunk(int x, int y) {
+	Chunk::Chunk(int x, int z) {
 		Chunk::x = x;
-		Chunk::y = y;
+		Chunk::z = z;
 		Chunk::numVertices = 0;
 		Chunk::VAO = Loader::createVAO();
 		//initialize / load chunk here
@@ -24,14 +24,9 @@ namespace VoxelEngine {
 	Chunk::~Chunk() {
 		glDeleteVertexArrays(1, &VAO);
 	}
-	void Chunk::load(int chunkX, int chunkZ, Shader* shader)
+	void Chunk::load()
 	{
-		shader->use();
 		glBindVertexArray(VAO);
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(WIDTH * chunkX, 0.f, WIDTH * chunkZ));
-		unsigned int modelLoc = glGetUniformLocation(shader->ID, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
 
 		for (int x = 0; x < WIDTH; x++) {
 			for (int y = 0; y < HEIGHT; y++) {
@@ -44,9 +39,15 @@ namespace VoxelEngine {
 		Chunk::loadBlocks();
 	}
 
-	void Chunk::render() {
+	void Chunk::render(Shader* shader) {
 
+		shader->use();
 		glBindVertexArray(VAO);
+
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
+		unsigned int modelLoc = glGetUniformLocation(shader->ID, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		glDrawArrays(GL_TRIANGLES, 0, numVertices);
 		glBindVertexArray(0);
