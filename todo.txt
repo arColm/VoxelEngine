@@ -1,0 +1,19 @@
+2 bytes per voxel - id
+
+bind the vao and set vertex attributes to block attributes respectively
+
+
+Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
+
+function for generating each face based on a set of vertices
+ --> then bind all vertices in chunk to vbo
+ --> each chunk has its own VAO
+ --> whenever we load a new chunk, we set up its VBOs to its associated VAO.
+ --> everytime we render a chunk, we take its VAO --> apply chunk position matrix --> glDrawTriangles
+ --> then render the vbo (?)
+
+
+
+future optimizations
+
+ - sharing vertices, using EBO ?
