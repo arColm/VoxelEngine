@@ -15,6 +15,7 @@ namespace VoxelEngine {
 		ChunkLoader(Shader* shader);
 		~ChunkLoader();
 		void renderChunks();
+		void loadChunks();
 		void addChunk(int x, int y, Chunk* chunk);
 		void removeChunk(int x, int y);
 

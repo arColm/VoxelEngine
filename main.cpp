@@ -102,6 +102,7 @@ int main() {
 
 	glEnable(GL_DEPTH_TEST);
 
+	chunkLoader.loadChunks();
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
@@ -120,12 +121,12 @@ int main() {
 
 		update(deltaTime);
 		//set view model
-
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
 		chunkLoader.renderChunks();
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

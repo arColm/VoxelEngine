@@ -9,13 +9,19 @@ namespace VoxelEngine{
 	}
 	ChunkLoader::~ChunkLoader() { }
 
-	void ChunkLoader::renderChunks() {
+	void ChunkLoader::loadChunks() {
 		
 		for(auto pair : chunk_map) {
 			Chunk* chunk = pair.second;
-			chunk->render(pair.first.x, pair.first.y, shader);
+			chunk->load(pair.first.x, pair.first.y, shader);
 		}
 
+	}
+	void ChunkLoader::renderChunks() {
+		for (auto pair : chunk_map) {
+			Chunk* chunk = pair.second;
+			chunk->render();
+		}
 	}
 
 	void ChunkLoader::addChunk(int x, int y, Chunk* chunk) {

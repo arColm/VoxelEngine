@@ -10,7 +10,8 @@ namespace VoxelEngine {
 	Chunk::Chunk(int x, int y) {
 		Chunk::x = x;
 		Chunk::y = y;
-
+		Chunk::numVertices = 0;
+		Chunk::VAO = Loader::createVAO();
 		//initialize / load chunk here
 		for (int x = 0; x < WIDTH; x++) {
 			for (int y = 0; y < HEIGHT; y++) {
@@ -21,11 +22,11 @@ namespace VoxelEngine {
 		}
 	}
 	Chunk::~Chunk() {
+		glDeleteVertexArrays(1, &VAO);
 	}
-	void Chunk::render(int chunkX, int chunkZ, Shader* shader)
+	void Chunk::load(int chunkX, int chunkZ, Shader* shader)
 	{
 		shader->use();
-		GLuint VAO = Loader::createVAO();
 		glBindVertexArray(VAO);
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(WIDTH * chunkX, 0.f, WIDTH * chunkZ));
@@ -40,7 +41,15 @@ namespace VoxelEngine {
 				}
 			}
 		}
-		Chunk::drawBlocks(VAO);
+		Chunk::loadBlocks();
+	}
+
+	void Chunk::render() {
+
+		glBindVertexArray(VAO);
+
+		glDrawArrays(GL_TRIANGLES, 0, numVertices);
+		glBindVertexArray(0);
 	}
 
 	void Chunk::setBlock(float x, float y, float z, BlockType block) {
@@ -88,7 +97,7 @@ namespace VoxelEngine {
 	void Chunk::addBottom(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
 
 	}
-	void Chunk::drawBlocks(GLuint VAO) {
+	void Chunk::loadBlocks() {
 
 		// position attribute
 		GLuint positionVBO = Loader::createVBO();
@@ -109,18 +118,14 @@ namespace VoxelEngine {
 		glEnableVertexAttribArray(1);
 
 
-
-
-		glDrawArrays(GL_TRIANGLES, 0, vertexPos.size()/3);
-
 		//std::cout << vertexPos.data()[0] << '-' << vertexPos.data()[1] << '-' << vertexPos.data()[2] << std::endl;
 		//std::cout << vertexPos[3] << '-' << vertexPos[4] << '-' << vertexPos[5] << std::endl;
 		//std::cout << vertexPos[6] << '-' << vertexPos[7] << '-' << vertexPos[8] << std::endl;
 		glBindVertexArray(0);
 
-		glDeleteVertexArrays(1, &VAO);
 		glDeleteBuffers(1, &positionVBO);
 		glDeleteBuffers(1, &colorVBO);
+		Chunk::numVertices = vertexPos.size()/3;
 		vertexPos.clear();
 		vertexColor.clear();
 	}
