@@ -22,7 +22,6 @@ namespace VoxelEngine {
 		int x, y;
 		static const int HEIGHT = 64,
 			WIDTH = 16;
-		GLuint VAO;
 		VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
 
 		void addTop(GLfloat x, GLfloat y, GLfloat z, BlockType block);
@@ -32,7 +31,7 @@ namespace VoxelEngine {
 		void addBack(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addBottom(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 
-		void drawBlocks();
+		void drawBlocks(GLuint VAO);
 
 		std::vector<GLfloat> vertexPos;
 		std::vector<GLfloat> vertexColor;

@@ -107,7 +107,7 @@ int main() {
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		//std::cout << (1.0f / deltaTime) << '\n';
+		std::cout << (1.0f / deltaTime) << '\n';
 		/*===============================
 			INPUT
 		=================================*/
@@ -208,7 +208,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 
 	cameraFront = glm::normalize(direction);
-	std::cout << cameraFront.y << std::endl;
 }
 /*
 	This method processes scrollwheel movement
