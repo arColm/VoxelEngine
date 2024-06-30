@@ -59,6 +59,11 @@ namespace VoxelEngine {
 
 	void Chunk::addBlock(float x,float y,float z, BlockType block) {
 		Chunk::addTop(x, y, z, block);
+		Chunk::addBottom(x, y, z, block);
+		Chunk::addRight(x, y, z, block);
+		Chunk::addLeft(x, y, z, block);
+		Chunk::addBack(x, y, z, block);
+		Chunk::addForward(x, y, z, block);
 
 	}
 
@@ -84,19 +89,109 @@ namespace VoxelEngine {
 		vertexColor.insert(vertexColor.end(), newColors.begin(), newColors.end());
 	}
 	void Chunk::addLeft(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
+		std::vector<GLfloat> newVertices = {
+			x, y + 1, z,
+			x, y + 1, z + 1,
+			x,y,z + 1,
+			x,y,z + 1,
+			x,y,z,
+			x,y + 1,z
+		};
+		std::vector<GLfloat> newColors = {
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f
+		};
 
+		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
+		vertexColor.insert(vertexColor.end(), newColors.begin(), newColors.end());
 	}
 	void Chunk::addRight(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
+		std::vector<GLfloat> newVertices = {
+			x+1, y + 1, z,
+			x + 1, y + 1, z + 1,
+			x + 1,y,z + 1,
+			x + 1,y,z + 1,
+			x + 1,y,z,
+			x + 1,y + 1,z
+		};
+		std::vector<GLfloat> newColors = {
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f
+		};
 
+		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
+		vertexColor.insert(vertexColor.end(), newColors.begin(), newColors.end());
 	}
 	void Chunk::addForward(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
+		std::vector<GLfloat> newVertices = {
+			x, y + 1, z,
+			x + 1, y + 1, z,
+			x + 1,y,z,
+			x + 1,y,z,
+			x,y,z,
+			x,y + 1,z
+		};
+		std::vector<GLfloat> newColors = {
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f
+		};
 
+		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
+		vertexColor.insert(vertexColor.end(), newColors.begin(), newColors.end());
 	}
 	void Chunk::addBack(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
+		std::vector<GLfloat> newVertices = {
+			x, y + 1, z + 1,
+			x + 1, y + 1, z + 1,
+			x + 1,y,z + 1,
+			x + 1,y,z + 1,
+			x,y,z + 1,
+			x,y + 1,z+1
+		};
+		std::vector<GLfloat> newColors = {
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f
+		};
 
+		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
+		vertexColor.insert(vertexColor.end(), newColors.begin(), newColors.end());
 	}
 	void Chunk::addBottom(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
+		std::vector<GLfloat> newVertices = {
+			x, y , z,
+			x, y , z + 1,
+			x + 1,y ,z + 1,
+			x + 1,y ,z + 1,
+			x + 1,y,z,
+			x,y ,z
+		};
+		std::vector<GLfloat> newColors = {
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f,
+			0.34f,0.17f,0.04f
+		};
 
+		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
+		vertexColor.insert(vertexColor.end(), newColors.begin(), newColors.end());
 	}
 	void Chunk::loadBlocks() {
 

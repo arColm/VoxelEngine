@@ -76,7 +76,7 @@ int main() {
 	//if user resizes window, resize viewport
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glPolygonMode(GL_FRONT, GL_FILL);
 
 	/*===============================
 		SCENE
@@ -84,13 +84,13 @@ int main() {
 	Chunk chunk(-1, -1);
 	for (int x = 0; x < 16; x++) {
 		for (int z = 0; z < 16; z++) {
-			chunk.setBlock(x, 12, z, BlockType::Dirt);
+			chunk.setBlock(x, x+z, z, BlockType::Dirt);
 		}
 	}	
 	Chunk chunk2(0, 0);
 	for (int x = 0; x < 16; x++) {
 		for (int z = 0; z < 16; z++) {
-			chunk2.setBlock(x, 15, z, BlockType::Dirt);
+			chunk2.setBlock(x, 12, z, BlockType::Dirt);
 		}
 	}
 	Shader defaultShader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
