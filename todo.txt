@@ -5,15 +5,35 @@ bind the vao and set vertex attributes to block attributes respectively
 
 Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 
-function for generating each face based on a set of vertices
- --> then bind all vertices in chunk to vbo
- --> each chunk has its own VAO
- --> whenever we load a new chunk, we set up its VBOs to its associated VAO.
- --> everytime we render a chunk, we take its VAO --> apply chunk position matrix --> glDrawTriangles
- --> then render the vbo (?)
+
+
+TODO
+ - simple face culling
+ --- need some way to access neighbouring chunks
+
+ - change way to store colors...
+
+ - (flat ground/simple) chunk generator
+ - generating chunks based on camera location - render distance
+ - unloading chunks based on camera location
+ - fog to mask chunk loading
+ - noise applied to chunk generator
+
+ - clouds (can just be noise!)
+
+ - more block types
+ - varying colors for a block type?
+ - multiple shaders per block? e.g. water has a unique shader
+ --- alternatively just use a different shader for liquids --> new chunk renderer for liquids
+ 
+ - simple light
+ - day/night cycle
+
+
 
 
 
 future optimizations
 
  - sharing vertices, using EBO ?
+ - greedy meshing?

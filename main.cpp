@@ -34,6 +34,8 @@ float yaw = -90.0f;
 float pitch = 0.0f;
 bool firstMouse = true;
 const float sensitivity = 0.1f;
+float SCREEN_WIDTH = 800;
+float SCREEN_HEIGHT = 600;
 /*===============================
 	DEFAULT CAMERA
 =================================*/
@@ -45,13 +47,14 @@ const float cameraSpeed = 10.0f;
 float fov = 45.0f;
 
 
+
 int main() {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "VoxelEngine", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "VoxelEngine", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -82,8 +85,8 @@ int main() {
 		SCENE
 	=================================*/
 	Chunk chunk(-1, -1);
-	for (int x = 0; x < 16; x++) {
-		for (int z = 0; z < 16; z++) {
+	for (int x = 0; x < 16; x+=2) {
+		for (int z = 0; z < 16; z+=2) {
 			chunk.setBlock(x, x+z, z, BlockType::Dirt);
 		}
 	}	
@@ -104,7 +107,7 @@ int main() {
 	glm::mat4 projection = glm::mat4(1.0f);
 	unsigned int projectionLoc = glGetUniformLocation(defaultShader.ID, "projection");
 	unsigned int viewLoc = glGetUniformLocation(defaultShader.ID, "view");
-	projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
 	glEnable(GL_DEPTH_TEST);
@@ -156,6 +159,8 @@ void update(float deltaTime) {
 */
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
+	SCREEN_WIDTH = width;
+	SCREEN_HEIGHT = height;
 }
 /*
 	This method processes keyboard input

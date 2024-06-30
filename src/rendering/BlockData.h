@@ -8,12 +8,13 @@ namespace VoxelEngine {
 		Air,
 		Dirt
 	};
-	struct BlockData {
-		short id;
-		glm::vec3 color;
+	namespace BlockData {
+		//short id;
+		//glm::vec3 color;
 
-		BlockData getBlockData(BlockType block);
+		//BlockData getBlockData(BlockType block);
 		BlockType getBlockType(short id);
+		glm::vec3 getBlockColor(BlockType block);
 	};
 
 }
