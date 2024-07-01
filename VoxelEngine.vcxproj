@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\rendering\BlockData.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="src\World\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="src\rendering\Block.h" />
     <ClInclude Include="src\rendering\BlockData.h" />
     <ClInclude Include="src\rendering\Chunk.h" />

@@ -11,6 +11,8 @@ TODO
  - simple face culling
  --- need some way to access neighbouring chunks
 
+ - instanced rendering
+
  - change way to store colors...
 
  - (flat ground/simple) chunk generator
@@ -24,6 +26,7 @@ TODO
  - more block types
  - varying colors for a block type?
  - multiple shaders per block? e.g. water has a unique shader
+ --- use uniform buffer object to handle transformation matrices
  --- alternatively just use a different shader for liquids --> new chunk renderer for liquids
  
  - simple light
