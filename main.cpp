@@ -84,11 +84,7 @@ int main() {
 
 
 
-	glm::mat4 projection = glm::mat4(1.0f);
-	unsigned int projectionLoc = glGetUniformLocation(defaultShader.ID, "projection");
-	unsigned int viewLoc = glGetUniformLocation(defaultShader.ID, "view");
-	projection = Camera::getPerspectiveMatrix(SCREEN_WIDTH,SCREEN_HEIGHT);
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+	Camera::setProjectionMatrix(defaultShader.projectionLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -111,8 +107,7 @@ int main() {
 
 		update(deltaTime);
 		//set view model
-		glm::mat4 view = Camera::getViewMatrix();
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
 
 		chunkLoader.renderChunks();
 

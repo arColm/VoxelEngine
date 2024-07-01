@@ -1,6 +1,7 @@
 
 
 #include "ChunkLoader.h"
+#include <Camera.h>
 
 namespace VoxelEngine{
 
@@ -17,6 +18,7 @@ namespace VoxelEngine{
 
 	}
 	void ChunkLoader::renderChunks() {
+		Camera::setViewMatrix(shader->viewLoc);
 		for (auto& pair : chunk_map) {
 			pair.second->render(shader);
 		}

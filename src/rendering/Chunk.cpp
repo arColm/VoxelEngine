@@ -75,8 +75,7 @@ namespace VoxelEngine {
 
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
-		unsigned int modelLoc = glGetUniformLocation(shader->ID, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(shader->modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
 		glDrawArrays(GL_TRIANGLES, 0, numVertices);
 		glBindVertexArray(0);

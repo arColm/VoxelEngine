@@ -82,6 +82,10 @@ namespace VoxelEngine {
         // delete the shaders as they're linked into our program now and no longer necessary
         glDeleteShader(vertex);
         glDeleteShader(fragment);
+
+        viewLoc = glGetUniformLocation(ID, "view");
+        projectionLoc = glGetUniformLocation(ID, "projection");
+        modelLoc = glGetUniformLocation(ID, "model");
     }
 
     void Shader::use()

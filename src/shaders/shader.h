@@ -14,6 +14,9 @@ namespace VoxelEngine {
     public:
         // the program ID
         unsigned int ID;
+        unsigned int viewLoc;
+        unsigned int projectionLoc;
+        unsigned int modelLoc;
 
         // constructor reads and builds the shader
         Shader(const char* vertexPath, const char* fragmentPath);

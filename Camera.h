@@ -11,9 +11,8 @@ namespace VoxelEngine::Camera {
 		DEFAULT CAMERA
 	=================================*/
 
-
-	glm::mat4 getViewMatrix();
-	glm::mat4 getPerspectiveMatrix(float SCREEN_WIDTH, float SCREEN_HEIGHT);
+	void setViewMatrix(unsigned int viewLoc);
+	void setProjectionMatrix(unsigned int projectionLoc, float SCREEN_WIDTH, float SCREEN_HEIGHT);
 	void initializeCamera(GLFWwindow* window);
 	void moveCamera(GLFWwindow* window, float deltaTime);
 

@@ -1,7 +1,9 @@
 
+#include <glad/glad.h>
 #include "Camera.h"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 namespace VoxelEngine::Camera {
@@ -20,14 +22,14 @@ namespace VoxelEngine::Camera {
 	bool firstMouse = true;
 	const float sensitivity = 0.1f;
 
-	glm::mat4 VoxelEngine::Camera::getViewMatrix() {
+	void setViewMatrix(unsigned int viewLoc) {
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-		return view;
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	}
-	glm::mat4 getPerspectiveMatrix(float SCREEN_WIDTH, float SCREEN_HEIGHT) {
-
-		return glm::perspective(glm::radians(fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
+	void setProjectionMatrix(unsigned int projectionLoc, float SCREEN_WIDTH, float SCREEN_HEIGHT) {
+		glm::mat4 projection = glm::perspective(glm::radians(fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	}
 
 	void initializeCamera(GLFWwindow* window) {
