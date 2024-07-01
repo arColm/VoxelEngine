@@ -25,7 +25,8 @@ namespace VoxelEngine {
 			WIDTH = 16;
 		GLuint VAO;
 		int numVertices;
-		VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
+		//VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
+		std::vector<std::vector<std::vector<VoxelEngine::BlockType>>> blocks;
 
 		void addTop(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addLeft(GLfloat x, GLfloat y, GLfloat z, BlockType block);

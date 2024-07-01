@@ -12,14 +12,10 @@ namespace VoxelEngine {
 		Chunk::z = z;
 		Chunk::numVertices = 0;
 		Chunk::VAO = Loader::createVAO();
+
 		//initialize / load chunk here
-		for (int x = 0; x < WIDTH; x++) {
-			for (int y = 0; y < HEIGHT; y++) {
-				for (int z = 0; z < WIDTH; z++) {
-					blocks[x][y][z] = BlockType::Air;
-				}
-			}
-		}
+		blocks = std::vector<std::vector<std::vector<VoxelEngine::BlockType>>>
+			(WIDTH, std::vector<std::vector<VoxelEngine::BlockType>>(HEIGHT, std::vector<VoxelEngine::BlockType>(WIDTH,BlockType::Air)));
 	}
 	Chunk::~Chunk() {
 		glDeleteVertexArrays(1, &VAO);
