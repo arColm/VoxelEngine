@@ -14,6 +14,8 @@ namespace VoxelEngine::Camera {
 
 	float fov = 45.0f;
 
+	int viewDistance = 3;
+
 
 	//mouse
 	float lastX = 400, lastY = 300; //last position of the mouse
@@ -21,6 +23,9 @@ namespace VoxelEngine::Camera {
 	float pitch = 0.0f;
 	bool firstMouse = true;
 	const float sensitivity = 0.1f;
+
+
+
 
 	void setViewMatrix(unsigned int viewLoc) {
 		glm::mat4 view = glm::mat4(1.0f);

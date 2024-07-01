@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <src/rendering/chunk.h>
 #include <src/rendering/ChunkLoader.h>
+#include <src/UI/FPSCounter.h>
 #include <Camera.h>
 
 using namespace VoxelEngine;
@@ -94,7 +95,7 @@ int main() {
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
-		std::cout << (1.0f / deltaTime) << '\n';
+		FPSCounter::updateFPS(deltaTime);
 		/*===============================
 			INPUT
 		=================================*/

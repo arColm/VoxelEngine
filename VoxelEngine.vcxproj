@@ -142,6 +142,7 @@
     <ClCompile Include="src\rendering\ChunkLoader.cpp" />
     <ClCompile Include="src\rendering\loader.cpp" />
     <ClCompile Include="src\shaders\shader.cpp" />
+    <ClCompile Include="src\UI\FPSCounter.cpp" />
     <ClCompile Include="src\World\FlatChunkGenerator.cpp" />
     <ClCompile Include="src\World\IChunkGenerator.cpp" />
     <ClCompile Include="src\World\world.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="src\rendering\ChunkLoader.h" />
     <ClInclude Include="src\rendering\loader.h" />
     <ClInclude Include="src\shaders\shader.h" />
+    <ClInclude Include="src\UI\FPSCounter.h" />
     <ClInclude Include="src\World\FlatChunkGenerator.h" />
     <ClInclude Include="src\World\IChunkGenerator.h" />
     <ClInclude Include="src\World\world.h" />
