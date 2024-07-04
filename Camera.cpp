@@ -6,46 +6,40 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
-namespace VoxelEngine::Camera {
-	glm::vec3 cameraPos = glm::vec3(0.0f, 15.0f, 3.0f);
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0);
-	const float cameraSpeed = 10.0f;
+namespace VoxelEngine {
+	//boost::signals2::signal<void()> enterNewChunkEvent;
+	Camera* mainCamera = nullptr;
 
-	float fov = 45.0f;
+	Camera::Camera() { }
+	Camera::~Camera() { }
 
-	int viewDistance = 3;
+	void Camera::updateCurrentChunk() {
+		
+		glm::ivec2 nextChunk = glm::ivec2((int)abs(cameraPos.x) / Chunk::getWidth(), (int)abs(cameraPos.z) / Chunk::getWidth());
+		if (cameraPos.x < 0) nextChunk.x = -(nextChunk.x + 1);
+		if (cameraPos.z < 0) nextChunk.y = -(nextChunk.y + 1);
+		if (nextChunk.x != currentChunk.x || nextChunk.y != currentChunk.y) {
+			currentChunk = nextChunk;
+			//enterNewChunkEvent.invoke(nextChunk);
+			//enterNewChunkEvent(currentChunk, viewDistance);
+			enterNewChunkEvent(nextChunk,viewDistance);
+			std::cout << cameraPos.x << '-' << cameraPos.z << ' ' << currentChunk.x << '-' << currentChunk.y << std::endl;
+		}
+	}
 
-
-	//mouse
-	float lastX = 400, lastY = 300; //last position of the mouse
-	float yaw = -90.0f;
-	float pitch = 0.0f;
-	bool firstMouse = true;
-	const float sensitivity = 0.1f;
-
-
-
-
-	void setViewMatrix(unsigned int viewLoc) {
+	void Camera::setViewMatrix(unsigned int viewLoc) {
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	}
-	void setProjectionMatrix(unsigned int projectionLoc, float SCREEN_WIDTH, float SCREEN_HEIGHT) {
+	void Camera::setProjectionMatrix(unsigned int projectionLoc, float SCREEN_WIDTH, float SCREEN_HEIGHT) {
 		glm::mat4 projection = glm::perspective(glm::radians(fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	}
 
-	void initializeCamera(GLFWwindow* window) {
-
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		glfwSetCursorPosCallback(window, mouse_callback);
-		glfwSetScrollCallback(window, scroll_callback);
-	}
 
 
-	void moveCamera(GLFWwindow* window, float deltaTime) {
+	void Camera::moveCamera(GLFWwindow* window, float deltaTime) {
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			cameraPos += cameraSpeed * cameraFront * deltaTime;
 		}
@@ -68,46 +62,54 @@ namespace VoxelEngine::Camera {
 		}
 	}
 
+
+	void initializeCamera(GLFWwindow* window,Camera* camera) {
+		mainCamera = camera;
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetCursorPosCallback(window, mouse_callback);
+		glfwSetScrollCallback(window, scroll_callback);
+	}
+
 	/*
 		This method processes mouse movement
 	*/
 	void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-		if (firstMouse) // initially set to true
+		if (mainCamera->firstMouse) // initially set to true
 		{
-			lastX = xpos;
-			lastY = ypos;
-			firstMouse = false;
+			mainCamera->lastX = (float) xpos;
+			mainCamera->lastY = (float) ypos;
+			mainCamera->firstMouse = false;
 		}
 		//calculate mouse offset
-		float xOffset = xpos - lastX;
-		float yOffset = lastY - ypos;
-		lastX = xpos;
-		lastY = ypos;
+		float xOffset = (float)xpos - mainCamera->lastX;
+		float yOffset = mainCamera->lastY - (float)ypos;
+		mainCamera->lastX = (float)xpos;
+		mainCamera->lastY = (float)ypos;
 
-		xOffset *= sensitivity;
-		yOffset *= sensitivity;
+		xOffset *= mainCamera->sensitivity;
+		yOffset *= mainCamera->sensitivity;
 
-		yaw += xOffset;
-		pitch += yOffset;
+		mainCamera->yaw += xOffset;
+		mainCamera->pitch += yOffset;
 
-		if (pitch > 89.0f) pitch = 89.0f;
-		if (pitch < -89.0f) pitch = -89.0f;
+		if (mainCamera->pitch > 89.0f) mainCamera->pitch = 89.0f;
+		if (mainCamera->pitch < -89.0f) mainCamera->pitch = -89.0f;
 
-		glm::vec3 direction;
-		direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-		direction.y = sin(glm::radians(pitch));
-		direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		glm::vec3 direction{};
+		direction.x = cos(glm::radians(mainCamera->yaw)) * cos(glm::radians(mainCamera->pitch));
+		direction.y = sin(glm::radians(mainCamera->pitch));
+		direction.z = sin(glm::radians(mainCamera->yaw)) * cos(glm::radians(mainCamera->pitch));
 
-		cameraFront = glm::normalize(direction);
+		mainCamera->cameraFront = glm::normalize(direction);
 	}
 	/*
 		This method processes scrollwheel movement
 	*/
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-		fov -= (float)yoffset;
-		if (fov < 1.0f)
-			fov = 1.0f;
-		if (fov > 45.0f)
-			fov = 45.0f;
+		mainCamera->fov -= (float)yoffset;
+		if (mainCamera->fov < 1.0f)
+			mainCamera->fov = 1.0f;
+		if (mainCamera->fov > 45.0f)
+			mainCamera->fov = 45.0f;
 	}
 }

@@ -71,7 +71,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>D:\opengl\libraries;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\opengl\boost_1_85_0\libs;D:\opengl\libraries;$(LibraryPath)</LibraryPath>
     <IncludePath>D:\opengl\projects\VoxelEngine;D:\opengl\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -108,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\opengl\include;D:\opengl\projects\VoxelEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\opengl\boost_1_85_0;D:\opengl\include;D:\opengl\projects\VoxelEngine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -156,6 +156,9 @@
     <ClInclude Include="src\rendering\loader.h" />
     <ClInclude Include="src\shaders\shader.h" />
     <ClInclude Include="src\UI\FPSCounter.h" />
+    <ClInclude Include="src\Utils\Event.h" />
+    <ClInclude Include="src\Utils\Observer.h" />
+    <ClInclude Include="src\Utils\Subject.h" />
     <ClInclude Include="src\World\FlatChunkGenerator.h" />
     <ClInclude Include="src\World\IChunkGenerator.h" />
     <ClInclude Include="src\World\world.h" />

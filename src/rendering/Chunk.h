@@ -18,6 +18,7 @@ namespace VoxelEngine {
 		void render(Shader* shader);
 		void addBlock(float x, float y,float z, BlockType block);
 		void setBlock(float x, float y, float z, BlockType block);
+		static int getWidth();
 
 	private:
 		int x, z;

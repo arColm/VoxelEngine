@@ -11,6 +11,8 @@
 #include <src/rendering/ChunkLoader.h>
 #include <src/UI/FPSCounter.h>
 #include <Camera.h>
+#include <src/World/world.h>
+#include <src/World/FlatChunkGenerator.h>
 
 using namespace VoxelEngine;
 
@@ -53,7 +55,8 @@ int main() {
 		return -1;
 	}
 
-	Camera::initializeCamera(window);
+	Camera cam;
+	initializeCamera(window,&cam);
 
 	glViewport(0, 0, 800, 600);
 
@@ -78,18 +81,21 @@ int main() {
 		}
 	}
 	Shader defaultShader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
-	ChunkLoader chunkLoader(&defaultShader);
-	chunkLoader.addChunk(-1,-1,&chunk);
-	chunkLoader.addChunk(0,0,&chunk2);
+	//ChunkLoader chunkLoader(&defaultShader);
+	//chunkLoader.addChunk(-1,-1,&chunk);
+	//chunkLoader.addChunk(0,0,&chunk2);
+
+	FlatChunkGenerator generator;
+	World world(&generator, 0);
+
 	defaultShader.use();
 
 
-
-	Camera::setProjectionMatrix(defaultShader.projectionLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
+	mainCamera->setProjectionMatrix(defaultShader.projectionLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glEnable(GL_DEPTH_TEST);
 
-	chunkLoader.loadChunks();
+	//chunkLoader.loadChunks();
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
@@ -110,8 +116,8 @@ int main() {
 		//set view model
 
 
-		chunkLoader.renderChunks();
-
+		//chunkLoader.renderChunks();
+		mainCamera->updateCurrentChunk();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -144,5 +150,5 @@ void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 	}
-	Camera::moveCamera(window, deltaTime);
+	mainCamera->moveCamera(window, deltaTime);
 }

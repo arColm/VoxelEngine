@@ -228,7 +228,9 @@ namespace VoxelEngine {
 		vertexColor.insert(vertexColor.end(), newColors.begin(), newColors.end());
 	}
 
-
+	int Chunk::getWidth() {
+		return WIDTH;
+	}
 
 }
 

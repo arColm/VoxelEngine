@@ -18,6 +18,8 @@ TODO
  - (flat ground/simple) chunk generator
  - generating chunks based on camera location - render distance
  - unloading chunks based on camera location
+ ---whenever we enter a new chunk --> iterate through chunks to see which ones are out of bounds 
+ --- --> then iterate through bounds to ensure all chunks in bounds are loaded
  - fog to mask chunk loading
  - noise applied to chunk generator
 

@@ -12,6 +12,7 @@
 namespace VoxelEngine {
 	class ChunkLoader {
 	public:
+		ChunkLoader();
 		ChunkLoader(Shader* shader);
 		~ChunkLoader();
 		void renderChunks();
@@ -19,8 +20,10 @@ namespace VoxelEngine {
 		void addChunk(int x, int y, Chunk* chunk);
 		void removeChunk(int x, int y);
 
-	private:
+
 		std::unordered_map<glm::ivec2, Chunk*> chunk_map;
+		std::unordered_map<int, Chunk*> chun_map;
+	private:
 		Shader* shader;
 	};
 }
