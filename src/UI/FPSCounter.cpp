@@ -4,18 +4,19 @@
 
 namespace VoxelEngine::FPSCounter {
 
-	float timeSinceLastFrame = 0.f;
+	float timeSinceLastUpdate = 0.f;
 	int numFramesPassed = 0;
-	int framesPerUpdate = 240;
+	float secondsPerUpdate = 1.f;
+	int framesPerUpdate = 60;
 
 	void updateFPS(float deltaTime) {
-		timeSinceLastFrame += deltaTime;
+		timeSinceLastUpdate += deltaTime;
 		numFramesPassed++;
 
-		if (numFramesPassed >= framesPerUpdate) {
+		if (timeSinceLastUpdate>=secondsPerUpdate) {
+			std::cout << (numFramesPassed/timeSinceLastUpdate) << '\n';
 			numFramesPassed = 0;
-			std::cout << ((float)framesPerUpdate / timeSinceLastFrame) << '\n';
-			timeSinceLastFrame = 0.f;
+			timeSinceLastUpdate -= secondsPerUpdate;
 		}
 	}
 }

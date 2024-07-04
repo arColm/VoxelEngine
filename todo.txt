@@ -20,6 +20,7 @@ TODO
  - unloading chunks based on camera location
  ---whenever we enter a new chunk --> iterate through chunks to see which ones are out of bounds 
  --- --> then iterate through bounds to ensure all chunks in bounds are loaded
+ --- abstract generating chunks to chunkloader with (x,y,generator) as parameter
  - fog to mask chunk loading
  - noise applied to chunk generator
 
