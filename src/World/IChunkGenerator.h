@@ -7,7 +7,7 @@
 namespace VoxelEngine {
 	class IChunkGenerator {
 	public:
-		virtual Chunk* generateChunk(int x, int z);
+		virtual std::shared_ptr<Chunk> generateChunk(int x, int z);
 		virtual ~IChunkGenerator();
 	};
 }

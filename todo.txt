@@ -8,6 +8,8 @@ Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 
 
 TODO
+CHANGE ALL RAW POINTERS TO SMART POINTERS
+
  - simple face culling
  --- need some way to access neighbouring chunks
 

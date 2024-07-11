@@ -30,10 +30,12 @@ namespace VoxelEngine {
 	void Camera::setViewMatrix(unsigned int viewLoc) {
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+		viewMatrix = view;
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	}
 	void Camera::setProjectionMatrix(unsigned int projectionLoc, float SCREEN_WIDTH, float SCREEN_HEIGHT) {
 		glm::mat4 projection = glm::perspective(glm::radians(fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
+		projectionMatrix = projection;
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	}
 

@@ -68,22 +68,12 @@ int main() {
 	/*===============================
 		SCENE
 	=================================*/
-	Chunk chunk(-1, -1);
-	for (int x = 0; x < 16; x+=2) {
-		for (int z = 0; z < 16; z+=2) {
-			chunk.setBlock(x, x+z, z, BlockType::Dirt);
-		}
-	}	
-	Chunk chunk2(0, 0);
-	for (int x = 0; x < 16; x++) {
-		for (int z = 0; z < 16; z++) {
-			chunk2.setBlock(x, 12, z, BlockType::Dirt);
-		}
-	}
 	Shader defaultShader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 	//ChunkLoader chunkLoader(&defaultShader);
 	//chunkLoader.addChunk(-1,-1,&chunk);
 	//chunkLoader.addChunk(0,0,&chunk2);
+
+	mainCamera->setProjectionMatrix(defaultShader.projectionLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	FlatChunkGenerator generator;
 	World world(&generator, 0);
@@ -91,7 +81,6 @@ int main() {
 	defaultShader.use();
 
 
-	mainCamera->setProjectionMatrix(defaultShader.projectionLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -116,8 +105,8 @@ int main() {
 		//set view model
 
 
-		//chunkLoader.renderChunks();
 		mainCamera->updateCurrentChunk();
+		world.renderChunks();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

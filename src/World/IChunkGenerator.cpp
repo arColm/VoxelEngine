@@ -4,7 +4,7 @@
 
 
 namespace VoxelEngine {
-	Chunk* IChunkGenerator::generateChunk(int x, int z) { return NULL; }
+	std::shared_ptr<Chunk> IChunkGenerator::generateChunk(int x, int z) { return NULL; }
 	IChunkGenerator::~IChunkGenerator() { }
 
 }

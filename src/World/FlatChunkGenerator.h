@@ -5,7 +5,7 @@
 namespace VoxelEngine {
 	class FlatChunkGenerator : public VoxelEngine::IChunkGenerator {
 	public:
-		Chunk* generateChunk(int x, int z);
+		std::shared_ptr<Chunk> generateChunk(int x, int z);
 	};
 }
 

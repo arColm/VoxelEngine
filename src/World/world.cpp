@@ -7,8 +7,7 @@
 namespace VoxelEngine {
 	World::World(IChunkGenerator* generator,int seed) {
 		World::generator = generator;
-		ChunkLoader cl;
-		World::chunkLoader = &cl;
+		World::chunkLoader = std::make_unique<ChunkLoader>();
 		World::chunkLoaderConnection = mainCamera->enterNewChunkEvent.connect(
 			boost::bind(&World::loadChunks,this, boost::placeholders::_1,boost::placeholders::_2));
 		World::seed = seed;
@@ -25,19 +24,20 @@ namespace VoxelEngine {
 		//unload chunks?
 		std::cout << World::chunkLoader->chunk_map.size() << std::endl;
 		if (World::chunkLoader->chunk_map.size() > maxChunksLoaded) {
-			return;
-			std::unordered_map<glm::ivec2, Chunk*> newChunkMap;
+			std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> newChunkMap;
+			std::cout << newChunkMap.size() << "..." << std::endl;
 			for (int u = viewDistance; u >= -viewDistance; u--) {
 				for (int v = abs(u)-viewDistance; abs(u + v) <= viewDistance; v++) {
 					glm::ivec2 chunkLoc(origin.x + u, origin.y + v);
 					if (World::chunkLoader->chunk_map.empty() || World::chunkLoader->chunk_map.find(chunkLoc) != World::chunkLoader->chunk_map.end()) {
-						//newChunkMap[chunkLoc] = World::chunkLoader->chunk_map[chunkLoc];
+						newChunkMap[chunkLoc] = World::chunkLoader->chunk_map[chunkLoc];
 					}
 					else {
-						//newChunkMap[chunkLoc] = generator->generateChunk(chunkLoc.x, chunkLoc.y);
+						newChunkMap[chunkLoc] = generator->generateChunk(chunkLoc.x, chunkLoc.y);
 					}
 				}
 			}
+			World::chunkLoader->chunk_map = newChunkMap; //probably inefficient
 		}
 		else {
 			for (int u = viewDistance; u >= -viewDistance; u--) {
@@ -45,14 +45,18 @@ namespace VoxelEngine {
 					glm::ivec2 chunkLoc(origin.x + u, origin.y + v);
 					std::cout << u << '-' << v << std::endl;
 					if (World::chunkLoader->chunk_map.empty() || World::chunkLoader->chunk_map.find(chunkLoc)==World::chunkLoader->chunk_map.end()) {
-						//World::chunkLoader->chunk_map[chunkLoc] = generator->generateChunk(chunkLoc.x, chunkLoc.y);
-						Chunk* chunk = generator->generateChunk(chunkLoc.x, chunkLoc.y);
+						std::shared_ptr<Chunk> chunk = generator->generateChunk(chunkLoc.x, chunkLoc.y);
 						World::chunkLoader->addChunk(chunkLoc.x, chunkLoc.y, chunk);
 					}
 				}
 			}
 		}
+		World::chunkLoader->loadChunks();
 
+	}
+
+	void World::renderChunks() {
+		World::chunkLoader->renderChunks();
 	}
 
 

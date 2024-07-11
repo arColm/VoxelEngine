@@ -17,12 +17,12 @@ namespace VoxelEngine {
 		~ChunkLoader();
 		void renderChunks();
 		void loadChunks();
-		void addChunk(int x, int y, Chunk* chunk);
+		void addChunk(int x, int y, std::shared_ptr<Chunk> chunk);
 		void removeChunk(int x, int y);
 
 
-		std::unordered_map<glm::ivec2, Chunk*> chunk_map;
-		std::unordered_map<int, Chunk*> chun_map;
+		std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> chunk_map;
+		//std::unordered_map<int, Chunk*> chun_map;
 	private:
 		Shader* shader;
 	};

@@ -11,13 +11,14 @@ namespace VoxelEngine {
 		int seed;
 		IChunkGenerator* generator;
 		boost::signals2::connection chunkLoaderConnection;
-		VoxelEngine::ChunkLoader* chunkLoader;
+		std::unique_ptr<ChunkLoader> chunkLoader;
 
 	public:
 		World(IChunkGenerator* generator, int seed);
 		~World();
 
 		void loadChunks(glm::ivec2 origin, int viewDistance);
+		void renderChunks();
 
 	};
 }

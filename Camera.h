@@ -52,6 +52,9 @@ namespace VoxelEngine {
 	};
 
 	extern Camera* mainCamera;
+	extern glm::mat4 projectionMatrix;
+	extern glm::mat4 viewMatrix;
+
 	void initializeCamera(GLFWwindow* window,Camera* cam);
 
 	void mouse_callback(GLFWwindow* window, double xpos, double ypos);
