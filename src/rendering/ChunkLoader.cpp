@@ -5,11 +5,10 @@
 
 namespace VoxelEngine{
 	ChunkLoader::ChunkLoader() {
-		Shader s("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
-		s.use();
-		ChunkLoader::shader = &s;
+		ChunkLoader::shader = std::make_shared<Shader>("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
+		updateProjectionMatrix(shader->projectionLoc);
 	}
-	ChunkLoader::ChunkLoader(Shader* shader) {
+	ChunkLoader::ChunkLoader(std::shared_ptr<Shader> shader) {
 		ChunkLoader::shader = shader;
 	}
 	ChunkLoader::~ChunkLoader() { }
@@ -22,6 +21,8 @@ namespace VoxelEngine{
 
 	}
 	void ChunkLoader::renderChunks() {
+		shader->use();
+		updateProjectionMatrix(shader->projectionLoc);
 		setViewMatrix(shader->viewLoc);
 		for (auto& pair : chunk_map) {
 			pair.second->render(shader);
@@ -29,9 +30,7 @@ namespace VoxelEngine{
 	}
 
 	void ChunkLoader::addChunk(int x, int y, std::shared_ptr<Chunk> chunk) {
-		//chunk_map[glm::ivec2(x,y)] = chunk;
 		ChunkLoader::chunk_map.insert_or_assign(glm::ivec2(x, y), chunk);
-		//ChunkLoader::chun_map.insert_or_assign(x, chunk);
 	}
 	void ChunkLoader::removeChunk(int x, int y) {
 

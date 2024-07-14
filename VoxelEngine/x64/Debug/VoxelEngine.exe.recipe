@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\opengl\VoxelEngine\x64\Debug\VoxelEngine.exe</FullPath>
+      <FullPath>D:\opengl\projects\VoxelEngine\x64\Debug\VoxelEngine.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

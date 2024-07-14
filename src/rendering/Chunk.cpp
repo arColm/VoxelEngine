@@ -68,7 +68,7 @@ namespace VoxelEngine {
 		vertexColor.clear();
 	}
 
-	void Chunk::render(Shader* shader) {
+	void Chunk::render(std::shared_ptr<Shader> shader) {
 
 		shader->use();
 		glBindVertexArray(VAO);

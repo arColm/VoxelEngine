@@ -18,7 +18,7 @@ namespace VoxelEngine {
 
 	public:
 
-		glm::vec3 cameraPos = glm::vec3(0.0f, 15.0f, 3.0f);
+		glm::vec3 cameraPos = glm::vec3(0.0f, 7.0f, 3.0f);
 		glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0);
 		const float cameraSpeed = 10.0f;
@@ -54,7 +54,8 @@ namespace VoxelEngine {
 	extern glm::mat4 viewMatrix;
 
 	void setViewMatrix(unsigned int viewLoc);
-	void setProjectionMatrix(unsigned int projectionLoc, float SCREEN_WIDTH, float SCREEN_HEIGHT);
+	void setProjectionMatrix(float SCREEN_WIDTH, float SCREEN_HEIGHT);
+	void updateProjectionMatrix(unsigned int projectionLoc);
 
 	void initializeCamera(GLFWwindow* window,Camera* cam);
 

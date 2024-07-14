@@ -68,17 +68,16 @@ int main() {
 	/*===============================
 		SCENE
 	=================================*/
-	Shader defaultShader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
+	//Shader defaultShader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 	//ChunkLoader chunkLoader(&defaultShader);
 	//chunkLoader.addChunk(-1,-1,&chunk);
 	//chunkLoader.addChunk(0,0,&chunk2);
 
-	setProjectionMatrix(defaultShader.projectionLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
+	setProjectionMatrix(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	FlatChunkGenerator generator;
 	World world(&generator, 0);
 
-	defaultShader.use();
 
 
 

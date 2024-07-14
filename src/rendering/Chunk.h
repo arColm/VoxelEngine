@@ -15,7 +15,7 @@ namespace VoxelEngine {
 		~Chunk();
 
 		void load();
-		void render(Shader* shader);
+		void render(std::shared_ptr<Shader> shader);
 		void addBlock(float x, float y,float z, BlockType block);
 		void setBlock(float x, float y, float z, BlockType block);
 		static int getWidth();
