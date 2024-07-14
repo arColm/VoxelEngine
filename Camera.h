@@ -45,8 +45,6 @@ namespace VoxelEngine {
 		Camera();
 		~Camera();
 		void updateCurrentChunk();
-		void setViewMatrix(unsigned int viewLoc);
-		void setProjectionMatrix(unsigned int projectionLoc, float SCREEN_WIDTH, float SCREEN_HEIGHT);
 		void moveCamera(GLFWwindow* window, float deltaTime);
 
 	};
@@ -54,6 +52,9 @@ namespace VoxelEngine {
 	extern Camera* mainCamera;
 	extern glm::mat4 projectionMatrix;
 	extern glm::mat4 viewMatrix;
+
+	void setViewMatrix(unsigned int viewLoc);
+	void setProjectionMatrix(unsigned int projectionLoc, float SCREEN_WIDTH, float SCREEN_HEIGHT);
 
 	void initializeCamera(GLFWwindow* window,Camera* cam);
 

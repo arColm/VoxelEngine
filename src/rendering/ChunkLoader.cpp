@@ -22,7 +22,7 @@ namespace VoxelEngine{
 
 	}
 	void ChunkLoader::renderChunks() {
-		mainCamera->setViewMatrix(shader->viewLoc);
+		setViewMatrix(shader->viewLoc);
 		for (auto& pair : chunk_map) {
 			pair.second->render(shader);
 		}

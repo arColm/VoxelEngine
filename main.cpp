@@ -73,7 +73,7 @@ int main() {
 	//chunkLoader.addChunk(-1,-1,&chunk);
 	//chunkLoader.addChunk(0,0,&chunk2);
 
-	mainCamera->setProjectionMatrix(defaultShader.projectionLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
+	setProjectionMatrix(defaultShader.projectionLoc, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	FlatChunkGenerator generator;
 	World world(&generator, 0);

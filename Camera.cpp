@@ -9,6 +9,8 @@
 namespace VoxelEngine {
 	//boost::signals2::signal<void()> enterNewChunkEvent;
 	Camera* mainCamera = nullptr;
+	glm::mat4 viewMatrix = glm::mat4(0);
+	glm::mat4 projectionMatrix = glm::mat4(0);
 
 	Camera::Camera() { }
 	Camera::~Camera() { }
