@@ -6,7 +6,8 @@
 namespace VoxelEngine {
 	enum class BlockType {
 		Air,
-		Dirt
+		Dirt,
+		Sand
 	};
 	namespace BlockData {
 		//short id;

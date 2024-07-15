@@ -24,6 +24,8 @@ namespace VoxelEngine {
 			return glm::vec3(0.f, 0.f, 0.f);
 		case BlockType::Dirt:
 			return glm::vec3(0.34f, 0.17f, 0.04f);
+		case BlockType::Sand:
+			return glm::vec3(0.79f, 0.79f, 0.05f);
 		}
 	}
 }
