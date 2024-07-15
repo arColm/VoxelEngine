@@ -63,7 +63,8 @@ int main() {
 	//if user resizes window, resize viewport
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	glPolygonMode(GL_FRONT, GL_FILL);
+	//glPolygonMode(GL_FRONT, GL_FILL);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/*===============================
 		SCENE

@@ -25,9 +25,8 @@ namespace VoxelEngine {
 		std::cout << World::chunkLoader->chunk_map.size() << std::endl;
 		if (World::chunkLoader->chunk_map.size() > maxChunksLoaded) {
 			std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> newChunkMap;
-			std::cout << newChunkMap.size() << "..." << std::endl;
 			for (int u = viewDistance; u >= -viewDistance; u--) {
-				for (int v = abs(u)-viewDistance; abs(u + v) <= viewDistance; v++) {
+				for (int v = abs(u)-viewDistance; abs(u)+v <= viewDistance; v++) {
 					glm::ivec2 chunkLoc(origin.x + u, origin.y + v);
 					if (World::chunkLoader->chunk_map.empty() || World::chunkLoader->chunk_map.find(chunkLoc) != World::chunkLoader->chunk_map.end()) {
 						newChunkMap[chunkLoc] = World::chunkLoader->chunk_map[chunkLoc];
@@ -41,9 +40,8 @@ namespace VoxelEngine {
 		}
 		else {
 			for (int u = viewDistance; u >= -viewDistance; u--) {
-				for (int v = abs(u) - viewDistance; abs(u + v) <= viewDistance; v++) {
+				for (int v = abs(u) - viewDistance; abs(u)+v <= viewDistance; v++) {
 					glm::ivec2 chunkLoc(origin.x + u, origin.y + v);
-					std::cout << u << '-' << v << std::endl;
 					if (World::chunkLoader->chunk_map.empty() || World::chunkLoader->chunk_map.find(chunkLoc)==World::chunkLoader->chunk_map.end()) {
 						std::shared_ptr<Chunk> chunk = generator->generateChunk(chunkLoc.x, chunkLoc.y);
 						World::chunkLoader->addChunk(chunkLoc.x, chunkLoc.y, chunk);
