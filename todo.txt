@@ -10,19 +10,13 @@ Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 TODO
 CHANGE ALL RAW POINTERS TO SMART POINTERS
 
- - simple face culling
+ - better face culling
  --- need some way to access neighbouring chunks
 
  - instanced rendering
 
  - change way to store colors...
 
- - (flat ground/simple) chunk generator
- - generating chunks based on camera location - render distance
- - unloading chunks based on camera location
- ---whenever we enter a new chunk --> iterate through chunks to see which ones are out of bounds 
- --- --> then iterate through bounds to ensure all chunks in bounds are loaded
- --- abstract generating chunks to chunkloader with (x,y,generator) as parameter
  - fog to mask chunk loading
  - noise applied to chunk generator
 

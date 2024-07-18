@@ -86,22 +86,22 @@ namespace VoxelEngine {
 	}
 
 	void Chunk::addBlock(float x,float y,float z, BlockType block) {
-		if (y < HEIGHT - 1 && blocks[x][y + 1][z] == BlockType::Air) {
+		if (y == HEIGHT - 1 || blocks[x][y + 1][z] == BlockType::Air) {
 			Chunk::addTop(x, y, z, block);
 		}
-		if (y >0 && blocks[x][y - 1][z] == BlockType::Air) {
+		if (y == 0 || blocks[x][y - 1][z] == BlockType::Air) {
 			Chunk::addBottom(x, y, z, block);
 		}
-		if (x < WIDTH - 1 && blocks[x + 1][y][z] == BlockType::Air) {
+		if (x == WIDTH - 1 || blocks[x + 1][y][z] == BlockType::Air) {
 			Chunk::addRight(x, y, z, block);
 		}
-		if (x > 0 && blocks[x - 1][y][z] == BlockType::Air) {
+		if (x == 0 || blocks[x - 1][y][z] == BlockType::Air) {
 			Chunk::addLeft(x, y, z, block);
 		}
-		if (z < WIDTH - 1 && blocks[x][y][z + 1] == BlockType::Air) {
+		if (z == WIDTH - 1 || blocks[x][y][z + 1] == BlockType::Air) {
 			Chunk::addBack(x, y, z, block);
 		}
-		if (z > 0 && blocks[x][y][z - 1] == BlockType::Air) {
+		if (z == 0 || blocks[x][y][z - 1] == BlockType::Air) {
 			Chunk::addForward(x, y, z, block);
 		}
 
