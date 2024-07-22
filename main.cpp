@@ -14,6 +14,7 @@
 #include <src/World/world.h>
 #include <src/World/FlatChunkGenerator.h>
 #include <src/World/PyramidChunkGenerator.h>
+#include <src/World/PerlinChunkGenerator.h>
 
 using namespace VoxelEngine;
 
@@ -65,7 +66,7 @@ int main() {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	glPolygonMode(GL_FRONT, GL_FILL);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/*===============================
 		SCENE
@@ -77,7 +78,7 @@ int main() {
 
 	setProjectionMatrix(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	PyramidChunkGenerator generator;
+	PerlinChunkGenerator generator;
 	World world(&generator, 0);
 
 

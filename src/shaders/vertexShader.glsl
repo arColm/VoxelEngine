@@ -18,3 +18,13 @@ void main()
 	gl_Position = projection * view * model * vec4(aPos,1.0);
 	//TexCoord = aTexCoord;
 };
+
+uint lowbias32(uint x)
+{
+    x ^= x >> 16;
+    x *= 0x7feb352dU;
+    x ^= x >> 15;
+    x *= 0x846ca68bU;
+    x ^= x >> 16;
+    return x;
+}

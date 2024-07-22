@@ -5,7 +5,6 @@
 #include "glm/glm.hpp"
 #include <glm/ext/vector_float3.hpp>
 #include <glm/fwd.hpp>
-#include <src/Utils/Event.h>
 #include "src/rendering/Chunk.h"
 #include "boost/signals2.hpp"
 

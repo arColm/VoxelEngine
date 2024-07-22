@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <src/Utils/Hashing/xxHash.h>
 
 namespace VoxelEngine {
 	Chunk::Chunk(int x, int z) { //probably use Generator as parameter
@@ -107,6 +108,14 @@ namespace VoxelEngine {
 
 	}
 
+	glm::vec3 randomizeColor(glm::vec3 color, glm::vec3 pos) {
+
+		xxHash hash(0);
+		hash = hash.eat(pos.y);
+		float var = (uint32_t)hash / static_cast<float>(std::numeric_limits<uint32_t>::max());
+		return glm::vec3(color.x * var, color.y * var, color.z * var);
+	}
+
 	void Chunk::addTop(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
 		std::vector<GLfloat> newVertices = {
 			x, y + 1, z,
@@ -117,6 +126,7 @@ namespace VoxelEngine {
 			x,y + 1,z
 		};
 		glm::vec3 color = BlockData::getBlockColor(block);
+		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
 			color.x,color.y,color.z,
 			color.x,color.y,color.z,
@@ -139,6 +149,7 @@ namespace VoxelEngine {
 			x,y + 1,z
 		};
 		glm::vec3 color = BlockData::getBlockColor(block);
+		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
 			color.x,color.y,color.z,
 			color.x,color.y,color.z,
@@ -161,6 +172,7 @@ namespace VoxelEngine {
 			x + 1,y + 1,z
 		};
 		glm::vec3 color = BlockData::getBlockColor(block);
+		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
 			color.x,color.y,color.z,
 			color.x,color.y,color.z,
@@ -183,6 +195,7 @@ namespace VoxelEngine {
 			x,y + 1,z
 		};
 		glm::vec3 color = BlockData::getBlockColor(block);
+		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
 			color.x,color.y,color.z,
 			color.x,color.y,color.z,
@@ -205,6 +218,7 @@ namespace VoxelEngine {
 			x,y + 1,z+1
 		};
 		glm::vec3 color = BlockData::getBlockColor(block);
+		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
 			color.x,color.y,color.z,
 			color.x,color.y,color.z,
@@ -227,6 +241,7 @@ namespace VoxelEngine {
 			x,y ,z
 		};
 		glm::vec3 color = BlockData::getBlockColor(block);
+		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
 			color.x,color.y,color.z,
 			color.x,color.y,color.z,
