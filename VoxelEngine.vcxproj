@@ -146,6 +146,7 @@
     <ClCompile Include="src\Utils\Hashing\xxHash.cpp" />
     <ClCompile Include="src\World\FlatChunkGenerator.cpp" />
     <ClCompile Include="src\World\IChunkGenerator.cpp" />
+    <ClCompile Include="src\World\IslandChunkGenerator.cpp" />
     <ClCompile Include="src\World\PerlinChunkGenerator.cpp" />
     <ClCompile Include="src\World\PyramidChunkGenerator.cpp" />
     <ClCompile Include="src\World\world.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="src\Utils\Hashing\xxHash.h" />
     <ClInclude Include="src\World\FlatChunkGenerator.h" />
     <ClInclude Include="src\World\IChunkGenerator.h" />
+    <ClInclude Include="src\World\IslandChunkGenerator.h" />
     <ClInclude Include="src\World\PerlinChunkGenerator.h" />
     <ClInclude Include="src\World\PyramidChunkGenerator.h" />
     <ClInclude Include="src\World\world.h" />

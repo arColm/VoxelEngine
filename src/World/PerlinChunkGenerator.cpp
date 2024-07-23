@@ -26,8 +26,10 @@ namespace VoxelEngine {
 			for (int zi = 0; zi < 16; zi++) {
 				float u = xi / 15.f;
 				float v = zi / 15.f;
-				float yi = std::lerp(std::lerp(p00, p10, u), std::lerp(p01, p11, u), v);
-				chunk->setBlock(xi, yi, zi, BlockType::Dirt);
+				int yi = std::lerp(std::lerp(p00, p10, u), std::lerp(p01, p11, u), v);
+				for (; yi >= 0; yi--) {
+					chunk->setBlock(xi, yi, zi, BlockType::Dirt);
+				}
 			}
 		}
 		return chunk;

@@ -4,12 +4,25 @@
 
 class xxHash {
 public:
-    xxHash();
-    xxHash(uint32_t accumulator);
-    operator uint32_t() const;
+    xxHash() {
+        xxHash::accumulator = 0;
+    }
+    xxHash(uint32_t accumulator) {
+        xxHash::accumulator = accumulator;
+    }
+    operator uint32_t() const {
+        uint32_t avalanche = xxHash::accumulator;
+        avalanche ^= avalanche >> 15;
+        avalanche *= primeB;
+        avalanche ^= avalanche >> 13;
+        avalanche *= primeC;
+        avalanche ^= avalanche >> 16;
+        return avalanche;
+    }
     xxHash eat(int data) { return rotateLeft(accumulator + (uint32_t)data * primeC, 11) * primeD; };
     static xxHash seed(int seed) { return (uint32_t)seed + primeE; };
     static uint32_t rotateLeft(uint32_t data, int steps) { return (data << steps) | (data >> 32 - steps); };
+    
 private:
     uint32_t accumulator;
     static const uint32_t primeA = 0b10011110001101110111100110110001;

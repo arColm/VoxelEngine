@@ -60,6 +60,9 @@
     <ClCompile Include="src\World\PerlinChunkGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\World\IslandChunkGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\shaders\shader.h">
@@ -102,6 +105,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\World\PerlinChunkGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\World\IslandChunkGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

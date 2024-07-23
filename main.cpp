@@ -15,6 +15,7 @@
 #include <src/World/FlatChunkGenerator.h>
 #include <src/World/PyramidChunkGenerator.h>
 #include <src/World/PerlinChunkGenerator.h>
+#include <src/World/IslandChunkGenerator.h>
 
 using namespace VoxelEngine;
 
@@ -78,13 +79,15 @@ int main() {
 
 	setProjectionMatrix(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	PerlinChunkGenerator generator;
+	IslandChunkGenerator generator;
 	World world(&generator, 0);
 
 
 
 
 	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
 	//chunkLoader.loadChunks();
 	while (!glfwWindowShouldClose(window))
