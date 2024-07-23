@@ -53,7 +53,7 @@ namespace VoxelEngine {
 		glBufferData(GL_ARRAY_BUFFER, vertexColor.size() * sizeof(vertexColor.at(0)), vertexColor.data(), GL_STATIC_DRAW);
 
 
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		glEnableVertexAttribArray(1);
 
 
@@ -108,12 +108,12 @@ namespace VoxelEngine {
 
 	}
 
-	glm::vec3 randomizeColor(glm::vec3 color, glm::vec3 pos) {
+	glm::vec4 randomizeColor(glm::vec4 color, glm::vec3 pos) {
 
 		xxHash hash(0);
 		hash = hash.eat(pos.y);
 		float var = (uint32_t)hash / static_cast<float>(std::numeric_limits<uint32_t>::max());
-		return glm::vec3(color.x * var, color.y * var, color.z * var);
+		return glm::vec4(color.x * var, color.y * var, color.z * var,color.w);
 	}
 
 	void Chunk::addTop(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
@@ -125,15 +125,15 @@ namespace VoxelEngine {
 			x + 1,y + 1,z,
 			x,y + 1,z
 		};
-		glm::vec3 color = BlockData::getBlockColor(block);
+		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
+			color.x,color.y,color.z, color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
 		};
 
 		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
@@ -148,15 +148,15 @@ namespace VoxelEngine {
 			x,y,z,
 			x,y + 1,z
 		};
-		glm::vec3 color = BlockData::getBlockColor(block);
+		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
+			color.x,color.y,color.z, color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
 		};
 
 		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
@@ -171,15 +171,15 @@ namespace VoxelEngine {
 			x + 1,y,z,
 			x + 1,y + 1,z
 		};
-		glm::vec3 color = BlockData::getBlockColor(block);
+		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
+			color.x,color.y,color.z, color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
 		};
 
 		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
@@ -194,15 +194,15 @@ namespace VoxelEngine {
 			x,y,z,
 			x,y + 1,z
 		};
-		glm::vec3 color = BlockData::getBlockColor(block);
+		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
+			color.x,color.y,color.z, color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
 		};
 
 		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
@@ -217,15 +217,15 @@ namespace VoxelEngine {
 			x,y,z + 1,
 			x,y + 1,z+1
 		};
-		glm::vec3 color = BlockData::getBlockColor(block);
+		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
+			color.x,color.y,color.z, color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
 		};
 
 		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
@@ -240,15 +240,15 @@ namespace VoxelEngine {
 			x + 1,y,z,
 			x,y ,z
 		};
-		glm::vec3 color = BlockData::getBlockColor(block);
+		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
 		std::vector<GLfloat> newColors = {
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
-			color.x,color.y,color.z,
+			color.x,color.y,color.z, color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
+			color.x,color.y,color.z,color.w,
 		};
 
 		vertexPos.insert(vertexPos.end(), newVertices.begin(), newVertices.end());
