@@ -7,6 +7,9 @@
 #include "BlockData.h"
 #include <vector>
 //#include <glm/glm.hpp>
+#include <unordered_map>
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/hash.hpp"
 
 namespace VoxelEngine {
 	class Chunk {
@@ -14,18 +17,23 @@ namespace VoxelEngine {
 		Chunk(int x, int z);
 		~Chunk();
 
-		void load();
-		void render(std::shared_ptr<Shader> shader);
-		void addBlock(float x, float y,float z, BlockType block);
+		void load(std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map);
+		void renderOpaque(std::shared_ptr<Shader> shader);
+		void renderTransparent(std::shared_ptr<Shader> shader);
+		//void render(std::shared_ptr<Shader> shader);
+		void addBlock(float x, float y,float z, BlockType block, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map);
 		void setBlock(float x, float y, float z, BlockType block);
+		BlockType getBlock(int x, int y, int z);
 		static int getWidth();
 
 	private:
 		int x, z;
 		static const int HEIGHT = 64,
 			WIDTH = 16;
-		GLuint VAO;
-		int numVertices;
+		GLuint opaqueVAO;
+		GLuint transparentVAO;
+		int numOpaqueVertices;
+		int numTransparentVertices;
 		//VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
 		std::vector<std::vector<std::vector<VoxelEngine::BlockType>>> blocks;
 
@@ -37,9 +45,13 @@ namespace VoxelEngine {
 		void addBottom(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 
 		void loadBlocks();
+		
 
-		std::vector<GLfloat> vertexPos;
-		std::vector<GLfloat> vertexColor;
+		std::vector<GLfloat> opaqueVertexPos;
+		std::vector<GLfloat> opaqueVertexColor;
+
+		std::vector<GLfloat> transparentVertexPos;
+		std::vector<GLfloat> transparentVertexColor;
 	};
 
 

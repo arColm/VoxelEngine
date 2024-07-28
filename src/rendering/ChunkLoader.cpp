@@ -16,7 +16,7 @@ namespace VoxelEngine{
 	void ChunkLoader::loadChunks() {
 		
 		for(const auto& pair : chunk_map) {
-			pair.second->load();
+			pair.second->load(&chunk_map);
 		}
 
 	}
@@ -25,7 +25,10 @@ namespace VoxelEngine{
 		updateProjectionMatrix(shader->projectionLoc);
 		setViewMatrix(shader->viewLoc);
 		for (const auto& pair : chunk_map) {
-			pair.second->render(shader);
+			pair.second->renderOpaque(shader);
+		}
+		for (const auto& pair : chunk_map) {
+			pair.second->renderTransparent(shader);
 		}
 	}
 

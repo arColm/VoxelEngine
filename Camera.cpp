@@ -25,7 +25,7 @@ namespace VoxelEngine {
 			//enterNewChunkEvent.invoke(nextChunk);
 			//enterNewChunkEvent(currentChunk, viewDistance);
 			enterNewChunkEvent(nextChunk,viewDistance);
-			std::cout << cameraPos.x << '-' << cameraPos.z << ' ' << currentChunk.x << '-' << currentChunk.y << std::endl;
+			//std::cout << cameraPos.x << '-' << cameraPos.z << ' ' << currentChunk.x << '-' << currentChunk.y << std::endl;
 		}
 	}
 
