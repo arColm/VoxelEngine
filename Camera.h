@@ -44,6 +44,7 @@ namespace VoxelEngine {
 		Camera();
 		~Camera();
 		void updateCurrentChunk();
+		void forceUpdateCurrentChunk();
 		void moveCamera(GLFWwindow* window, float deltaTime);
 
 	};

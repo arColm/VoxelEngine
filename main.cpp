@@ -92,6 +92,7 @@ int main() {
 	glEnable(GL_ALPHA_TEST);
 
 	//chunkLoader.loadChunks();
+	mainCamera->forceUpdateCurrentChunk();
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
