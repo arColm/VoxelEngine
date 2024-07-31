@@ -7,7 +7,6 @@
 
 
 namespace VoxelEngine {
-	//boost::signals2::signal<void()> enterNewChunkEvent;
 	Camera* mainCamera = nullptr;
 	glm::mat4 viewMatrix = glm::mat4(0);
 	glm::mat4 projectionMatrix = glm::mat4(0);
@@ -27,10 +26,7 @@ namespace VoxelEngine {
 		if (cameraPos.z < 0) nextChunk.y = -(nextChunk.y + 1);
 		if (nextChunk.x != currentChunk.x || nextChunk.y != currentChunk.y) {
 			currentChunk = nextChunk;
-			//enterNewChunkEvent.invoke(nextChunk);
-			//enterNewChunkEvent(currentChunk, viewDistance);
 			enterNewChunkEvent(nextChunk,viewDistance);
-			//std::cout << cameraPos.x << '-' << cameraPos.z << ' ' << currentChunk.x << '-' << currentChunk.y << std::endl;
 		}
 	}
 

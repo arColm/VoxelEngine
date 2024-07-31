@@ -9,8 +9,6 @@
 #include "boost/signals2.hpp"
 
 namespace VoxelEngine {
-	//(x,z,viewDistance)
-	//static Event<int,int> enterNewChunkEvent;
 
 
 	class Camera {

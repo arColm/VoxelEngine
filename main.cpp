@@ -12,10 +12,8 @@
 #include <src/UI/FPSCounter.h>
 #include <Camera.h>
 #include <src/World/world.h>
-#include <src/World/FlatChunkGenerator.h>
-#include <src/World/PyramidChunkGenerator.h>
-#include <src/World/PerlinChunkGenerator.h>
 #include <src/World/IslandChunkGenerator.h>
+#include<thread>
 
 using namespace VoxelEngine;
 
@@ -23,6 +21,7 @@ using namespace VoxelEngine;
 	FUNCTION DECLARATIONS
 =================================*/
 
+void renderingLoop(GLFWwindow* window, World* world);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void update(float deltaTime);
@@ -91,8 +90,11 @@ int main() {
 	glBlendFunc(GL_DST_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_ALPHA_TEST);
 
-	//chunkLoader.loadChunks();
-	mainCamera->forceUpdateCurrentChunk();
+
+	glfwMakeContextCurrent(NULL);
+	std::thread renderingThread(&renderingLoop, window,&world);
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
@@ -103,29 +105,38 @@ int main() {
 			INPUT
 		=================================*/
 		processInput(window);
+
+
+		update(deltaTime);
+
+		glfwPollEvents();
+	}
+
+
+	/*===============================
+		CLEAN UP
+	=================================*/
+	renderingThread.join();
+	glfwTerminate();
+	return 0;
+}
+
+void renderingLoop(GLFWwindow* window, World* world) {
+	glfwMakeContextCurrent(window);
+	mainCamera->forceUpdateCurrentChunk();
+	while (!glfwWindowShouldClose(window)) {
+
+
 		/*===============================
 			RENDERING
 		=================================*/
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		update(deltaTime);
-		//set view model
-
-
 		mainCamera->updateCurrentChunk();
-		world.renderChunks();
-
+		world->renderChunks();
 		glfwSwapBuffers(window);
-		glfwPollEvents();
 	}
-	/*===============================
-		CLEAN UP
-	=================================*/
-	//glDeleteVertexArrays(1, &VAO);
-	//glDeleteBuffers(1, &VBO);
-	glfwTerminate();
-	return 0;
+
 }
 
 void update(float deltaTime) {

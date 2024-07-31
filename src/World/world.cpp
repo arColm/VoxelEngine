@@ -22,7 +22,6 @@ namespace VoxelEngine {
 	void World::loadChunks(glm::ivec2 origin, int viewDistance) {
 		int maxChunksLoaded = viewDistance * (viewDistance + 1);
 		//unload chunks?
-		std::cout << World::chunkLoader->chunk_map.size() << std::endl;
 		if (World::chunkLoader->chunk_map.size() > maxChunksLoaded) {
 			std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> newChunkMap;
 			for (int u = viewDistance; u >= -viewDistance; u--) {
@@ -56,7 +55,6 @@ namespace VoxelEngine {
 	void World::renderChunks() {
 		World::chunkLoader->renderChunks();
 	}
-
 
 
 }
