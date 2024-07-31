@@ -8,6 +8,7 @@
 #include <vector>
 //#include <glm/glm.hpp>
 #include <unordered_map>
+#include <array>
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/hash.hpp"
 
@@ -35,7 +36,7 @@ namespace VoxelEngine {
 		int numOpaqueVertices;
 		int numTransparentVertices;
 		//VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
-		std::vector<std::vector<std::vector<VoxelEngine::BlockType>>> blocks;
+		std::array<std::array<std::array<VoxelEngine::BlockType,WIDTH>,HEIGHT>,WIDTH> blocks;
 
 		void addTop(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addLeft(GLfloat x, GLfloat y, GLfloat z, BlockType block);

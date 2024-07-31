@@ -6,6 +6,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <src/Utils/Hashing/xxHash.h>
+#include <array>
+#include <algorithm>
 
 namespace VoxelEngine {
 	Chunk::Chunk(int x, int z) {
@@ -18,8 +20,15 @@ namespace VoxelEngine {
 
 
 		//initialize / load chunk here
-		blocks = std::vector<std::vector<std::vector<VoxelEngine::BlockType>>>
-			(WIDTH, std::vector<std::vector<VoxelEngine::BlockType>>(HEIGHT, std::vector<VoxelEngine::BlockType>(WIDTH,BlockType::Air)));
+		//blocks = std::vector<std::vector<std::vector<VoxelEngine::BlockType>>>
+		//	(WIDTH, std::vector<std::vector<VoxelEngine::BlockType>>(HEIGHT, std::vector<VoxelEngine::BlockType>(WIDTH,BlockType::Air)));
+		for (int x = 0; x < WIDTH; x++) {
+			for (int y = 0; y < HEIGHT; y++) {
+				for (int z = 0; z < WIDTH; z++) {
+					blocks[x][y][z] = BlockType::Air;
+				}
+			}
+		}
 	}
 	Chunk::~Chunk() {
 		glDeleteVertexArrays(1, &opaqueVAO);
@@ -194,17 +203,17 @@ namespace VoxelEngine {
 	}
 
 	void Chunk::addTop(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
-		std::vector<GLfloat> newVertices = {
+		std::array<GLfloat, 18> newVertices= {
 			x, y + 1, z,
 			x, y + 1, z + 1,
 			x + 1,y + 1,z + 1,
 			x + 1,y + 1,z + 1,
 			x + 1,y + 1,z,
 			x,y + 1,z
-		};
+		} ;
 		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
-		std::vector<GLfloat> newColors = {
+		std::array<GLfloat, 24> newColors = {
 			color.x,color.y,color.z, color.w,
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
@@ -222,7 +231,7 @@ namespace VoxelEngine {
 		}
 	}
 	void Chunk::addLeft(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
-		std::vector<GLfloat> newVertices = {
+		std::array<GLfloat, 18> newVertices = {
 			x, y + 1, z,
 			x, y + 1, z + 1,
 			x,y,z + 1,
@@ -232,7 +241,7 @@ namespace VoxelEngine {
 		};
 		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
-		std::vector<GLfloat> newColors = {
+		std::array<GLfloat, 24> newColors = {
 			color.x,color.y,color.z, color.w,
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
@@ -250,7 +259,7 @@ namespace VoxelEngine {
 		}
 	}
 	void Chunk::addRight(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
-		std::vector<GLfloat> newVertices = {
+		std::array<GLfloat, 18> newVertices = {
 			x+1, y + 1, z,
 			x + 1, y + 1, z + 1,
 			x + 1,y,z + 1,
@@ -260,7 +269,7 @@ namespace VoxelEngine {
 		};
 		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
-		std::vector<GLfloat> newColors = {
+		std::array<GLfloat, 24> newColors = {
 			color.x,color.y,color.z, color.w,
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
@@ -278,7 +287,7 @@ namespace VoxelEngine {
 		}
 	}
 	void Chunk::addForward(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
-		std::vector<GLfloat> newVertices = {
+		std::array<GLfloat, 18> newVertices = {
 			x, y + 1, z,
 			x + 1, y + 1, z,
 			x + 1,y,z,
@@ -288,7 +297,7 @@ namespace VoxelEngine {
 		};
 		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
-		std::vector<GLfloat> newColors = {
+		std::array<GLfloat, 24> newColors = {
 			color.x,color.y,color.z, color.w,
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
@@ -306,7 +315,7 @@ namespace VoxelEngine {
 		}
 	}
 	void Chunk::addBack(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
-		std::vector<GLfloat> newVertices = {
+		std::array<GLfloat, 18> newVertices = {
 			x, y + 1, z + 1,
 			x + 1, y + 1, z + 1,
 			x + 1,y,z + 1,
@@ -316,7 +325,7 @@ namespace VoxelEngine {
 		};
 		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
-		std::vector<GLfloat> newColors = {
+		std::array<GLfloat, 24> newColors = {
 			color.x,color.y,color.z, color.w,
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
@@ -335,7 +344,7 @@ namespace VoxelEngine {
 		}
 	}
 	void Chunk::addBottom(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
-		std::vector<GLfloat> newVertices = {
+		std::array<GLfloat, 18> newVertices = {
 			x, y , z,
 			x, y , z + 1,
 			x + 1,y ,z + 1,
@@ -345,7 +354,7 @@ namespace VoxelEngine {
 		};
 		glm::vec4 color = BlockData::getBlockColor(block);
 		color = randomizeColor(color, glm::vec3(x, y, z));
-		std::vector<GLfloat> newColors = {
+		std::array<GLfloat, 24> newColors = {
 			color.x,color.y,color.z, color.w,
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
