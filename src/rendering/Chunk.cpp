@@ -44,7 +44,6 @@ namespace VoxelEngine {
 				}
 			}
 		}
-		Chunk::loadBlocks();
 	}
 
 	void Chunk::loadBlocks() {

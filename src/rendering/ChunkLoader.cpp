@@ -2,6 +2,7 @@
 
 #include "ChunkLoader.h"
 #include <Camera.h>
+#include <thread>
 
 namespace VoxelEngine{
 	ChunkLoader::ChunkLoader() {
@@ -14,11 +15,18 @@ namespace VoxelEngine{
 	ChunkLoader::~ChunkLoader() { }
 
 	void ChunkLoader::loadChunks() {
-		
-		for(const auto& pair : chunk_map) {
-			pair.second->load(&chunk_map);
-		}
+		std::vector < std::thread> threads;
 
+		for(const auto& pair : chunk_map) {
+			threads.push_back(std::thread(&Chunk::load, pair.second, &chunk_map));
+			//pair.second->load(&chunk_map);
+		}
+		for (auto& t : threads) {
+			t.join();
+		}
+		for (const auto& pair : chunk_map) {
+			pair.second->loadBlocks();
+		}
 	}
 	void ChunkLoader::renderChunks() {
 		shader->use();

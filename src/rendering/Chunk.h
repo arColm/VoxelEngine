@@ -27,6 +27,8 @@ namespace VoxelEngine {
 		BlockType getBlock(int x, int y, int z);
 		static int getWidth();
 
+		void loadBlocks();
+
 	private:
 		int x, z;
 		static const int HEIGHT = 64,
@@ -44,8 +46,6 @@ namespace VoxelEngine {
 		void addForward(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addBack(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addBottom(GLfloat x, GLfloat y, GLfloat z, BlockType block);
-
-		void loadBlocks();
 		
 
 		std::vector<GLfloat> opaqueVertexPos;
