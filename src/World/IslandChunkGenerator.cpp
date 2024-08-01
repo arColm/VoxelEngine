@@ -29,7 +29,7 @@ namespace VoxelEngine {
 				int yi = 20 * std::lerp(std::lerp(p00, p10, u), std::lerp(p01, p11, u), v);
 				if (yi >= 15) {
 					for (; yi >= 15; yi--) {
-						chunk->setBlock(xi, yi, zi, BlockType::Sand);
+						chunk->setBlock(xi, yi, zi, BlockType::Dirt);
 					}
 				}
 				else {
@@ -38,7 +38,7 @@ namespace VoxelEngine {
 					}
 				}
 				for (; yi >= 0; yi--) {
-					chunk->setBlock(xi, yi, zi, BlockType::Dirt);
+					chunk->setBlock(xi, yi, zi, BlockType::Sand);
 				}
 			}
 		}

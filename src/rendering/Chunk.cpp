@@ -15,8 +15,8 @@ namespace VoxelEngine {
 		Chunk::z = z;
 		Chunk::numOpaqueVertices = 0;
 		Chunk::numTransparentVertices = 0;
-		Chunk::opaqueVAO = Loader::createVAO();
-		Chunk::transparentVAO = Loader::createVAO();
+		Chunk::opaqueVAO = 0;
+		Chunk::transparentVAO = 0;
 
 
 		//initialize / load chunk here
@@ -45,8 +45,14 @@ namespace VoxelEngine {
 			}
 		}
 	}
+	void Chunk::createVAO() {
+		Chunk::opaqueVAO = Loader::createVAO();
+		Chunk::transparentVAO = Loader::createVAO();
+
+	}
 
 	void Chunk::loadBlocks() {
+		if (opaqueVAO == transparentVAO) createVAO();
 		// opaque blocks
 		// 
 		glBindVertexArray(opaqueVAO);
