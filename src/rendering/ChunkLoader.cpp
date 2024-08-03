@@ -24,9 +24,9 @@ namespace VoxelEngine{
 		for (auto& t : threads) {
 			t.join();
 		}
-		for (const auto& pair : chunk_map) {
+		/*for (const auto& pair : chunk_map) {
 			pair.second->loadBlocks();
-		}
+		}*/
 	}
 	void ChunkLoader::renderChunks() {
 		shader->use();

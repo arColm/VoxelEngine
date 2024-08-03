@@ -21,8 +21,7 @@ namespace VoxelEngine {
 
 	void World::loadChunks(glm::ivec2 origin, int viewDistance) {
 
-		int maxChunksLoaded = viewDistance * (viewDistance + 1)*5;
-		//std::vector<std::thread> threads;
+		int maxChunksLoaded = viewDistance * (viewDistance + 1) * 5;
 		//unload chunks?
 		if (World::chunkLoader->chunk_map.size() > maxChunksLoaded) {
 			std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> newChunkMap;
@@ -33,30 +32,38 @@ namespace VoxelEngine {
 						newChunkMap[chunkLoc] = World::chunkLoader->chunk_map[chunkLoc];
 					}
 					else {
-						//threads.push_back(std::thread([&](int x, int y, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>& chunkMap) {
-						//	newChunkMap[chunkLoc] = generator->generateChunk(x, y);
-						//}, chunkLoc.x, chunkLoc.y, std::ref(newChunkMap)));
-						newChunkMap[chunkLoc] = generator->generateChunk(chunkLoc.x, chunkLoc.y);
+						std::thread t([&](int x, int y, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>& chunkMap) {
+							auto chunk = generator->generateChunk(x, y);
+							chunk.get()->load(&chunkMap);
+							std::lock_guard<std::mutex> lock(chunkQueue_mutex);
+							chunkQueue.push(chunk);
+							}, chunkLoc.x, chunkLoc.y, std::ref(chunkLoader->chunk_map));
+						t.detach();
+						//threads.push_back(t);
+						//newChunkMap[chunkLoc] = generator->generateChunk(chunkLoc.x, chunkLoc.y);
 					}
 				}
 			}
 			//for (auto& t : threads) {
 			//	t.join();
 			//}
-			World::chunkLoader->chunk_map = newChunkMap; //probably inefficient
+			//World::chunkLoader->chunk_map = newChunkMap; //probably inefficient
 		}
 		else {
 			for (int u = viewDistance; u >= -viewDistance; u--) {
 				for (int v = abs(u) - viewDistance; abs(u)+v <= viewDistance; v++) {
 					glm::ivec2 chunkLoc(origin.x + u, origin.y + v);
-					if (World::chunkLoader->chunk_map.empty() || World::chunkLoader->chunk_map.find(chunkLoc)==World::chunkLoader->chunk_map.end()) {
+					if (World::chunkLoader->chunk_map.find(chunkLoc)==World::chunkLoader->chunk_map.end()) {
 
-						std::shared_ptr<Chunk> chunk = generator->generateChunk(chunkLoc.x, chunkLoc.y);
-						World::chunkLoader->addChunk(chunkLoc.x, chunkLoc.y, chunk);
-						//threads.push_back(std::thread([&](int x, int y) {
-						//	std::shared_ptr<Chunk> chunk = generator->generateChunk(x, y);
-						//	World::chunkLoader->addChunk(x, y, chunk);
-						//}, chunkLoc.x, chunkLoc.y));
+						//std::shared_ptr<Chunk> chunk = generator->generateChunk(chunkLoc.x, chunkLoc.y);
+						//World::chunkLoader->addChunk(chunkLoc.x, chunkLoc.y, chunk);
+						std::thread t([&](int x, int y, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>& chunkMap) {
+							auto chunk = generator->generateChunk(x, y);
+							chunk.get()->load(&chunkMap);
+							std::lock_guard<std::mutex> lock(chunkQueue_mutex);
+							chunkQueue.push(chunk);
+							}, chunkLoc.x, chunkLoc.y, std::ref(chunkLoader->chunk_map));
+						t.detach();
 					}
 				}
 			}
@@ -66,10 +73,19 @@ namespace VoxelEngine {
 		}
 
 
-		World::chunkLoader->loadChunks();
+		//World::chunkLoader->loadChunks();
 
 	}
 	void World::renderChunks() {
+		if (!chunkQueue.empty()) {
+			std::lock_guard<std::mutex> lock(chunkQueue_mutex);
+			while (!chunkQueue.empty()) {
+				auto chunk = chunkQueue.front();
+				chunkQueue.pop();
+				chunk->loadBlocks();
+				World::chunkLoader->addChunk(chunk->getX(), chunk->getZ(), chunk);
+			}
+		}
 		World::chunkLoader->renderChunks();
 	}
 

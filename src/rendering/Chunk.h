@@ -26,6 +26,8 @@ namespace VoxelEngine {
 		void setBlock(float x, float y, float z, BlockType block);
 		BlockType getBlock(int x, int y, int z);
 		static int getWidth();
+		int getX();
+		int getZ();
 
 		void loadBlocks();
 

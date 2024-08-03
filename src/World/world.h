@@ -5,6 +5,8 @@
 #include "IChunkGenerator.h"
 #include <src/rendering/ChunkLoader.h>
 #include "boost/signals2.hpp"
+#include <queue>
+#include <mutex>
 namespace VoxelEngine {
 
 	class World {
@@ -22,6 +24,8 @@ namespace VoxelEngine {
 		IChunkGenerator* generator;
 		boost::signals2::connection chunkLoaderConnection;
 		std::unique_ptr<ChunkLoader> chunkLoader;
+		std::queue<std::shared_ptr<Chunk>> chunkQueue;
+		std::mutex chunkQueue_mutex;
 
 	};
 }

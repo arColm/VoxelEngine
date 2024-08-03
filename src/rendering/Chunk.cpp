@@ -384,5 +384,12 @@ namespace VoxelEngine {
 		return blocks[x][y][z];
 	}
 
+	int Chunk::getX() {
+		return x;
+	}
+	int Chunk::getZ() {
+		return z;
+	}
+
 }
 

@@ -22,10 +22,10 @@ namespace VoxelEngine {
 		p11 = (h11 / static_cast<float>(std::numeric_limits<uint32_t>::max())) * 10;
 
 		
-		for (int xi = 0; xi < 16; xi++) {
-			for (int zi = 0; zi < 16; zi++) {
-				float u = xi / 15.f;
-				float v = zi / 15.f;
+		for (int xi = 0; xi < Chunk::getWidth(); xi++) {
+			for (int zi = 0; zi < Chunk::getWidth(); zi++) {
+				float u = xi / (Chunk::getWidth()-1.f);
+				float v = zi / (Chunk::getWidth() - 1.f);
 				int yi = std::lerp(std::lerp(p00, p10, u), std::lerp(p01, p11, u), v);
 				for (; yi >= 0; yi--) {
 					chunk->setBlock(xi, yi, zi, BlockType::Dirt);

@@ -31,7 +31,10 @@ CHANGE ALL RAW POINTERS TO SMART POINTERS
 
 
 
-
+ create thread to generate chunk + vertex data [.detach()]
+ puts chunk into queue [LOCKED]
+ main rendering thread checks queue, pops and then loads any chunks into VAOs, then adds to chunk_map [LOCKED]
+ main rendering thread renders all chujnks in chunk_map.
 
 future optimizations
 
