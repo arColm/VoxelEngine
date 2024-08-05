@@ -17,6 +17,7 @@ namespace VoxelEngine {
 		Chunk::numTransparentVertices = 0;
 		Chunk::opaqueVAO = 0;
 		Chunk::transparentVAO = 0;
+		Chunk::hasValidChunkData = false;
 
 
 		//initialize / load chunk here
@@ -204,6 +205,7 @@ namespace VoxelEngine {
 		xxHash hash(0);
 		hash = hash.eat(pos.y);
 		float var = (uint32_t)hash / static_cast<float>(std::numeric_limits<uint32_t>::max());
+		var = var * 0.4f + 0.8f;
 		return glm::vec4(color.x * var, color.y * var, color.z * var,color.w);
 	}
 

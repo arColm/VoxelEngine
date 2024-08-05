@@ -25,10 +25,21 @@ namespace VoxelEngine {
 
 		for (int xi = 0; xi < WIDTH; xi++) {
 			for (int zi = 0; zi < WIDTH; zi++) {
-				float u = xi / (WIDTH-1.f);
-				float v = zi / (WIDTH - 1.f);
-				int yi = 20 * std::lerp(std::lerp(p00, p10, u), std::lerp(p01, p11, u), v);
+				float u = 0.5f*xi / (WIDTH-1.f);
+				float v = 0.5f*zi / (WIDTH - 1.f);
+				int yi = 40 * std::lerp(std::lerp(p00, p10, u), std::lerp(p01, p11, u), v);
 				if (yi >= 15) {
+					if (yi >= 30) {
+						for (int i = 0; i < 3; i++, yi--) {
+							chunk->setBlock(xi, yi, zi, BlockType::Snow);
+						}
+					}
+					else {
+						for (int i = 0; i < 3; i++, yi--) {
+							chunk->setBlock(xi, yi, zi, BlockType::Grass);
+						}
+					}
+
 					for (; yi >= 15; yi--) {
 						chunk->setBlock(xi, yi, zi, BlockType::Dirt);
 					}

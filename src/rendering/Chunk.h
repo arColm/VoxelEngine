@@ -34,11 +34,12 @@ namespace VoxelEngine {
 	private:
 		int x, z;
 		static const int HEIGHT = 64,
-			WIDTH = 16;
+			WIDTH = 18;
 		GLuint opaqueVAO;
 		GLuint transparentVAO;
 		int numOpaqueVertices;
 		int numTransparentVertices;
+		bool hasValidChunkData;
 		//VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
 		std::array<std::array<std::array<VoxelEngine::BlockType,WIDTH>,HEIGHT>,WIDTH> blocks;
 

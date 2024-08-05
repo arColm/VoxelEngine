@@ -21,9 +21,21 @@ namespace VoxelEngine {
 
 	void World::loadChunks(glm::ivec2 origin, int viewDistance) {
 
-		int maxChunksLoaded = viewDistance * (viewDistance + 1) * 5;
+		int maxChunksLoaded = viewDistance * (viewDistance + 1) * 2;
 		//unload chunks?
 		if (World::chunkLoader->chunk_map.size() > maxChunksLoaded) {
+			std::cout << "unloaded";
+			//unload chunks
+			for (auto it = World::chunkLoader->chunk_map.begin(); it != World::chunkLoader->chunk_map.end(); )
+			{
+				auto chunk = it->second;
+				if (chunk->getX() - origin.x + chunk->getZ() - origin.y > viewDistance) {
+					it = World::chunkLoader->chunk_map.erase(it);
+				}
+				else {
+					it++;
+				}
+			}
 			std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> newChunkMap;
 			for (int u = viewDistance; u >= -viewDistance; u--) {
 				for (int v = abs(u)-viewDistance; abs(u)+v <= viewDistance; v++) {
