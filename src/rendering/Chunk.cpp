@@ -17,7 +17,7 @@ namespace VoxelEngine {
 		Chunk::numTransparentVertices = 0;
 		Chunk::opaqueVAO = 0;
 		Chunk::transparentVAO = 0;
-		Chunk::hasValidChunkData = false;
+		Chunk::isRendered = false;
 
 
 		//initialize / load chunk here
@@ -45,6 +45,7 @@ namespace VoxelEngine {
 				}
 			}
 		}
+		isRendered = true;
 	}
 	void Chunk::createVAO() {
 		Chunk::opaqueVAO = Loader::createVAO();
@@ -392,6 +393,12 @@ namespace VoxelEngine {
 	int Chunk::getZ() {
 		return z;
 	}
+	bool Chunk::getIsRendered() {
+		return isRendered;
+	}
 
+	void Chunk::setIsRendered(bool val) {
+		isRendered = val;
+	}
 }
 

@@ -32,6 +32,7 @@ CHANGE ALL RAW POINTERS TO SMART POINTERS
 
 
  need to fix chunk_map error with higher WIDTHs
+ change isRendered in Chunk to hasMesh
 
 future optimizations
 

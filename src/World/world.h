@@ -26,6 +26,7 @@ namespace VoxelEngine {
 		std::unique_ptr<ChunkLoader> chunkLoader;
 		std::queue<std::shared_ptr<Chunk>> chunkQueue;
 		std::mutex chunkQueue_mutex;
+		std::mutex chunkMap_mutex;
 
 	};
 }

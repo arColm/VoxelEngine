@@ -24,22 +24,24 @@ namespace VoxelEngine {
 		//void render(std::shared_ptr<Shader> shader);
 		void addBlock(float x, float y,float z, BlockType block, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map);
 		void setBlock(float x, float y, float z, BlockType block);
+
+		void loadBlocks();
+
 		BlockType getBlock(int x, int y, int z);
 		static int getWidth();
 		int getX();
 		int getZ();
-
-		void loadBlocks();
-
+		bool getIsRendered();
+		void setIsRendered(bool val);
 	private:
 		int x, z;
 		static const int HEIGHT = 64,
-			WIDTH = 18;
+			WIDTH = 32;
 		GLuint opaqueVAO;
 		GLuint transparentVAO;
 		int numOpaqueVertices;
 		int numTransparentVertices;
-		bool hasValidChunkData;
+		bool isRendered;
 		//VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
 		std::array<std::array<std::array<VoxelEngine::BlockType,WIDTH>,HEIGHT>,WIDTH> blocks;
 

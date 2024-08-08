@@ -22,6 +22,7 @@ using namespace VoxelEngine;
 =================================*/
 
 void renderingLoop(GLFWwindow* window, World* world);
+void chunkLoadingLoop(GLFWwindow* window, World* world);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void update(float deltaTime);
@@ -92,7 +93,9 @@ int main() {
 
 
 	glfwMakeContextCurrent(NULL);
+	std::thread chunkLoadingThread(&chunkLoadingLoop, window, &world);
 	std::thread renderingThread(&renderingLoop, window,&world);
+
 
 
 	while (!glfwWindowShouldClose(window))
@@ -117,13 +120,14 @@ int main() {
 		CLEAN UP
 	=================================*/
 	renderingThread.join();
+	chunkLoadingThread.join();
 	glfwTerminate();
 	return 0;
 }
 
 void renderingLoop(GLFWwindow* window, World* world) {
 	glfwMakeContextCurrent(window);
-	mainCamera->forceUpdateCurrentChunk();
+	//mainCamera->forceUpdateCurrentChunk();
 	while (!glfwWindowShouldClose(window)) {
 
 
@@ -132,9 +136,16 @@ void renderingLoop(GLFWwindow* window, World* world) {
 		=================================*/
 		glClearColor(0.25f, 0.60f, 0.62f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		mainCamera->updateCurrentChunk();
+		//mainCamera->updateCurrentChunk();
 		world->renderChunks();
 		glfwSwapBuffers(window);
+	}
+
+}
+void chunkLoadingLoop(GLFWwindow* window, World* world) {
+	mainCamera->forceUpdateCurrentChunk();
+	while (!glfwWindowShouldClose(window)) {
+		mainCamera->updateCurrentChunk();
 	}
 
 }
