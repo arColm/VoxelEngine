@@ -10,6 +10,10 @@ Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 TODO
 CHANGE ALL RAW POINTERS TO SMART POINTERS
 
+delete chunks in rendering thread
+
+ - better separation between world and chunkloader
+
 
  - instanced rendering
 
@@ -31,8 +35,6 @@ CHANGE ALL RAW POINTERS TO SMART POINTERS
 
 
 
- need to fix chunk_map error with higher WIDTHs
- change isRendered in Chunk to hasMesh
 
 future optimizations
 

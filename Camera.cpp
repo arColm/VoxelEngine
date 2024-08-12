@@ -37,7 +37,7 @@ namespace VoxelEngine {
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	}
 	void setProjectionMatrix(float SCREEN_WIDTH, float SCREEN_HEIGHT) {
-		glm::mat4 projection = glm::perspective(glm::radians(mainCamera->fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(mainCamera->fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 1000.0f);
 		projectionMatrix = projection;
 	}
 
