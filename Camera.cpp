@@ -48,6 +48,12 @@ namespace VoxelEngine {
 
 
 	void Camera::moveCamera(GLFWwindow* window, float deltaTime) {
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+			cameraSpeed = baseCameraSpeed * 2.f;
+		}
+		else {
+			cameraSpeed = baseCameraSpeed;
+		}
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 			cameraPos += cameraSpeed * cameraFront * deltaTime;
 		}

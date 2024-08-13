@@ -10,7 +10,6 @@ Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 TODO
 CHANGE ALL RAW POINTERS TO SMART POINTERS
 
-delete chunks in rendering thread
 
  - better separation between world and chunkloader
 

@@ -42,7 +42,6 @@ namespace VoxelEngine {
 				}
 			}
 		}
-		std::cout << chunkLoader->chunk_map.size() << std::endl;
 		std::vector<std::jthread> threads;
 		std::queue<std::shared_ptr<VoxelEngine::Chunk>> newChunks;
 		std::mutex newChunk_mutex;

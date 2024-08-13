@@ -14,17 +14,18 @@ namespace VoxelEngine {
 	class Camera {
 
 	public:
+		const float baseCameraSpeed = 20.0f;
 
-		glm::vec3 cameraPos = glm::vec3(0.0f, 14.0f, 3.0f);
+		glm::vec3 cameraPos = glm::vec3(16.0f, 14.0f, 3.0f);
 		glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0);
-		const float cameraSpeed = 10.0f;
+		float cameraSpeed = baseCameraSpeed;
 
 		float fov = 45.0f;
 
 		//this is inaccurate, but gets changed instantly
 		glm::vec2 currentChunk = glm::vec2((int)cameraPos.x / Chunk::getWidth(), (int)cameraPos.z / Chunk::getWidth());
-		int viewDistance = 6;
+		int viewDistance = 12;
 
 
 		//mouse
