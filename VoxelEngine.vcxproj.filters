@@ -110,6 +110,9 @@
     <ClInclude Include="src\World\IslandChunkGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utils\Noise\PerlinNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\fragmentShader.glsl" />

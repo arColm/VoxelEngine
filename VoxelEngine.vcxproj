@@ -161,6 +161,7 @@
     <ClInclude Include="src\shaders\shader.h" />
     <ClInclude Include="src\UI\FPSCounter.h" />
     <ClInclude Include="src\Utils\Hashing\xxHash.h" />
+    <ClInclude Include="src\Utils\Noise\PerlinNoise.h" />
     <ClInclude Include="src\World\FlatChunkGenerator.h" />
     <ClInclude Include="src\World\IChunkGenerator.h" />
     <ClInclude Include="src\World\IslandChunkGenerator.h" />

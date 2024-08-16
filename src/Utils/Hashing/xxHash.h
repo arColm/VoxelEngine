@@ -19,9 +19,17 @@ public:
         avalanche ^= avalanche >> 16;
         return avalanche;
     }
+
+    float Floats01A() { return (float)((uint32_t)(*this) & 255) / 255.f; };
+    float Floats01B() { return (float)(((uint32_t)(*this) >> 8) & 255) / 255.f; };
+    float Floats01C() { return (float)(((uint32_t)(*this) >> 16) & 255) / 255.f; };
+    float Floats01D() { return (float)(((uint32_t)(*this) >> 24) & 255) / 255.f; };
+
     xxHash eat(int data) { return rotateLeft(accumulator + (uint32_t)data * primeC, 11) * primeD; };
+    xxHash eat(float data) { return rotateLeft(accumulator + (uint32_t)(data * primeC), 11) * primeD; };
     static xxHash seed(int seed) { return (uint32_t)seed + primeE; };
     static uint32_t rotateLeft(uint32_t data, int steps) { return (data << steps) | (data >> 32 - steps); };
+
     
 private:
     uint32_t accumulator;
