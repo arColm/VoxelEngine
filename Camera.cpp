@@ -88,6 +88,7 @@ namespace VoxelEngine {
 		This method processes mouse movement
 	*/
 	void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+		if (glfwGetInputMode(window, GLFW_CURSOR) != GLFW_CURSOR_DISABLED) return;
 		if (mainCamera->firstMouse) // initially set to true
 		{
 			mainCamera->lastX = (float) xpos;

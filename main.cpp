@@ -18,6 +18,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include <src/UI/WorldGenerationGUI.h>
 
 using namespace VoxelEngine;
 
@@ -68,7 +69,7 @@ int main() {
 	glViewport(0, 0, 800, 600);
 
 	//if user resizes window, resize viewport
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	glPolygonMode(GL_FRONT, GL_FILL);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -160,7 +161,8 @@ void renderingLoop(GLFWwindow* window, World* world) {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		ImGui::ShowDemoWindow(); // Show demo window! :)
+		//ImGui::ShowDemoWindow(); // Show demo window! :)
+		VoxelEngine::GUI::ShowWorldGenerationGUIWindow();
 
 
 
@@ -212,6 +214,17 @@ void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
 		return;
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) {
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		mainCamera->firstMouse = true;
+	}
+	if (glfwGetMouseButton(window, 0) == GLFW_PRESS && glfwGetInputMode(window,GLFW_CURSOR)==GLFW_CURSOR_NORMAL) {
+		double xPos, yPos;
+		glfwGetCursorPos(window, &xPos, &yPos);
+		if (xPos < SCREEN_WIDTH && yPos < SCREEN_HEIGHT) {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
 	}
 	mainCamera->moveCamera(window, deltaTime);
 }
