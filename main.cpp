@@ -98,33 +98,22 @@ int main() {
 
 	glfwMakeContextCurrent(NULL);
 	std::thread chunkLoadingThread(&chunkLoadingLoop, window, &world);
-	std::thread renderingThread(&renderingLoop, window,&world);
+	//std::thread renderingThread(&renderingLoop, window,&world);
+
+	renderingLoop(window, &world);
 
 
-
-	while (!glfwWindowShouldClose(window))
-	{
-		float currentFrame = glfwGetTime();
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
-		FPSCounter::updateFPS(deltaTime);
-		/*===============================
-			INPUT
-		=================================*/
-		processInput(window);
-
-
-		update(deltaTime);
-
-
-		glfwPollEvents();
-	}
+	//while (!glfwWindowShouldClose(window))
+	//{
+	//	processInput(window);
+	//	glfwPollEvents();
+	//}
 
 
 	/*===============================
 		CLEAN UP
 	=================================*/
-	renderingThread.join();
+	//renderingThread.join();
 	chunkLoadingThread.join();
 	glfwTerminate();
 	return 0;
@@ -148,6 +137,23 @@ void renderingLoop(GLFWwindow* window, World* world) {
 
 	//mainCamera->forceUpdateCurrentChunk();
 	while (!glfwWindowShouldClose(window)) {
+
+
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+		FPSCounter::updateFPS(deltaTime);
+		/*===============================
+			INPUT
+		=================================*/
+		processInput(window);
+
+		update(deltaTime);
+		glfwPollEvents();
+
+		/*===============================
+			GUI
+		=================================*/
 		// (Your code calls glfwPollEvents())
 		// ...
 		// Start the Dear ImGui frame
@@ -155,6 +161,8 @@ void renderingLoop(GLFWwindow* window, World* world) {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGui::ShowDemoWindow(); // Show demo window! :)
+
+
 
 		/*===============================
 			RENDERING
@@ -165,20 +173,17 @@ void renderingLoop(GLFWwindow* window, World* world) {
 		world->renderChunks();
 
 
-		// Rendering
-		// (Your code clears your framebuffer, renders your other stuff etc.)
+		// Rendering GUI
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		// (Your code calls glfwSwapBuffers() etc.)
 
 
+		// Swap Buffers
 		glfwSwapBuffers(window);
 	}
-
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
-
 }
 void chunkLoadingLoop(GLFWwindow* window, World* world) {
 	mainCamera->forceUpdateCurrentChunk();
@@ -206,6 +211,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, true);
+		return;
 	}
 	mainCamera->moveCamera(window, deltaTime);
 }
