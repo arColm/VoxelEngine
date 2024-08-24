@@ -118,6 +118,25 @@ namespace VoxelEngine {
 		threads.clear();
 
 	}
+	void World::reloadChunks() {
+		{
+			std::lock_guard<std::mutex> lock(chunkMap_mutex);
+			std::lock_guard<std::mutex> lock2(chunkUnloadingQueue_mutex);
+			for(auto& c : chunkLoader->chunk_map) {
+				chunkUnloadingQueue.push(c.second);
+			}
+			chunkLoader->chunk_map.clear();
+		}
+
+		if (!chunkQueue.empty()) {
+			std::lock_guard<std::mutex> lock(chunkQueue_mutex);
+			while (!chunkQueue.empty()) {
+				chunkQueue.pop();
+			}
+		}
+		mainCamera->forceUpdateCurrentChunk();
+		//World::loadChunks(mainCamera->currentChunk, mainCamera->viewDistance);
+	}
 	void World::renderChunks() {
 		if (!chunkUnloadingQueue.empty()) {
 			std::lock_guard<std::mutex> lock(chunkUnloadingQueue_mutex);

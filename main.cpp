@@ -41,6 +41,8 @@ float lastFrame = 0.0f; // Time of last frame
 float SCREEN_WIDTH = 800;
 float SCREEN_HEIGHT = 600;
 
+float GUI_WIDTH = 600;
+
 
 int main() {
 	glfwInit();
@@ -48,7 +50,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "VoxelEngine", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH + GUI_WIDTH, SCREEN_HEIGHT, "VoxelEngine", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -162,7 +164,7 @@ void renderingLoop(GLFWwindow* window, World* world) {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		//ImGui::ShowDemoWindow(); // Show demo window! :)
-		VoxelEngine::GUI::ShowWorldGenerationGUIWindow();
+		VoxelEngine::GUI::ShowWorldGenerationGUIWindow(world);
 
 
 

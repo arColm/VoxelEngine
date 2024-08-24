@@ -12,7 +12,8 @@ namespace VoxelEngine {
 
 
 	class Camera {
-
+	private:
+		bool currentChunkInvalid = false;
 	public:
 		const float baseCameraSpeed = 20.0f;
 

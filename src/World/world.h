@@ -17,6 +17,7 @@ namespace VoxelEngine {
 		void loadChunks(glm::ivec2 origin, int viewDistance);
 		void renderChunks();
 
+		void reloadChunks();
 
 	private:
 
