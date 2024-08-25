@@ -20,6 +20,10 @@ public:
         return avalanche;
     }
 
+    xxHash operator+ (const int& v) const {
+        return accumulator + (uint32_t)v;
+    }
+
     float Floats01A() { return (float)((uint32_t)(*this) & 255) / 255.f; };
     float Floats01B() { return (float)(((uint32_t)(*this) >> 8) & 255) / 255.f; };
     float Floats01C() { return (float)(((uint32_t)(*this) >> 16) & 255) / 255.f; };

@@ -25,7 +25,7 @@ public:
 				float u = xi / (float)(width);
 				for (int zi = 0; zi < width; zi++) {
 					float v = zi / (float)(width);
-					res[xi][zi] += GetNoise2D((x+u) * frequency, (y+v) * frequency) * amplitude;
+					res[xi][zi] += GetNoise2D((x+u) * frequency, (y+v) * frequency, i) * amplitude;
 				}
 			}
 			maxAmplitude += amplitude;
@@ -46,7 +46,7 @@ public:
 		return res;
 
 	}
-	static float GetNoise2D(float x, float y) {
+	static float GetNoise2D(float x, float y,int octave = 0) {
 		//std::cout << x << '-' << y << std::endl;
 
 		xxHash x0, x1;
@@ -61,8 +61,8 @@ public:
 		int floorY = std::floor(y);
 
 
-		x0 = x0.eat(floorX);
-		x1 = x1.eat(floorX + 1);
+		x0 = x0.eat(floorX) + octave;
+		x1 = x1.eat(floorX + 1) + octave;
 
 		h00 = x0.eat(floorY);
 		h01 = x0.eat(floorY + 1);

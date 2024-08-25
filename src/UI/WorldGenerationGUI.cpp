@@ -12,9 +12,11 @@ namespace VoxelEngine::GUI {
 
         static float f = 0.0f;
         static int counter = 0;
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+        ImGui::Begin("World Generation");
 
-        ImGui::SetWindowPos(ImVec2(800, 0));
+        //change 800 to variable
+        ImGui::SetWindowPos(ImVec2(800, 0)); // ImVec2(SCREEN_WIDTH,0)
+        ImGui::SetWindowSize(ImVec2(600, 600)); //ImVec2(GUI_WIDTH,SCREEN_HEIGHT)
 
         //ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 
