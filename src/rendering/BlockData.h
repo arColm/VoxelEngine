@@ -19,6 +19,7 @@ namespace VoxelEngine {
 		//BlockData getBlockData(BlockType block);
 		BlockType getBlockType(short id);
 		glm::vec4 getBlockColor(BlockType block);
+		bool getBlockTransparent(BlockType block);
 	};
 
 }

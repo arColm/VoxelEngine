@@ -8,6 +8,9 @@ namespace VoxelEngine {
 		static float persistence;
 		static float lacunarity;
 		static int numOctaves;
+		static int seaLevel;
+		static int snowLevel;
+		static int maxHeight;
 		std::shared_ptr<Chunk> generateChunk(int x, int z);
 
 		void generateGUI();

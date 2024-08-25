@@ -24,4 +24,20 @@ namespace VoxelEngine {
 			return glm::vec4(0.27f, 0.52f, 0.33f, 1.0f);
 		}
 	}
+	bool BlockData::getBlockTransparent(BlockType block) {
+		switch (block) {
+		case BlockType::Air:
+			return true;
+		case BlockType::Dirt:
+			return false;
+		case BlockType::Sand:
+			return false;
+		case BlockType::Water:
+			return true;
+		case BlockType::Snow:
+			return false;
+		case BlockType::Grass:
+			return false;
+		}
+	}
 }

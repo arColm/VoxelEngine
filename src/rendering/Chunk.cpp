@@ -141,62 +141,74 @@ namespace VoxelEngine {
 	}
 
 	void Chunk::addBlock(float x,float y,float z, BlockType block, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map) {
-		if (y == HEIGHT - 1 || blocks[x][y + 1][z] == BlockType::Air) {
+		if (y == HEIGHT - 1) {
 			Chunk::addTop(x, y, z, block);
 		}
-		else if (blocks[x][y + 1][z] != block && blocks[x][y + 1][z] == BlockType::Water) {
-			Chunk::addTop(x, y, z, block);
+		else {
+			BlockType aboveBlock = blocks[x][y + 1][z];
+			if (aboveBlock != block && BlockData::getBlockTransparent(aboveBlock)) {
+				Chunk::addTop(x, y, z, block);
+			}
 		}
 
-		if (y == 0 || blocks[x][y - 1][z] == BlockType::Air) {
+		if (y == 0) {
 			Chunk::addBottom(x, y, z, block);
 		}
-		else if (blocks[x][y-1][z] != block && blocks[x][y-1][z] == BlockType::Water) {
-			Chunk::addBottom(x, y, z, block);
+		else {
+			BlockType belowBlock = blocks[x][y - 1][z];
+			if (belowBlock != block && BlockData::getBlockTransparent(belowBlock)) {
+				Chunk::addTop(x, y, z, block);
+			}
 		}
 
+		BlockType rightBlock = BlockType::Air;
 		if (x == WIDTH - 1) {
 			auto adjChunk = chunk_map->find(glm::ivec2(this->x + 1, this->z));
-			if (adjChunk!=chunk_map->end() && adjChunk->second->getBlock(0, y, z) == BlockType::Air) Chunk::addRight(x, y, z, block);
+			if (adjChunk != chunk_map->end()) rightBlock = adjChunk->second->getBlock(0, y, z);
+			//if (adjChunk!=chunk_map->end() && adjChunk->second->getBlock(0, y, z) == BlockType::Air) Chunk::addRight(x, y, z, block);
 		}
-		else if (blocks[x + 1][y][z] == BlockType::Air) {
-			Chunk::addRight(x, y, z, block);
+		else {
+			rightBlock = blocks[x + 1][y][z];
 		}
-		else if (blocks[x + 1][y][z] != block && blocks[x + 1][y][z] == BlockType::Water) {
+		if (rightBlock!=block && BlockData::getBlockTransparent(rightBlock)) {
 			Chunk::addRight(x, y, z, block);
 		}
 
+		BlockType leftBlock = BlockType::Air;
 		if (x == 0) {
 			auto adjChunk = chunk_map->find(glm::ivec2(this->x - 1, this->z));
-			if (adjChunk != chunk_map->end() && adjChunk->second->getBlock(WIDTH-1, y, z) == BlockType::Air) Chunk::addLeft(x, y, z, block);
+			if (adjChunk != chunk_map->end()) leftBlock = adjChunk->second->getBlock(WIDTH-1, y, z);
 		}
-		else if (blocks[x - 1][y][z] == BlockType::Air) {
-			Chunk::addLeft(x, y, z, block);
+		else {
+			leftBlock = blocks[x - 1][y][z];
 		}
-		else if (blocks[x - 1][y][z] != block && blocks[x - 1][y][z] == BlockType::Water) {
+
+		if (leftBlock != block && BlockData::getBlockTransparent(leftBlock)) {
 			Chunk::addLeft(x, y, z, block);
 		}
 
+		BlockType backBlock = BlockType::Air;
 		if (z == WIDTH - 1) {
 			auto adjChunk = chunk_map->find(glm::ivec2(this->x, this->z+1));
-			if (adjChunk != chunk_map->end() && adjChunk->second->getBlock(x, y, 0) == BlockType::Air) Chunk::addBack(x, y, z, block);
+			if (adjChunk != chunk_map->end()) backBlock = adjChunk->second->getBlock(x, y, 0);
 		}
-		else if (blocks[x][y][z + 1] == BlockType::Air) {
-			Chunk::addBack(x, y, z, block);
+		else {
+			backBlock = blocks[x][y][z+1];
 		}
-		else if (blocks[x][y][z+1] != block && blocks[x][y][z + 1] == BlockType::Water) {
+		if (backBlock != block && BlockData::getBlockTransparent(backBlock)) {
 			Chunk::addBack(x, y, z, block);
 		}
 
+		BlockType frontBlock = BlockType::Air;
 		if (z == 0) {
 			auto adjChunk = chunk_map->find(glm::ivec2(this->x, this->z - 1));
-			if (adjChunk != chunk_map->end() && adjChunk->second->getBlock(x, y, WIDTH-1) == BlockType::Air) Chunk::addForward(x, y, z, block);
+			if (adjChunk != chunk_map->end()) frontBlock = adjChunk->second->getBlock(x, y, WIDTH - 1);
 		}
-		else if (blocks[x][y][z - 1] == BlockType::Air) {
-			Chunk::addForward(x, y, z, block);
+		else {
+			frontBlock = blocks[x][y][z - 1];
 		}
-		else if (blocks[x][y][z - 1] != block && blocks[x][y][z - 1] == BlockType::Water) {
-			Chunk::addForward(x, y, z, block);
+		if (frontBlock != block && BlockData::getBlockTransparent(frontBlock)) {
+			Chunk::addFront(x, y, z, block);
 		}
 
 	}
@@ -294,7 +306,7 @@ namespace VoxelEngine {
 			opaqueVertexColor.insert(opaqueVertexColor.end(), newColors.begin(), newColors.end());
 		}
 	}
-	void Chunk::addForward(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
+	void Chunk::addFront(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
 		std::array<GLfloat, 18> newVertices = {
 			x, y + 1, z,
 			x + 1, y + 1, z,

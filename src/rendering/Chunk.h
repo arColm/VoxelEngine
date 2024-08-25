@@ -47,7 +47,7 @@ namespace VoxelEngine {
 		void addTop(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addLeft(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addRight(GLfloat x, GLfloat y, GLfloat z, BlockType block);
-		void addForward(GLfloat x, GLfloat y, GLfloat z, BlockType block);
+		void addFront(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addBack(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		void addBottom(GLfloat x, GLfloat y, GLfloat z, BlockType block);
 		
