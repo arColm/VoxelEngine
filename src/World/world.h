@@ -19,6 +19,10 @@ namespace VoxelEngine {
 
 		void reloadChunks();
 
+		void generateGUI();
+
+		const std::type_info& getGeneratorType();
+
 	private:
 
 		int seed;

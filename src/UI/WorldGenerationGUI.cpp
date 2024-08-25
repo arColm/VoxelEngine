@@ -15,10 +15,13 @@ namespace VoxelEngine::GUI {
         ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
         ImGui::SetWindowPos(ImVec2(800, 0));
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
 
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+        //ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+
+        //ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+        //ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+        world->generateGUI();
 
         if (ImGui::Button("Reload Chunks"))
             world->reloadChunks();

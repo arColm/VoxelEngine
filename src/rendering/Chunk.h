@@ -18,6 +18,9 @@ namespace VoxelEngine {
 		Chunk(int x, int z);
 		~Chunk();
 
+		static const int HEIGHT = 64,
+			WIDTH = 32;
+
 		void load(std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map);
 		void renderOpaque(std::shared_ptr<Shader> shader);
 		void renderTransparent(std::shared_ptr<Shader> shader);
@@ -28,15 +31,12 @@ namespace VoxelEngine {
 		void loadBlocks();
 
 		BlockType getBlock(int x, int y, int z);
-		static int getWidth();
 		int getX();
 		int getZ();
 		bool getIsRendered();
 		void setIsRendered(bool val);
 	private:
 		int x, z;
-		static const int HEIGHT = 64,
-			WIDTH = 32;
 		GLuint opaqueVAO;
 		GLuint transparentVAO;
 		int numOpaqueVertices;

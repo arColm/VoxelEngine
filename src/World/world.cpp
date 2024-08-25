@@ -135,7 +135,6 @@ namespace VoxelEngine {
 			}
 		}
 		mainCamera->forceUpdateCurrentChunk();
-		//World::loadChunks(mainCamera->currentChunk, mainCamera->viewDistance);
 	}
 	void World::renderChunks() {
 		if (!chunkUnloadingQueue.empty()) {
@@ -156,6 +155,12 @@ namespace VoxelEngine {
 		World::chunkLoader->renderChunks();
 	}
 
+	void World::generateGUI() {
+		generator->generateGUI();
+	}
+	const std::type_info& World::getGeneratorType() {
+		return typeid(&generator);
+	}
 
 
 }

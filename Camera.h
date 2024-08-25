@@ -25,7 +25,7 @@ namespace VoxelEngine {
 		float fov = 45.0f;
 
 		//this is inaccurate, but gets changed instantly
-		glm::vec2 currentChunk = glm::vec2((int)cameraPos.x / Chunk::getWidth(), (int)cameraPos.z / Chunk::getWidth());
+		glm::vec2 currentChunk = glm::vec2((int)cameraPos.x / Chunk::WIDTH, (int)cameraPos.z / Chunk::WIDTH);
 		int viewDistance = 12;
 
 

@@ -380,9 +380,6 @@ namespace VoxelEngine {
 		}
 	}
 
-	int Chunk::getWidth() {
-		return WIDTH;
-	}
 	BlockType Chunk::getBlock(int x, int y, int z) {
 		return blocks[x][y][z];
 	}

@@ -9,6 +9,8 @@ namespace VoxelEngine {
 	public:
 		virtual std::shared_ptr<Chunk> generateChunk(int x, int z);
 		virtual ~IChunkGenerator();
+		
+		virtual void generateGUI();
 	};
 }
 

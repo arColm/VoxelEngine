@@ -1,37 +1,61 @@
 #include "src/World/PerlinChunkGenerator.h"
 #include <src/Utils/Hashing/xxHash.h>
+#include <src/Utils/Noise/PerlinNoise.h>
+#include <imgui.h>
 
 
 
 namespace VoxelEngine {
+
+	float PerlinChunkGenerator::persistence = 0.5f;
+	float PerlinChunkGenerator::lacunarity = 2.0f;
+	int PerlinChunkGenerator::numOctaves = 3;
 	std::shared_ptr<Chunk> PerlinChunkGenerator::generateChunk(int x, int z) {
 		std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>(x, z);
-		xxHash x0, x1;
-		xxHash h00, h01, h10, h11;
-		x0 = x0.eat(x);
-		x1 = x1.eat(x + 1);
-		h00 = x0.eat(z);
-		h01 = x0.eat(z + 1);
-		h10 = x1.eat(z);
-		h11 = x1.eat(z + 1);
+		int WIDTH = Chunk::WIDTH;
 
-		float p00, p01, p10, p11;
-		p00 = (h00 / static_cast<float>(std::numeric_limits<uint32_t>::max())) * 10;
-		p01 = (h01 / static_cast<float>(std::numeric_limits<uint32_t>::max())) * 10;
-		p10 = (h10 / static_cast<float>(std::numeric_limits<uint32_t>::max())) * 10;
-		p11 = (h11 / static_cast<float>(std::numeric_limits<uint32_t>::max())) * 10;
+		std::vector<std::vector<float>> heightMap = PerlinNoise::GetLattice2D(x, z, WIDTH, numOctaves, lacunarity, persistence);
 
-		
-		for (int xi = 0; xi < Chunk::getWidth(); xi++) {
-			for (int zi = 0; zi < Chunk::getWidth(); zi++) {
-				float u = xi / (Chunk::getWidth()-1.f);
-				float v = zi / (Chunk::getWidth() - 1.f);
-				int yi = std::lerp(std::lerp(p00, p10, u), std::lerp(p01, p11, u), v);
+		for (int xi = 0; xi < WIDTH; xi++) {
+			for (int zi = 0; zi < WIDTH; zi++) {
+				int yi = 40 * heightMap[xi][zi];
+
+				if (yi >= 15) {
+					if (yi >= 30) {
+						for (int i = 0; i < 3; i++, yi--) {
+							chunk->setBlock(xi, yi, zi, BlockType::Snow);
+						}
+					}
+					else {
+						for (int i = 0; i < 3; i++, yi--) {
+							chunk->setBlock(xi, yi, zi, BlockType::Grass);
+						}
+					}
+
+					for (; yi >= 15; yi--) {
+						chunk->setBlock(xi, yi, zi, BlockType::Dirt);
+					}
+				}
+				else {
+					for (int i = 14; i > yi; i--) {
+						chunk->setBlock(xi, i, zi, BlockType::Water);
+					}
+				}
 				for (; yi >= 0; yi--) {
-					chunk->setBlock(xi, yi, zi, BlockType::Dirt);
+					chunk->setBlock(xi, yi, zi, BlockType::Sand);
 				}
 			}
 		}
 		return chunk;
+
+	}
+
+	void PerlinChunkGenerator::generateGUI() {
+
+		ImGui::SliderFloat("Persistence", &persistence, 0.3f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+
+		ImGui::SliderFloat("Lacunarity", &lacunarity, 1.0f, 5.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+
+		ImGui::SliderInt("numOctaves", &numOctaves, 1, 7);            // Edit 1 float using a slider from 0.0f to 1.0f
 	}
 }

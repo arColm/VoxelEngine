@@ -22,7 +22,7 @@ namespace VoxelEngine {
 
 	void Camera::updateCurrentChunk() {
 		
-		glm::ivec2 nextChunk((int)abs(cameraPos.x) / Chunk::getWidth(), (int)abs(cameraPos.z) / Chunk::getWidth());
+		glm::ivec2 nextChunk((int)abs(cameraPos.x) / Chunk::WIDTH, (int)abs(cameraPos.z) / Chunk::WIDTH);
 		if (cameraPos.x < 0) nextChunk.x = -(nextChunk.x + 1);
 		if (cameraPos.z < 0) nextChunk.y = -(nextChunk.y + 1);
 		if (nextChunk.x != currentChunk.x || nextChunk.y != currentChunk.y || currentChunkInvalid) {

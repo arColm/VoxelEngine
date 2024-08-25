@@ -19,6 +19,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <src/UI/WorldGenerationGUI.h>
+#include <src/World/PerlinChunkGenerator.h>
 
 using namespace VoxelEngine;
 
@@ -86,7 +87,7 @@ int main() {
 
 	setProjectionMatrix(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	IslandChunkGenerator generator;
+	PerlinChunkGenerator generator;
 	World world(&generator, 0);
 
 

@@ -7,7 +7,7 @@
 namespace VoxelEngine {
 	std::shared_ptr<Chunk> IslandChunkGenerator::generateChunk(int x, int z) {
 		std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>(x, z);
-		int WIDTH = Chunk::getWidth();
+		int WIDTH = Chunk::WIDTH;
 
 		std::vector<std::vector<float>> heightMap = PerlinNoise::GetLattice2D(x,z,WIDTH,3,2.0f,0.5f);
 
