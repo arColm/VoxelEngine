@@ -33,15 +33,14 @@ namespace VoxelEngine {
 		BlockType getBlock(int x, int y, int z);
 		int getX();
 		int getZ();
-		bool getIsRendered();
-		void setIsRendered(bool val);
+		bool getHasMesh();
 	private:
 		int x, z;
 		GLuint opaqueVAO;
 		GLuint transparentVAO;
 		int numOpaqueVertices;
 		int numTransparentVertices;
-		bool isRendered;
+		bool hasMesh;
 		//VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
 		std::array<std::array<std::array<VoxelEngine::BlockType,WIDTH>,HEIGHT>,WIDTH> blocks;
 

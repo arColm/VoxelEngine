@@ -76,7 +76,7 @@ namespace VoxelEngine {
 				}
 				else {
 					auto& chunk = World::chunkLoader->chunk_map.find(chunkLoc)->second;
-					if (!chunk->getIsRendered()) {
+					if (!chunk->getHasMesh()) {
 						if (MULTITHREADED_CHUNKLOADING) {
 							threads.push_back(
 								std::jthread([&](std::shared_ptr<VoxelEngine::Chunk>chunk, int viewDistance) {

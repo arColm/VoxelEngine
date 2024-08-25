@@ -7,9 +7,9 @@
 
 namespace VoxelEngine {
 
-	float PerlinChunkGenerator::persistence = 0.5f;
-	float PerlinChunkGenerator::lacunarity = 2.0f;
-	int PerlinChunkGenerator::numOctaves = 3;
+	float PerlinChunkGenerator::persistence = 0.875f;
+	float PerlinChunkGenerator::lacunarity = 1.143f;
+	int PerlinChunkGenerator::numOctaves = 5;
 	std::shared_ptr<Chunk> PerlinChunkGenerator::generateChunk(int x, int z) {
 		std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>(x, z);
 		int WIDTH = Chunk::WIDTH;

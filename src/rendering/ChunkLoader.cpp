@@ -33,13 +33,13 @@ namespace VoxelEngine{
 		updateProjectionMatrix(shader->projectionLoc);
 		setViewMatrix(shader->viewLoc);
 		for (const auto& pair : chunk_map) {
-			if (pair.second->getIsRendered()) {
+			if (pair.second->getHasMesh()) {
 				pair.second->renderOpaque(shader);
 			}
 
 		}
 		for (const auto& pair : chunk_map) {
-			if (pair.second->getIsRendered()) {
+			if (pair.second->getHasMesh()) {
 				pair.second->renderTransparent(shader);
 			}
 		}
