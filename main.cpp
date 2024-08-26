@@ -59,7 +59,7 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	//glfwSwapInterval(0); //disables vsync
+	glfwSwapInterval(0); //disables vsync
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;

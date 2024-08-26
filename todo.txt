@@ -18,6 +18,13 @@ TODO
  - change way to store colors...
 
  - fog to mask chunk loading
+ --- shader takes camera position, changes color based on distance to camera
+ 
+ - simple light
+ - day/night cycle
+ --- single point/cube for sun
+ --- shadow mapping
+ ---- draw shadows based on what the sun CANT see
  - noise applied to chunk generator
 
  - clouds (can just be noise!)
@@ -28,9 +35,6 @@ TODO
  --- use uniform buffer object to handle transformation matrices
  --- alternatively just use a different shader for liquids --> new chunk renderer for liquids
  
- - simple light
- - day/night cycle
-
 
 
 

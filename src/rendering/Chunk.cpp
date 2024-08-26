@@ -117,21 +117,21 @@ namespace VoxelEngine {
 
 		shader->use();
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
+		//glm::mat4 model = glm::mat4(1.0f);
+		//model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
 		glBindVertexArray(opaqueVAO);
-		glUniformMatrix4fv(shader->modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniformMatrix4fv(shader->modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, numOpaqueVertices);
 		glBindVertexArray(0);
 	}
 	void Chunk::renderTransparent(std::shared_ptr<Shader> shader) {
 		shader->use();
 
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
+		//glm::mat4 model = glm::mat4(1.0f);
+		//model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
 
 		glBindVertexArray(transparentVAO);
-		glUniformMatrix4fv(shader->modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniformMatrix4fv(shader->modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, numTransparentVertices);
 		glBindVertexArray(0);
 	}
@@ -141,23 +141,24 @@ namespace VoxelEngine {
 	}
 
 	void Chunk::addBlock(float x,float y,float z, BlockType block, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map) {
+		int globalX = x + Chunk::x * Chunk::WIDTH; int globalZ = z + Chunk::z * Chunk::WIDTH;
 		if (y == HEIGHT - 1) {
-			Chunk::addTop(x, y, z, block);
+			Chunk::addTop(globalX, y, globalZ, block);
 		}
 		else {
 			BlockType aboveBlock = blocks[x][y + 1][z];
 			if (aboveBlock != block && BlockData::getBlockTransparent(aboveBlock)) {
-				Chunk::addTop(x, y, z, block);
+				Chunk::addTop(globalX, y, globalZ, block);
 			}
 		}
 
 		if (y == 0) {
-			Chunk::addBottom(x, y, z, block);
+			Chunk::addBottom(globalX, y, globalZ, block);
 		}
 		else {
 			BlockType belowBlock = blocks[x][y - 1][z];
 			if (belowBlock != block && BlockData::getBlockTransparent(belowBlock)) {
-				Chunk::addTop(x, y, z, block);
+				Chunk::addBottom(globalX, y, globalZ, block);
 			}
 		}
 
@@ -171,7 +172,7 @@ namespace VoxelEngine {
 			rightBlock = blocks[x + 1][y][z];
 		}
 		if (rightBlock!=block && BlockData::getBlockTransparent(rightBlock)) {
-			Chunk::addRight(x, y, z, block);
+			Chunk::addRight(globalX, y, globalZ, block);
 		}
 
 		BlockType leftBlock = BlockType::Air;
@@ -184,7 +185,7 @@ namespace VoxelEngine {
 		}
 
 		if (leftBlock != block && BlockData::getBlockTransparent(leftBlock)) {
-			Chunk::addLeft(x, y, z, block);
+			Chunk::addLeft(globalX, y, globalZ, block);
 		}
 
 		BlockType backBlock = BlockType::Air;
@@ -196,7 +197,7 @@ namespace VoxelEngine {
 			backBlock = blocks[x][y][z+1];
 		}
 		if (backBlock != block && BlockData::getBlockTransparent(backBlock)) {
-			Chunk::addBack(x, y, z, block);
+			Chunk::addBack(globalX, y, globalZ, block);
 		}
 
 		BlockType frontBlock = BlockType::Air;
@@ -208,7 +209,7 @@ namespace VoxelEngine {
 			frontBlock = blocks[x][y][z - 1];
 		}
 		if (frontBlock != block && BlockData::getBlockTransparent(frontBlock)) {
-			Chunk::addFront(x, y, z, block);
+			Chunk::addFront(globalX, y, globalZ, block);
 		}
 
 	}

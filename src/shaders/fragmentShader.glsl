@@ -8,6 +8,8 @@ in vec4 vertexColor;
 
 //uniform vec3 objectColor;
 //uniform vec3 lightColor;
+uniform vec3 cameraPos;
+
 
 void main()
 {

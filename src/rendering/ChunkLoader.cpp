@@ -32,6 +32,7 @@ namespace VoxelEngine{
 		shader->use();
 		updateProjectionMatrix(shader->projectionLoc);
 		setViewMatrix(shader->viewLoc);
+		shader->setVec3("cameraPos", mainCamera->cameraPos);
 		for (const auto& pair : chunk_map) {
 			if (pair.second->getHasMesh()) {
 				pair.second->renderOpaque(shader);
