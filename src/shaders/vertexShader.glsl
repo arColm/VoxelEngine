@@ -8,10 +8,12 @@ layout (location = 1) in vec4 aColor;
 
 //out vec2 TexCoord;
 out vec4 vertexColor;
+out vec4 FragPosLightSpace;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 lightSpaceMatrix;
 
 uniform vec3 cameraPos;
 
@@ -24,8 +26,11 @@ void main()
 {
 	gl_Position = projection * view * vec4(aPos,1.0);
 	vertexColor = aColor + vec4(fogColor(aPos),0.0);
+    FragPosLightSpace = lightSpaceMatrix * vec4(aPos, 1.0);
 
 	//vertexColor = vec4(aPos, 1.0);
 	//TexCoord = aTexCoord;
 };
+
+
 

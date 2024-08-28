@@ -115,7 +115,7 @@ namespace VoxelEngine {
 
 	void Chunk::renderOpaque(std::shared_ptr<Shader> shader) {
 
-		shader->use();
+		//shader->use();
 
 		//glm::mat4 model = glm::mat4(1.0f);
 		//model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
@@ -125,7 +125,7 @@ namespace VoxelEngine {
 		glBindVertexArray(0);
 	}
 	void Chunk::renderTransparent(std::shared_ptr<Shader> shader) {
-		shader->use();
+		//shader->use();
 
 		//glm::mat4 model = glm::mat4(1.0f);
 		//model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));

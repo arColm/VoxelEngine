@@ -20,6 +20,7 @@
 #include "imgui_impl_opengl3.h"
 #include <src/UI/WorldGenerationGUI.h>
 #include <src/World/PerlinChunkGenerator.h>
+#include <src/rendering/Renderer.h>
 
 using namespace VoxelEngine;
 
@@ -39,8 +40,6 @@ void update(float deltaTime);
 float deltaTime = 0.0f;	// Time between current frame and last frame
 float lastFrame = 0.0f; // Time of last frame
 
-float SCREEN_WIDTH = 800;
-float SCREEN_HEIGHT = 600;
 
 float GUI_WIDTH = 600;
 
@@ -51,7 +50,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH + GUI_WIDTH, SCREEN_HEIGHT, "VoxelEngine", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(Renderer::SCREEN_WIDTH + GUI_WIDTH, Renderer::SCREEN_HEIGHT, "VoxelEngine", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -70,6 +69,7 @@ int main() {
 	initializeCamera(window,&cam);
 
 	glViewport(0, 0, 800, 600);
+	glClearColor(0.25f, 0.60f, 0.62f, 1.0f);
 
 	//if user resizes window, resize viewport
 	//glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -85,7 +85,7 @@ int main() {
 	//chunkLoader.addChunk(-1,-1,&chunk);
 	//chunkLoader.addChunk(0,0,&chunk2);
 
-	setProjectionMatrix(SCREEN_WIDTH, SCREEN_HEIGHT);
+	setProjectionMatrix(Renderer::SCREEN_WIDTH, Renderer::SCREEN_HEIGHT);
 
 	PerlinChunkGenerator generator;
 	World world(&generator, 0);
@@ -122,6 +122,7 @@ int main() {
 	glfwTerminate();
 	return 0;
 }
+
 
 void renderingLoop(GLFWwindow* window, World* world) {
 	glfwMakeContextCurrent(window);
@@ -172,9 +173,6 @@ void renderingLoop(GLFWwindow* window, World* world) {
 		/*===============================
 			RENDERING
 		=================================*/
-		glClearColor(0.25f, 0.60f, 0.62f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//mainCamera->updateCurrentChunk();
 		world->renderChunks();
 
 
@@ -207,8 +205,8 @@ void update(float deltaTime) {
 */
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
-	SCREEN_WIDTH = width;
-	SCREEN_HEIGHT = height;
+	Renderer::SCREEN_WIDTH = width;
+	Renderer::SCREEN_HEIGHT = height;
 }
 /*
 	This method processes keyboard input
@@ -225,7 +223,7 @@ void processInput(GLFWwindow* window) {
 	if (glfwGetMouseButton(window, 0) == GLFW_PRESS && glfwGetInputMode(window,GLFW_CURSOR)==GLFW_CURSOR_NORMAL) {
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
-		if (xPos < SCREEN_WIDTH && yPos < SCREEN_HEIGHT) {
+		if (xPos < Renderer::SCREEN_WIDTH && yPos < Renderer::SCREEN_HEIGHT) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 	}

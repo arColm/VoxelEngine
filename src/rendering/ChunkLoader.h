@@ -23,7 +23,18 @@ namespace VoxelEngine {
 
 		std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> chunk_map;
 	private:
+		void renderMeshes();
 		std::shared_ptr<Shader> shader;
+		std::shared_ptr<Shader> lightShader;
+		unsigned int depthMapFBO;
+		unsigned int depthMap;
+
+		//unsigned int quadVAO;
+		//unsigned int quadVBO;
+		//std::shared_ptr<Shader> debugDepthShader;
+
+		//void renderQuad();
+
 	};
 }
 

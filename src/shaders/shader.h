@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iostream>
 #include <glm/ext/vector_float3.hpp>
+#include <glm/ext/matrix_float4x4.hpp>
 
 namespace VoxelEngine {
     class Shader
@@ -31,6 +32,7 @@ namespace VoxelEngine {
         void setFloat(const std::string& name, float value) const;
 
         void setVec3(const std::string& name, const glm::vec3& value) const;
+        void setMat4(const std::string& name, const glm::mat4& value) const;
 
     };
 }

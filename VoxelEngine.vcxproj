@@ -148,6 +148,7 @@
     <ClCompile Include="src\rendering\Chunk.cpp" />
     <ClCompile Include="src\rendering\ChunkLoader.cpp" />
     <ClCompile Include="src\rendering\loader.cpp" />
+    <ClCompile Include="src\rendering\Renderer.cpp" />
     <ClCompile Include="src\shaders\shader.cpp" />
     <ClCompile Include="src\UI\FPSCounter.cpp" />
     <ClCompile Include="src\UI\WorldGenerationGUI.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="src\rendering\Chunk.h" />
     <ClInclude Include="src\rendering\ChunkLoader.h" />
     <ClInclude Include="src\rendering\loader.h" />
+    <ClInclude Include="src\rendering\Renderer.h" />
     <ClInclude Include="src\shaders\shader.h" />
     <ClInclude Include="src\UI\FPSCounter.h" />
     <ClInclude Include="src\UI\WorldGenerationGUI.h" />

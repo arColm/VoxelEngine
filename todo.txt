@@ -4,7 +4,7 @@ bind the vao and set vertex attributes to block attributes respectively
 
 
 Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
-
+// TODO: change 1024 to generics (SHADOW_WIDTH/SHADOW_HEIGHT) -- chunkloader.cpp
 
 
 TODO
