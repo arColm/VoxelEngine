@@ -10,7 +10,6 @@
 namespace VoxelEngine {
 	World::World(IChunkGenerator* generator,int seed) {
 		World::generator = generator;
-		World::chunkLoader = std::make_unique<ChunkLoader>();
 		World::chunkLoaderConnection = mainCamera->enterNewChunkEvent.connect(
 			boost::bind(&World::loadChunks,this, boost::placeholders::_1,boost::placeholders::_2));
 		World::seed = seed;
@@ -25,16 +24,16 @@ namespace VoxelEngine {
 		int maxChunksLoaded = (viewDistance + 1) * (viewDistance + 2) * 2;
 		maxChunksLoaded = 1;
 		//unload chunks?
-		if (World::chunkLoader->chunk_map.size() > maxChunksLoaded) {
+		if (chunk_map.size() > maxChunksLoaded) {
 			//unload chunks
 			std::lock_guard<std::mutex> lock(chunkMap_mutex); //consider only locking when erasing
-			for (auto it = chunkLoader->chunk_map.cbegin(); it != chunkLoader->chunk_map.cend();)
+			for (auto it = chunk_map.cbegin(); it != chunk_map.cend();)
 			{
 				if (abs(it->first.x - origin.x) + abs(it->first.y - origin.y) > viewDistance)
 				{
 					std::lock_guard<std::mutex> lock(chunkUnloadingQueue_mutex);
 					chunkUnloadingQueue.push(it->second);
-					it = chunkLoader->chunk_map.erase(it);
+					it = chunk_map.erase(it);
 				}
 				else
 				{
@@ -48,7 +47,7 @@ namespace VoxelEngine {
 		for (int u = viewDistance; u >= -viewDistance; u--) {
 			for (int v = abs(u) - viewDistance; abs(u) + v <= viewDistance; v++) {
 				glm::ivec2 chunkLoc(origin.x + u, origin.y + v);
-				if (World::chunkLoader->chunk_map.find(chunkLoc) == World::chunkLoader->chunk_map.end()) {
+				if (chunk_map.find(chunkLoc) == chunk_map.end()) {
 					if (MULTITHREADED_CHUNKLOADING) {
 						threads.push_back(std::jthread(
 							[&](int x, int y, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>& chunkMap, bool isRendered) {
@@ -58,8 +57,8 @@ namespace VoxelEngine {
 								newChunks.push(chunk);
 							}
 							std::lock_guard<std::mutex> lock(chunkMap_mutex);
-							World::chunkLoader->addChunk(x, y, chunk);
-							}, chunkLoc.x, chunkLoc.y, std::ref(chunkLoader->chunk_map),
+							addChunk(x, y, chunk);
+							}, chunkLoc.x, chunkLoc.y, std::ref(chunk_map),
 								!(v == abs(u) - viewDistance || v == viewDistance - abs(u))));
 					}
 					else {
@@ -70,12 +69,12 @@ namespace VoxelEngine {
 							newChunks.push(chunk);
 						}
 						std::lock_guard<std::mutex> lock(chunkMap_mutex);
-						World::chunkLoader->addChunk(chunkLoc.x, chunkLoc.y, chunk);
+						addChunk(chunkLoc.x, chunkLoc.y, chunk);
 					}
 
 				}
 				else {
-					auto& chunk = World::chunkLoader->chunk_map.find(chunkLoc)->second;
+					auto& chunk = chunk_map.find(chunkLoc)->second;
 					if (!chunk->getHasMesh()) {
 						if (MULTITHREADED_CHUNKLOADING) {
 							threads.push_back(
@@ -108,7 +107,7 @@ namespace VoxelEngine {
 			//		chunkQueue.push(chunk);
 			//	}, chunk, std::ref(chunkLoader->chunk_map)));
 
-			chunk->load(&chunkLoader->chunk_map);
+			chunk->load(&chunk_map);
 			std::lock_guard<std::mutex> lock(chunkQueue_mutex);
 			chunkQueue.push(chunk);
 		}
@@ -122,10 +121,10 @@ namespace VoxelEngine {
 		{
 			std::lock_guard<std::mutex> lock(chunkMap_mutex);
 			std::lock_guard<std::mutex> lock2(chunkUnloadingQueue_mutex);
-			for(auto& c : chunkLoader->chunk_map) {
+			for(auto& c : chunk_map) {
 				chunkUnloadingQueue.push(c.second);
 			}
-			chunkLoader->chunk_map.clear();
+			chunk_map.clear();
 		}
 
 		if (!chunkQueue.empty()) {
@@ -136,7 +135,7 @@ namespace VoxelEngine {
 		}
 		mainCamera->forceUpdateCurrentChunk();
 	}
-	void World::renderChunks() {
+	void World::updateChunkMap() {
 		if (!chunkUnloadingQueue.empty()) {
 			std::lock_guard<std::mutex> lock(chunkUnloadingQueue_mutex);
 			while (!chunkUnloadingQueue.empty()) {
@@ -148,19 +147,18 @@ namespace VoxelEngine {
 			while (!chunkQueue.empty()) {
 				auto chunk = chunkQueue.front();
 				chunkQueue.pop();
-				chunk->loadBlocks();
+				chunk->generateMesh();
 			}
 		}
-		std::lock_guard<std::mutex> lock(chunkMap_mutex);
-		World::chunkLoader->renderChunks();
 	}
+
 
 	void World::generateGUI() {
 		generator->generateGUI();
 	}
-	const std::type_info& World::getGeneratorType() {
-		return typeid(&generator);
+
+
+	void World::addChunk(int x, int y, std::shared_ptr<Chunk> chunk) {
+		chunk_map.insert_or_assign(glm::ivec2(x, y), chunk);
 	}
-
-
 }

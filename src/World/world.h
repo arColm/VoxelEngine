@@ -15,25 +15,26 @@ namespace VoxelEngine {
 		~World();
 
 		void loadChunks(glm::ivec2 origin, int viewDistance);
-		void renderChunks();
 
 		void reloadChunks();
 
 		void generateGUI();
+		void updateChunkMap();
 
-		const std::type_info& getGeneratorType();
+		void addChunk(int x, int y, std::shared_ptr<Chunk> chunk);
 
+
+		std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> chunk_map;
+		std::mutex chunkMap_mutex; //todo: make this private
 	private:
 
 		int seed;
 		IChunkGenerator* generator;
 		boost::signals2::connection chunkLoaderConnection;
-		std::unique_ptr<ChunkLoader> chunkLoader;
 		std::queue<std::shared_ptr<Chunk>> chunkQueue;
 		std::queue<std::shared_ptr<Chunk>> chunkUnloadingQueue;
 		std::mutex chunkQueue_mutex;
 		std::mutex chunkUnloadingQueue_mutex;
-		std::mutex chunkMap_mutex;
 
 	};
 }

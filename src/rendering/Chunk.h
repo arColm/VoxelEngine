@@ -28,7 +28,7 @@ namespace VoxelEngine {
 		void addBlock(float x, float y,float z, BlockType block, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map);
 		void setBlock(float x, float y, float z, BlockType block);
 
-		void loadBlocks();
+		void generateMesh();
 
 		BlockType getBlock(int x, int y, int z);
 		int getX();

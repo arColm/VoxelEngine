@@ -20,7 +20,7 @@
 #include "imgui_impl_opengl3.h"
 #include <src/UI/WorldGenerationGUI.h>
 #include <src/World/PerlinChunkGenerator.h>
-#include <src/rendering/Renderer.h>
+#include <src/rendering/WorldRenderer.h>
 
 using namespace VoxelEngine;
 
@@ -28,8 +28,8 @@ using namespace VoxelEngine;
 	FUNCTION DECLARATIONS
 =================================*/
 
-void renderingLoop(GLFWwindow* window, World* world);
-void chunkLoadingLoop(GLFWwindow* window, World* world);
+void renderingLoop(GLFWwindow* window, WorldRenderer* renderer);
+void chunkLoadingLoop(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void update(float deltaTime);
@@ -50,7 +50,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(Renderer::SCREEN_WIDTH + GUI_WIDTH, Renderer::SCREEN_HEIGHT, "VoxelEngine", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(WorldRenderer::SCREEN_WIDTH + GUI_WIDTH, WorldRenderer::SCREEN_HEIGHT, "VoxelEngine", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -85,10 +85,12 @@ int main() {
 	//chunkLoader.addChunk(-1,-1,&chunk);
 	//chunkLoader.addChunk(0,0,&chunk2);
 
-	setProjectionMatrix(Renderer::SCREEN_WIDTH, Renderer::SCREEN_HEIGHT);
+	setProjectionMatrix(WorldRenderer::SCREEN_WIDTH, WorldRenderer::SCREEN_HEIGHT);
 
 	PerlinChunkGenerator generator;
-	World world(&generator, 0);
+	//World world(&generator, 0);
+	std::shared_ptr<World> world = std::make_shared<World>(&generator, 0);
+	WorldRenderer worldRenderer(world);
 
 
 
@@ -101,10 +103,10 @@ int main() {
 
 
 	glfwMakeContextCurrent(NULL);
-	std::thread chunkLoadingThread(&chunkLoadingLoop, window, &world);
+	std::thread chunkLoadingThread(&chunkLoadingLoop, window);
 	//std::thread renderingThread(&renderingLoop, window,&world);
 
-	renderingLoop(window, &world);
+	renderingLoop(window, &worldRenderer);
 
 
 	//while (!glfwWindowShouldClose(window))
@@ -124,7 +126,7 @@ int main() {
 }
 
 
-void renderingLoop(GLFWwindow* window, World* world) {
+void renderingLoop(GLFWwindow* window, WorldRenderer* renderer) {
 	glfwMakeContextCurrent(window);
 
 	// Setup Dear ImGui context
@@ -166,14 +168,14 @@ void renderingLoop(GLFWwindow* window, World* world) {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		//ImGui::ShowDemoWindow(); // Show demo window! :)
-		VoxelEngine::GUI::ShowWorldGenerationGUIWindow(world);
+		VoxelEngine::GUI::ShowWorldGenerationGUIWindow(renderer->world);
 
 
 
 		/*===============================
 			RENDERING
 		=================================*/
-		world->renderChunks();
+		renderer->renderFrame();
 
 
 		// Rendering GUI
@@ -188,7 +190,7 @@ void renderingLoop(GLFWwindow* window, World* world) {
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
-void chunkLoadingLoop(GLFWwindow* window, World* world) {
+void chunkLoadingLoop(GLFWwindow* window) {
 	mainCamera->forceUpdateCurrentChunk();
 	while (!glfwWindowShouldClose(window)) {
 		mainCamera->updateCurrentChunk();
@@ -205,8 +207,8 @@ void update(float deltaTime) {
 */
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
-	Renderer::SCREEN_WIDTH = width;
-	Renderer::SCREEN_HEIGHT = height;
+	WorldRenderer::SCREEN_WIDTH = width;
+	WorldRenderer::SCREEN_HEIGHT = height;
 }
 /*
 	This method processes keyboard input
@@ -223,7 +225,7 @@ void processInput(GLFWwindow* window) {
 	if (glfwGetMouseButton(window, 0) == GLFW_PRESS && glfwGetInputMode(window,GLFW_CURSOR)==GLFW_CURSOR_NORMAL) {
 		double xPos, yPos;
 		glfwGetCursorPos(window, &xPos, &yPos);
-		if (xPos < Renderer::SCREEN_WIDTH && yPos < Renderer::SCREEN_HEIGHT) {
+		if (xPos < WorldRenderer::SCREEN_WIDTH && yPos < WorldRenderer::SCREEN_HEIGHT) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 	}

@@ -87,7 +87,7 @@
     <ClCompile Include="src\UI\WorldGenerationGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\Renderer.cpp">
+    <ClCompile Include="src\rendering\WorldRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,7 +170,7 @@
     <ClInclude Include="src\UI\WorldGenerationGUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\rendering\Renderer.h">
+    <ClInclude Include="src\rendering\WorldRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

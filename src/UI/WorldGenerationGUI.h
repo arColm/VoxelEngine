@@ -3,7 +3,7 @@
 
 
 namespace VoxelEngine::GUI {
-	void ShowWorldGenerationGUIWindow(VoxelEngine::World* world);
+	void ShowWorldGenerationGUIWindow(std::shared_ptr<World> world);
 
 	void ShowTest();
 }

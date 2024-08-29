@@ -53,7 +53,7 @@ namespace VoxelEngine {
 
 	}
 
-	void Chunk::loadBlocks() {
+	void Chunk::generateMesh() {
 		if (opaqueVAO == transparentVAO) createVAO();
 		// opaque blocks
 		// 

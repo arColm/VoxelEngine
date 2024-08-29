@@ -6,7 +6,7 @@
 
 namespace VoxelEngine::GUI {
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-	void ShowWorldGenerationGUIWindow(World* world) {
+	void ShowWorldGenerationGUIWindow(std::shared_ptr<World> world) {
 		IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing Dear ImGui context.");
 		IMGUI_CHECKVERSION();
 
