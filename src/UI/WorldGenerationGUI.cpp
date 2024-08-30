@@ -10,8 +10,6 @@ namespace VoxelEngine::GUI {
 		IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing Dear ImGui context.");
 		IMGUI_CHECKVERSION();
 
-        static float f = 0.0f;
-        static int counter = 0;
         ImGui::Begin("World Generation");
 
         //change 800 to variable
@@ -24,9 +22,6 @@ namespace VoxelEngine::GUI {
         //ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
         world->generateGUI();
-
-        if (ImGui::Button("Reload Chunks"))
-            world->reloadChunks();
 
         ImGui::End();
 		ShowTest();

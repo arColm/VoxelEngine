@@ -6,7 +6,7 @@ namespace VoxelEngine {
 
 	class WorldRenderer {
 	public:
-		const static unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+		const static unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 		static float SCREEN_WIDTH;
 		static float SCREEN_HEIGHT;
 
@@ -23,6 +23,7 @@ namespace VoxelEngine {
 
 
 		void generateMeshes();
+		glm::mat4 generateLightSpaceMatrix();
 
 		unsigned int depthMapFBO;
 		unsigned int depthMap;

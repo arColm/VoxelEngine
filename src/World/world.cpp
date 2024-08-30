@@ -3,16 +3,22 @@
 #include "src/World/world.h"
 #include "Camera.h"
 #include <thread>
+#include <imgui.h>
 
 #define MULTITHREADED_CHUNKLOADING false
 
 
 namespace VoxelEngine {
+
+
 	World::World(IChunkGenerator* generator,int seed) {
 		World::generator = generator;
 		World::chunkLoaderConnection = mainCamera->enterNewChunkEvent.connect(
 			boost::bind(&World::loadChunks,this, boost::placeholders::_1,boost::placeholders::_2));
 		World::seed = seed;
+		World::totalTime = 0;
+		World::accumulatedDeltaTime = 0;
+		World::invTickRate = 1.f / TICK_RATE;
 	}
 
 	World::~World() {
@@ -154,11 +160,34 @@ namespace VoxelEngine {
 
 
 	void World::generateGUI() {
+		//generic world gui
+		ImGui::Text("Time = %f", getCurrentTime());
+		ImGui::Separator();
+
+		//generator gui
 		generator->generateGUI();
+
+		if (ImGui::Button("Reload Chunks"))
+			reloadChunks();
 	}
 
 
 	void World::addChunk(int x, int y, std::shared_ptr<Chunk> chunk) {
 		chunk_map.insert_or_assign(glm::ivec2(x, y), chunk);
+	}
+	void World::tick(float deltaTime)
+	{
+		accumulatedDeltaTime += deltaTime;
+		while (accumulatedDeltaTime >= invTickRate) {
+			//tick all objects for invTickRate time
+			totalTime += invTickRate;
+
+
+			accumulatedDeltaTime -= invTickRate;
+		}
+	}
+	float World::getCurrentTime()
+	{
+		return std::fmod(totalTime,TIME_PER_DAY);
 	}
 }

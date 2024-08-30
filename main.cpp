@@ -28,6 +28,7 @@ using namespace VoxelEngine;
 	FUNCTION DECLARATIONS
 =================================*/
 
+void worldUpdateLoop(GLFWwindow* window, std::shared_ptr<World> world);
 void renderingLoop(GLFWwindow* window, WorldRenderer* renderer);
 void chunkLoadingLoop(GLFWwindow* window);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -104,6 +105,7 @@ int main() {
 
 	glfwMakeContextCurrent(NULL);
 	std::thread chunkLoadingThread(&chunkLoadingLoop, window);
+	std::thread worldUpdateThread(&worldUpdateLoop, window,world);
 	//std::thread renderingThread(&renderingLoop, window,&world);
 
 	renderingLoop(window, &worldRenderer);
@@ -121,8 +123,24 @@ int main() {
 	=================================*/
 	//renderingThread.join();
 	chunkLoadingThread.join();
+	worldUpdateThread.join();
 	glfwTerminate();
 	return 0;
+}
+
+void worldUpdateLoop(GLFWwindow* window, std::shared_ptr<World> world) {
+	float tickRate = 20;
+	float timeBetweenTicks = 1.0f / tickRate;
+
+	float lastFrameTime = glfwGetTime();
+	float deltaTime;
+	while (!glfwWindowShouldClose(window)) {
+		float startTime = glfwGetTime();
+		deltaTime = startTime - lastFrameTime;
+
+		world->tick(deltaTime);
+		lastFrameTime = glfwGetTime();
+	}
 }
 
 
@@ -155,7 +173,7 @@ void renderingLoop(GLFWwindow* window, WorldRenderer* renderer) {
 		=================================*/
 		processInput(window);
 
-		update(deltaTime);
+		//update(deltaTime);
 		glfwPollEvents();
 
 		/*===============================

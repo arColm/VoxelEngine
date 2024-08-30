@@ -11,6 +11,11 @@ namespace VoxelEngine {
 
 	class World {
 	public:
+		const float TIME_PER_DAY= 20.0f;
+		const float TICK_RATE = 20.0f;
+		float invTickRate;
+
+
 		World(IChunkGenerator* generator, int seed);
 		~World();
 
@@ -23,6 +28,9 @@ namespace VoxelEngine {
 
 		void addChunk(int x, int y, std::shared_ptr<Chunk> chunk);
 
+		void tick(float deltaTime);
+
+		float getCurrentTime();
 
 		std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> chunk_map;
 		std::mutex chunkMap_mutex; //todo: make this private
@@ -35,7 +43,9 @@ namespace VoxelEngine {
 		std::queue<std::shared_ptr<Chunk>> chunkUnloadingQueue;
 		std::mutex chunkQueue_mutex;
 		std::mutex chunkUnloadingQueue_mutex;
+		float totalTime;
 
+		float accumulatedDeltaTime;
 	};
 }
 

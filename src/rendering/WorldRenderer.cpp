@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <src/UI/WorldGenerationGUI.h>
 #include <Camera.h>
+#include <numbers>
 
 
 namespace VoxelEngine {
@@ -48,19 +49,31 @@ namespace VoxelEngine {
 
 	WorldRenderer::~WorldRenderer()
 	{
+		glDeleteTextures(1, &depthMap);
+		glDeleteFramebuffers(1, &depthMapFBO);
 	}
 
+	glm::mat4 WorldRenderer::generateLightSpaceMatrix() {
+		glm::mat4 lightProjection, lightView;
+		float near_plane = 1.0f, far_plane = 600.5f;
+		float shadowDistance = mainCamera->viewDistance * 16;
+		lightProjection = glm::ortho(-shadowDistance, shadowDistance, -shadowDistance, shadowDistance, near_plane, far_plane);
+		//glm::vec3 lightPos = glm::floor(mainCamera->cameraPos) + glm::vec3(10.0f, 30.0f, 0.0f);
+		//lightPos.y = 30;
+		glm::vec3 lightPos = glm::vec3(0.0f);
+		lightPos.x += std::cos(world->getCurrentTime() * 2 * world->invTickRate * std::numbers::pi_v<float>) * 30.0f;
+		lightPos.y += std::sin(world->getCurrentTime() * 2 * world->invTickRate * std::numbers::pi_v<float>) * 30.0f;
+		glm::vec3 lightDirection(0.0f);
+
+		lightView = glm::lookAt(lightPos,
+			lightDirection,
+			glm::vec3(0.0f, 1.0f, 0.0f));
+
+		return lightProjection * lightView;
+	}
 	void WorldRenderer::renderFrame()
 	{
-		glm::mat4 lightProjection, lightView;
-		glm::mat4 lightSpaceMatrix;
-		float near_plane = 1.0f, far_plane = 200.5f;
-		lightProjection = glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, near_plane, far_plane);
-		lightView = glm::lookAt(glm::vec3(10.0f, 30.0f, 0.0f),
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(2.0f, 1.0f, 0.0f));
-
-		lightSpaceMatrix = lightProjection * lightView;
+		glm::mat4 lightSpaceMatrix = generateLightSpaceMatrix();
 
 		// Shadow Map Rendering
 		shadowMapShader->use();
