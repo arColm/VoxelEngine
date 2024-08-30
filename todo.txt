@@ -8,7 +8,7 @@ Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 
 
 TODO
-
+	MOVE ALL DEFINITIONS FROM HEADER TO CPP FILE
 
  - better separation between world and chunkloader
 

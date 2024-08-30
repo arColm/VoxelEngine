@@ -21,6 +21,7 @@
 #include <src/UI/WorldGenerationGUI.h>
 #include <src/World/PerlinChunkGenerator.h>
 #include <src/rendering/WorldRenderer.h>
+#include <src/rendering/DebugRenderer.h>
 
 using namespace VoxelEngine;
 
@@ -77,6 +78,11 @@ int main() {
 
 	glPolygonMode(GL_FRONT, GL_FILL);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	/*===============================
+		DEBUG
+	=================================*/
+	VoxelEngine::DebugRenderer::initializeDebugRenderer();
 
 	/*===============================
 		SCENE

@@ -147,6 +147,7 @@
     <ClCompile Include="src\rendering\BlockData.cpp" />
     <ClCompile Include="src\rendering\Chunk.cpp" />
     <ClCompile Include="src\rendering\ChunkLoader.cpp" />
+    <ClCompile Include="src\rendering\DebugRenderer.cpp" />
     <ClCompile Include="src\rendering\loader.cpp" />
     <ClCompile Include="src\rendering\WorldRenderer.cpp" />
     <ClCompile Include="src\shaders\shader.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="src\rendering\BlockData.h" />
     <ClInclude Include="src\rendering\Chunk.h" />
     <ClInclude Include="src\rendering\ChunkLoader.h" />
+    <ClInclude Include="src\rendering\DebugRenderer.h" />
     <ClInclude Include="src\rendering\loader.h" />
     <ClInclude Include="src\rendering\WorldRenderer.h" />
     <ClInclude Include="src\shaders\shader.h" />

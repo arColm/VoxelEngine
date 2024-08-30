@@ -55,16 +55,19 @@ namespace VoxelEngine {
 
 	glm::mat4 WorldRenderer::generateLightSpaceMatrix() {
 		glm::mat4 lightProjection, lightView;
-		float near_plane = 1.0f, far_plane = 600.5f;
+		float near_plane = 1.0f, far_plane = 2000.5f;
 		float shadowDistance = mainCamera->viewDistance * 16;
 		lightProjection = glm::ortho(-shadowDistance, shadowDistance, -shadowDistance, shadowDistance, near_plane, far_plane);
 		//glm::vec3 lightPos = glm::floor(mainCamera->cameraPos) + glm::vec3(10.0f, 30.0f, 0.0f);
 		//lightPos.y = 30;
 		glm::vec3 lightPos = glm::vec3(0.0f);
-		lightPos.x += std::cos(world->getCurrentTime() * 2 * world->invTickRate * std::numbers::pi_v<float>) * 30.0f;
-		lightPos.y += std::sin(world->getCurrentTime() * 2 * world->invTickRate * std::numbers::pi_v<float>) * 30.0f;
+		lightPos = mainCamera->cameraPos;
+		lightPos.y = 0;
+		lightPos.x += std::cos(world->getCurrentTime() * 2 * world->invTickRate * std::numbers::pi_v<float>) * shadowDistance;
+		lightPos.y += std::sin(world->getCurrentTime() * 2 * world->invTickRate * std::numbers::pi_v<float>) * shadowDistance;
 		glm::vec3 lightDirection(0.0f);
-
+		lightDirection = mainCamera->cameraPos;
+		lightDirection.y = 0;
 		lightView = glm::lookAt(lightPos,
 			lightDirection,
 			glm::vec3(0.0f, 1.0f, 0.0f));

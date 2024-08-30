@@ -56,8 +56,6 @@ namespace VoxelEngine {
 	};
 
 	extern Camera* mainCamera;
-	extern glm::mat4 projectionMatrix;
-	extern glm::mat4 viewMatrix;
 
 
 
