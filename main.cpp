@@ -67,7 +67,7 @@ int main() {
 	}
 
 	Camera cam;
-	initializeCamera(window,&cam);
+	initializeMainCamera(window,&cam);
 
 	glViewport(0, 0, 800, 600);
 	glClearColor(0.25f, 0.60f, 0.62f, 1.0f);
@@ -81,12 +81,8 @@ int main() {
 	/*===============================
 		SCENE
 	=================================*/
-	//Shader defaultShader("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
-	//ChunkLoader chunkLoader(&defaultShader);
-	//chunkLoader.addChunk(-1,-1,&chunk);
-	//chunkLoader.addChunk(0,0,&chunk2);
 
-	setProjectionMatrix(WorldRenderer::SCREEN_WIDTH, WorldRenderer::SCREEN_HEIGHT);
+	mainCamera->setProjectionMatrix(WorldRenderer::SCREEN_WIDTH, WorldRenderer::SCREEN_HEIGHT);
 
 	PerlinChunkGenerator generator;
 	//World world(&generator, 0);
@@ -109,13 +105,6 @@ int main() {
 	//std::thread renderingThread(&renderingLoop, window,&world);
 
 	renderingLoop(window, &worldRenderer);
-
-
-	//while (!glfwWindowShouldClose(window))
-	//{
-	//	processInput(window);
-	//	glfwPollEvents();
-	//}
 
 
 	/*===============================

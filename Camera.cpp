@@ -8,8 +8,6 @@
 
 namespace VoxelEngine {
 	Camera* mainCamera = nullptr;
-	glm::mat4 viewMatrix = glm::mat4(0);
-	glm::mat4 projectionMatrix = glm::mat4(0);
 
 	Camera::Camera() { }
 	Camera::~Camera() { }
@@ -32,19 +30,21 @@ namespace VoxelEngine {
 		}
 	}
 
-	void setViewMatrix(unsigned int viewLoc) {
-		glm::mat4 view = glm::mat4(1.0f);
-		view = glm::lookAt(mainCamera->cameraPos, mainCamera->cameraPos + mainCamera->cameraFront, mainCamera->cameraUp);
-		viewMatrix = view;
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	void Camera::setViewMatrix() {
+		glm::mat4 view = glm::lookAt(this->cameraPos, this->cameraPos + this->cameraFront, this->cameraUp);
+		this->viewMatrix = view;
 	}
-	void setProjectionMatrix(float SCREEN_WIDTH, float SCREEN_HEIGHT) {
-		glm::mat4 projection = glm::perspective(glm::radians(mainCamera->fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 1000.0f);
-		projectionMatrix = projection;
+	void Camera::updateViewMatrixUniform(unsigned int viewLoc) {
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(this->viewMatrix));
+	}
+	void Camera::setProjectionMatrix(float SCREEN_WIDTH, float SCREEN_HEIGHT) {
+		glm::mat4 projection = glm::perspective(glm::radians(this->fov), SCREEN_WIDTH / SCREEN_HEIGHT, 0.1f, 1000.0f);
+		this->projectionMatrix = projection;
 	}
 
-	void updateProjectionMatrix(unsigned int projectionLoc) {
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+	void Camera::updateProjectionMatrixUniform(unsigned int projectionLoc) {
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(this->projectionMatrix));
+
 	}
 
 
@@ -79,7 +79,7 @@ namespace VoxelEngine {
 	}
 
 
-	void initializeCamera(GLFWwindow* window,Camera* camera) {
+	void initializeMainCamera(GLFWwindow* window,Camera* camera) {
 		mainCamera = camera;
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		glfwSetCursorPosCallback(window, mouse_callback);

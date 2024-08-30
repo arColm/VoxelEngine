@@ -91,13 +91,17 @@ namespace VoxelEngine {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		defaultBlockShader->use();
-		updateProjectionMatrix(defaultBlockShader->projectionLoc);
-		setViewMatrix(defaultBlockShader->viewLoc);
+		mainCamera->updateProjectionMatrixUniform(defaultBlockShader->projectionLoc);
+		mainCamera->setViewMatrix();
+		mainCamera->updateViewMatrixUniform(defaultBlockShader->viewLoc);
 		defaultBlockShader->setVec3("cameraPos", mainCamera->cameraPos);
 		defaultBlockShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		renderScene();
+
+		//Debug Rendering
+
 	}
 
 	void WorldRenderer::renderScene()

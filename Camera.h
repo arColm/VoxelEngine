@@ -37,6 +37,8 @@ namespace VoxelEngine {
 		const float sensitivity = 0.1f;
 
 
+		glm::mat4 viewMatrix = glm::mat4(0);
+		glm::mat4 projectionMatrix = glm::mat4(0);
 
 		boost::signals2::signal<void(glm::vec2, int) > enterNewChunkEvent;
 
@@ -47,17 +49,20 @@ namespace VoxelEngine {
 		void forceUpdateCurrentChunk();
 		void moveCamera(GLFWwindow* window, float deltaTime);
 
+		void setViewMatrix();
+		void updateViewMatrixUniform(unsigned int viewLoc);
+		void setProjectionMatrix(float SCREEN_WIDTH, float SCREEN_HEIGHT);
+		void updateProjectionMatrixUniform(unsigned int projectionLoc);
 	};
 
 	extern Camera* mainCamera;
 	extern glm::mat4 projectionMatrix;
 	extern glm::mat4 viewMatrix;
 
-	void setViewMatrix(unsigned int viewLoc);
-	void setProjectionMatrix(float SCREEN_WIDTH, float SCREEN_HEIGHT);
-	void updateProjectionMatrix(unsigned int projectionLoc);
 
-	void initializeCamera(GLFWwindow* window,Camera* cam);
+
+	void initializeMainCamera(GLFWwindow* window,Camera* cam);
+	void updateViewMatrixUniform(unsigned int viewLoc);
 
 	void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
