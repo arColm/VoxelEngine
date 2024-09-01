@@ -38,11 +38,13 @@ namespace VoxelEngine {
 
 		int seed;
 		IChunkGenerator* generator;
-		boost::signals2::connection chunkLoaderConnection;
 		std::queue<std::shared_ptr<Chunk>> chunkQueue;
 		std::queue<std::shared_ptr<Chunk>> chunkUnloadingQueue;
 		std::mutex chunkQueue_mutex;
 		std::mutex chunkUnloadingQueue_mutex;
+
+		boost::signals2::connection chunkLoaderConnection;
+
 		float totalTime;
 
 		float accumulatedDeltaTime;

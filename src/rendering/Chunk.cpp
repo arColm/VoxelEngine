@@ -76,9 +76,19 @@ namespace VoxelEngine {
 		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		glEnableVertexAttribArray(1);
 
+		// normals attribute
+		GLuint normalsVBO = Loader::createVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, normalsVBO);
+		glBufferData(GL_ARRAY_BUFFER, opaqueVertexNormals.size() * sizeof(opaqueVertexNormals.at(0)), opaqueVertexNormals.data(), GL_STATIC_DRAW);
+
+
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glEnableVertexAttribArray(2);
+
 		Chunk::numOpaqueVertices = opaqueVertexPos.size() / 3;
 		opaqueVertexPos.clear();
 		opaqueVertexColor.clear();
+		opaqueVertexNormals.clear();
 
 
 		// transparent
@@ -102,9 +112,19 @@ namespace VoxelEngine {
 		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		glEnableVertexAttribArray(1);
 
+		// normals attribute
+		GLuint transparentNormalsVBO = Loader::createVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, transparentNormalsVBO);
+		glBufferData(GL_ARRAY_BUFFER, transparentVertexNormals.size() * sizeof(transparentVertexNormals.at(0)), transparentVertexNormals.data(), GL_STATIC_DRAW);
+
+
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glEnableVertexAttribArray(2);
+
 		Chunk::numTransparentVertices = transparentVertexPos.size() / 3;
 		transparentVertexPos.clear();
 		transparentVertexColor.clear();
+		transparentVertexNormals.clear();
 
 		glBindVertexArray(0);
 		glDeleteBuffers(1, &positionVBO);
@@ -242,13 +262,23 @@ namespace VoxelEngine {
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
 		};
+		std::array<GLfloat, 18> normals = {
+			0,1,0,
+			0,1,0,
+			0,1,0,
+			0,1,0,
+			0,1,0,
+			0,1,0,
+		};
 		if (color.w < 1.0f) {
 			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
 			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
 			opaqueVertexColor.insert(opaqueVertexColor.end(), newColors.begin(), newColors.end());
+			opaqueVertexNormals.insert(opaqueVertexNormals.end(), normals.begin(), normals.end());
 		}
 	}
 	void Chunk::addLeft(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
@@ -270,13 +300,23 @@ namespace VoxelEngine {
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
 		};
+		std::array<GLfloat, 18> normals = {
+			-1,0,0,
+			-1,0,0,
+			-1,0,0,
+			-1,0,0,
+			-1,0,0,
+			-1,0,0,
+		};
 		if (color.w < 1.0f) {
 			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
 			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
 			opaqueVertexColor.insert(opaqueVertexColor.end(), newColors.begin(), newColors.end());
+			opaqueVertexNormals.insert(opaqueVertexNormals.end(), normals.begin(), normals.end());
 		}
 	}
 	void Chunk::addRight(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
@@ -298,13 +338,23 @@ namespace VoxelEngine {
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
 		};
+		std::array<GLfloat, 18> normals = {
+			1,0,0,
+			1,0,0,
+			1,0,0,
+			1,0,0,
+			1,0,0,
+			1,0,0,
+		};
 		if (color.w < 1.0f) {
 			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
 			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
 			opaqueVertexColor.insert(opaqueVertexColor.end(), newColors.begin(), newColors.end());
+			opaqueVertexNormals.insert(opaqueVertexNormals.end(), normals.begin(), normals.end());
 		}
 	}
 	void Chunk::addFront(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
@@ -326,13 +376,23 @@ namespace VoxelEngine {
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
 		};
+		std::array<GLfloat, 18> normals = {
+			0,0,-1,
+			0,0,-1,
+			0,0,-1,
+			0,0,-1,
+			0,0,-1,
+			0,0,-1,
+		};
 		if (color.w < 1.0f) {
 			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
 			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
 			opaqueVertexColor.insert(opaqueVertexColor.end(), newColors.begin(), newColors.end());
+			opaqueVertexNormals.insert(opaqueVertexNormals.end(), normals.begin(), normals.end());
 		}
 	}
 	void Chunk::addBack(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
@@ -354,14 +414,23 @@ namespace VoxelEngine {
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
 		};
-
+		std::array<GLfloat, 18> normals = {
+			0,0,1,
+			0,0,1,
+			0,0,1,
+			0,0,1,
+			0,0,1,
+			0,0,1,
+		};
 		if (color.w < 1.0f) {
 			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
 			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
 			opaqueVertexColor.insert(opaqueVertexColor.end(), newColors.begin(), newColors.end());
+			opaqueVertexNormals.insert(opaqueVertexNormals.end(), normals.begin(), normals.end());
 		}
 	}
 	void Chunk::addBottom(GLfloat x, GLfloat y, GLfloat z, BlockType block) {
@@ -383,13 +452,23 @@ namespace VoxelEngine {
 			color.x,color.y,color.z,color.w,
 			color.x,color.y,color.z,color.w,
 		};
+		std::array<GLfloat, 18> normals = {
+			0,-1,0,
+			0,-1,0,
+			0,-1,0,
+			0,-1,0,
+			0,-1,0,
+			0,-1,0,
+		};
 		if (color.w < 1.0f) {
 			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
 			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
 			opaqueVertexColor.insert(opaqueVertexColor.end(), newColors.begin(), newColors.end());
+			opaqueVertexNormals.insert(opaqueVertexNormals.end(), normals.begin(), normals.end());
 		}
 	}
 

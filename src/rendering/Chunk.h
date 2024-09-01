@@ -54,9 +54,11 @@ namespace VoxelEngine {
 
 		std::vector<GLfloat> opaqueVertexPos;
 		std::vector<GLfloat> opaqueVertexColor;
+		std::vector<GLfloat> opaqueVertexNormals;
 
 		std::vector<GLfloat> transparentVertexPos;
 		std::vector<GLfloat> transparentVertexColor;
+		std::vector<GLfloat> transparentVertexNormals;
 
 		void createVAO();
 	};

@@ -10,22 +10,14 @@ Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 TODO
 	MOVE ALL DEFINITIONS FROM HEADER TO CPP FILE
 
- - better separation between world and chunkloader
-
+	could clean up lights a little bit - e.g. increase resolution of shadow map
+	add skybox
 
  - instanced rendering
 
  - change way to store colors...
 
  - fog to mask chunk loading
- --- shader takes camera position, changes color based on distance to camera
- 
- - simple light
- - day/night cycle
- --- single point/cube for sun
- --- shadow mapping
- ---- draw shadows based on what the sun CANT see
- - noise applied to chunk generator
 
  - clouds (can just be noise!)
 

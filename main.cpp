@@ -23,6 +23,8 @@
 #include <src/rendering/WorldRenderer.h>
 #include <src/rendering/DebugRenderer.h>
 
+#define DEBUG_ENABLED true
+
 using namespace VoxelEngine;
 
 /*===============================
@@ -44,6 +46,8 @@ float lastFrame = 0.0f; // Time of last frame
 
 
 float GUI_WIDTH = 600;
+
+
 
 
 int main() {
@@ -82,7 +86,9 @@ int main() {
 	/*===============================
 		DEBUG
 	=================================*/
-	VoxelEngine::DebugRenderer::initializeDebugRenderer();
+	if (DEBUG_ENABLED) {
+		VoxelEngine::DebugRenderer::initializeDebugRenderer();
+	}
 
 	/*===============================
 		SCENE
@@ -119,6 +125,7 @@ int main() {
 	//renderingThread.join();
 	chunkLoadingThread.join();
 	worldUpdateThread.join();
+	if(DEBUG_ENABLED) DebugRenderer::releaseResources();
 	glfwTerminate();
 	return 0;
 }
@@ -189,7 +196,9 @@ void renderingLoop(GLFWwindow* window, WorldRenderer* renderer) {
 			RENDERING
 		=================================*/
 		renderer->renderFrame();
-
+		if (DEBUG_ENABLED) {
+			DebugRenderer::renderDebug();
+		}
 
 		// Rendering GUI
 		ImGui::Render();

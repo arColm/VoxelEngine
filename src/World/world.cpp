@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include <thread>
 #include <imgui.h>
+#include <src/rendering/DebugRenderer.h>
 
 #define MULTITHREADED_CHUNKLOADING false
 
@@ -13,12 +14,13 @@ namespace VoxelEngine {
 
 	World::World(IChunkGenerator* generator,int seed) {
 		World::generator = generator;
-		World::chunkLoaderConnection = mainCamera->enterNewChunkEvent.connect(
-			boost::bind(&World::loadChunks,this, boost::placeholders::_1,boost::placeholders::_2));
 		World::seed = seed;
 		World::totalTime = 0;
 		World::accumulatedDeltaTime = 0;
 		World::invTickRate = 1.f / TICK_RATE;
+
+		World::chunkLoaderConnection = mainCamera->enterNewChunkEvent.connect(
+			boost::bind(&World::loadChunks, this, boost::placeholders::_1, boost::placeholders::_2));
 	}
 
 	World::~World() {
@@ -189,5 +191,5 @@ namespace VoxelEngine {
 	float World::getCurrentTime()
 	{
 		return std::fmod(totalTime,TIME_PER_DAY);
-	}
+	}\
 }

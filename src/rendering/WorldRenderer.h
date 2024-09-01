@@ -6,7 +6,8 @@ namespace VoxelEngine {
 
 	class WorldRenderer {
 	public:
-		const static unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
+		static const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
+		inline static const float sunMaxHeight = 400.f;
 		static float SCREEN_WIDTH;
 		static float SCREEN_HEIGHT;
 
@@ -20,6 +21,8 @@ namespace VoxelEngine {
 	private:
 		std::shared_ptr<Shader> defaultBlockShader;
 		std::shared_ptr<Shader> shadowMapShader;
+		glm::vec3 sunPos;
+		glm::vec3 sunLightDirection;
 
 
 		void generateMeshes();
@@ -28,6 +31,10 @@ namespace VoxelEngine {
 		unsigned int depthMapFBO;
 		unsigned int depthMap;
 
+
+
+		boost::signals2::connection debugRendererConnection;
+		void onDrawDebug();
 
 	};
 

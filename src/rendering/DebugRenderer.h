@@ -10,7 +10,8 @@ namespace VoxelEngine {
 		extern boost::signals2::signal<void()> drawDebugEvent;
 		void renderDebug();
 		void initializeDebugRenderer();
+		void releaseResources();
 
-
+		void drawCube(glm::vec3 pos, glm::vec3 color);
 	};
 }
