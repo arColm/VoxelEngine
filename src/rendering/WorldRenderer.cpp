@@ -6,6 +6,7 @@
 #include <Camera.h>
 #include <numbers>
 #include "DebugRenderer.h"
+#include "loader.h"
 
 
 namespace VoxelEngine {
@@ -19,6 +20,7 @@ namespace VoxelEngine {
 	{
 		WorldRenderer::defaultBlockShader = std::make_shared<Shader>("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 		WorldRenderer::shadowMapShader = std::make_shared<Shader>("src/shaders/depthVertexShader.glsl", "src/shaders/depthFragmentShader.glsl");
+		WorldRenderer::skyboxShader = std::make_unique<Shader>("src/shaders/skyboxVertexShader.glsl", "src/shaders/skyboxFragmentShader.glsl");
 		WorldRenderer::world = world;
 
 
@@ -49,13 +51,75 @@ namespace VoxelEngine {
 		glReadBuffer(GL_NONE);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		
+		/*===============================
+			SKYBOX INITIALIZATION
+		=================================*/
+
+		const std::array<GLfloat, 108> skyboxVertices = {
+			-1.0f,  1.0f, -1.0f,
+			-1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f, -1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+
+			-1.0f, -1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f, -1.0f,  1.0f,
+			-1.0f, -1.0f,  1.0f,
+
+			-1.0f,  1.0f, -1.0f,
+			 1.0f,  1.0f, -1.0f,
+			 1.0f,  1.0f,  1.0f,
+			 1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f,  1.0f,
+			-1.0f,  1.0f, -1.0f,
+
+			-1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			 1.0f, -1.0f, -1.0f,
+			 1.0f, -1.0f, -1.0f,
+			-1.0f, -1.0f,  1.0f,
+			 1.0f, -1.0f,  1.0f
+
+		};
+		WorldRenderer::skyboxVAO = VoxelEngine::Loader::createVAO();
+		glBindVertexArray(skyboxVAO);
+
+		unsigned int skyboxVBO = VoxelEngine::Loader::createVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+
+		glBufferData(GL_ARRAY_BUFFER, skyboxVertices.size() * sizeof(skyboxVertices.at(0)), skyboxVertices.data(), GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+
+		glBindVertexArray(0);
+		glDeleteBuffers(1,&skyboxVBO);
 	}
 
 	WorldRenderer::~WorldRenderer()
 	{
 		glDeleteTextures(1, &depthMap);
 		glDeleteFramebuffers(1, &depthMapFBO);
+
+		glDeleteVertexArrays(1, &skyboxVAO);
+
 		WorldRenderer::debugRendererConnection.disconnect();
 	}
 
@@ -99,13 +163,16 @@ namespace VoxelEngine {
 		renderScene();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+
 		// Main Rendering
 		glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+
+		// Render Scene
 		defaultBlockShader->use();
 		mainCamera->updateProjectionMatrixUniform(defaultBlockShader->projectionLoc);
-		mainCamera->setViewMatrix();
 		mainCamera->updateViewMatrixUniform(defaultBlockShader->viewLoc);
 		defaultBlockShader->setVec3("cameraPos", mainCamera->cameraPos);
 		defaultBlockShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
@@ -114,9 +181,17 @@ namespace VoxelEngine {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		renderScene();
-
+		// Skybox Rendering
+		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader->use();
+		mainCamera->updateProjectionMatrixUniform(skyboxShader->projectionLoc);
+		mainCamera->setViewMatrix();
+		mainCamera->updateViewMatrixUniform(skyboxShader->viewLoc);
+		skyboxShader->setVec3("cameraPos", mainCamera->cameraPos);
+		skyboxShader->setFloat("sunHeight", sunPos.y / sunMaxHeight);
+		renderSkybox();
+		glDepthFunc(GL_LESS); // set depth function back to default
 		//Debug Rendering
-
 	}
 
 	void WorldRenderer::renderScene()
@@ -144,5 +219,12 @@ namespace VoxelEngine {
 	void WorldRenderer::onDrawDebug()
 	{
 		DebugRenderer::drawCube(sunPos, glm::vec3(1, 1, 0));
+	}
+
+	void WorldRenderer::renderSkybox() 
+	{
+		glBindVertexArray(skyboxVAO);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
 	}
 }

@@ -195,6 +195,8 @@
     <None Include="src\shaders\debugBlockFragmentShader.glsl" />
     <None Include="src\shaders\debugBlockVertexShader.glsl" />
     <None Include="src\shaders\fragmentShader.glsl" />
+    <None Include="src\shaders\skyboxFragmentShader.glsl" />
+    <None Include="src\shaders\skyboxVertexShader.glsl" />
     <None Include="src\shaders\vertexShader.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -21,6 +21,7 @@ namespace VoxelEngine {
 	private:
 		std::shared_ptr<Shader> defaultBlockShader;
 		std::shared_ptr<Shader> shadowMapShader;
+		std::unique_ptr<Shader> skyboxShader;
 		glm::vec3 sunPos;
 		glm::vec3 sunLightDirection;
 
@@ -28,9 +29,12 @@ namespace VoxelEngine {
 		void generateMeshes();
 		glm::mat4 generateLightSpaceMatrix();
 
+		void renderSkybox();
+
 		unsigned int depthMapFBO;
 		unsigned int depthMap;
 
+		unsigned int skyboxVAO;
 
 
 		boost::signals2::connection debugRendererConnection;

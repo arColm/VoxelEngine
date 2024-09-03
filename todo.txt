@@ -12,7 +12,7 @@ TODO
 
 	could clean up lights a little bit - e.g. increase resolution of shadow map
 	add skybox
-
+	https://gamedev.stackexchange.com/questions/21482/concerning-the-minecraft-skybox
  - instanced rendering
 
  - change way to store colors...
