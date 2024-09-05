@@ -15,12 +15,88 @@ namespace VoxelEngine {
 	float VoxelEngine::WorldRenderer::SCREEN_HEIGHT = 600;
 
 
+	const std::array<GLfloat, 108> skyboxVertices = {
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+
+	};
+
+	const std::array<GLfloat, 36> sunMoonVertices = {
+		1.0f, -0.1f,0.1f,
+		1.0f, 0.1f,0.1f,
+		1.0f, -0.1f,-0.1f,
+		1.0f, -0.1f, -0.1f,
+		1.0f, 0.1f, -0.1f,
+		1.0f, 0.1f, 0.1f,
+
+		-1.0f, 0.05f,0.05f,
+		-1.0f, -0.05f,0.05f,
+		-1.0f, -0.05f,-0.05f,
+		-1.0f, -0.05f, -0.05f,
+		-1.0f, 0.05f, -0.05f,
+		-1.0f, 0.05f, 0.05f,
+	};
+	const std::array<GLfloat, 36> sunMoonColors = {
+		0.9608f,0.7725f, 0.3373f,
+		0.9608f,0.7725f, 0.3373f,
+		0.9608f,0.7725f, 0.3373f,
+		0.9608f,0.7725f, 0.3373f,
+		0.9608f,0.7725f, 0.3373f,
+		0.9608f,0.7725f, 0.3373f,
+
+		0.6706f, 0.6706f,0.6706f,
+		0.6706f, 0.6706f,0.6706f,
+		0.6706f, 0.6706f,0.6706f,
+		0.6706f, 0.6706f,0.6706f,
+		0.6706f, 0.6706f,0.6706f,
+		0.6706f, 0.6706f,0.6706f,
+	};
 
 	WorldRenderer::WorldRenderer(std::shared_ptr<World> world)
 	{
 		WorldRenderer::defaultBlockShader = std::make_shared<Shader>("src/shaders/vertexShader.glsl", "src/shaders/fragmentShader.glsl");
 		WorldRenderer::shadowMapShader = std::make_shared<Shader>("src/shaders/depthVertexShader.glsl", "src/shaders/depthFragmentShader.glsl");
 		WorldRenderer::skyboxShader = std::make_unique<Shader>("src/shaders/skyboxVertexShader.glsl", "src/shaders/skyboxFragmentShader.glsl");
+		WorldRenderer::sunMoonShader = std::make_unique<Shader>("src/shaders/sunMoonVertexShader.glsl", "src/shaders/sunMoonFragmentShader.glsl");
 		WorldRenderer::world = world;
 
 
@@ -55,50 +131,6 @@ namespace VoxelEngine {
 			SKYBOX INITIALIZATION
 		=================================*/
 
-		const std::array<GLfloat, 108> skyboxVertices = {
-			-1.0f,  1.0f, -1.0f,
-			-1.0f, -1.0f, -1.0f,
-			 1.0f, -1.0f, -1.0f,
-			 1.0f, -1.0f, -1.0f,
-			 1.0f,  1.0f, -1.0f,
-			-1.0f,  1.0f, -1.0f,
-
-			-1.0f, -1.0f,  1.0f,
-			-1.0f, -1.0f, -1.0f,
-			-1.0f,  1.0f, -1.0f,
-			-1.0f,  1.0f, -1.0f,
-			-1.0f,  1.0f,  1.0f,
-			-1.0f, -1.0f,  1.0f,
-
-			 1.0f, -1.0f, -1.0f,
-			 1.0f, -1.0f,  1.0f,
-			 1.0f,  1.0f,  1.0f,
-			 1.0f,  1.0f,  1.0f,
-			 1.0f,  1.0f, -1.0f,
-			 1.0f, -1.0f, -1.0f,
-
-			-1.0f, -1.0f,  1.0f,
-			-1.0f,  1.0f,  1.0f,
-			 1.0f,  1.0f,  1.0f,
-			 1.0f,  1.0f,  1.0f,
-			 1.0f, -1.0f,  1.0f,
-			-1.0f, -1.0f,  1.0f,
-
-			-1.0f,  1.0f, -1.0f,
-			 1.0f,  1.0f, -1.0f,
-			 1.0f,  1.0f,  1.0f,
-			 1.0f,  1.0f,  1.0f,
-			-1.0f,  1.0f,  1.0f,
-			-1.0f,  1.0f, -1.0f,
-
-			-1.0f, -1.0f, -1.0f,
-			-1.0f, -1.0f,  1.0f,
-			 1.0f, -1.0f, -1.0f,
-			 1.0f, -1.0f, -1.0f,
-			-1.0f, -1.0f,  1.0f,
-			 1.0f, -1.0f,  1.0f
-
-		};
 		WorldRenderer::skyboxVAO = VoxelEngine::Loader::createVAO();
 		glBindVertexArray(skyboxVAO);
 
@@ -111,6 +143,28 @@ namespace VoxelEngine {
 
 		glBindVertexArray(0);
 		glDeleteBuffers(1,&skyboxVBO);
+
+
+		WorldRenderer::sunMoonVAO = VoxelEngine::Loader::createVAO();
+		glBindVertexArray(sunMoonVAO);
+		
+		unsigned int sunMoonPosVBO = VoxelEngine::Loader::createVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, sunMoonPosVBO);
+
+		glBufferData(GL_ARRAY_BUFFER, sunMoonVertices.size() * sizeof(sunMoonVertices.at(0)), sunMoonVertices.data(), GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+		glEnableVertexAttribArray(0);
+		
+		unsigned int sunMoonColorVBO = VoxelEngine::Loader::createVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, sunMoonColorVBO);
+		glBufferData(GL_ARRAY_BUFFER, sunMoonColors.size() * sizeof(sunMoonColors.at(0)), sunMoonColors.data(), GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+		glEnableVertexAttribArray(1);
+
+		glBindVertexArray(0);
+		glDeleteBuffers(1, &sunMoonPosVBO);
+		glDeleteBuffers(1, &sunMoonColorVBO);
+		
 	}
 
 	WorldRenderer::~WorldRenderer()
@@ -119,6 +173,7 @@ namespace VoxelEngine {
 		glDeleteFramebuffers(1, &depthMapFBO);
 
 		glDeleteVertexArrays(1, &skyboxVAO);
+		glDeleteVertexArrays(1, &sunMoonVAO);
 
 		WorldRenderer::debugRendererConnection.disconnect();
 	}
@@ -171,6 +226,8 @@ namespace VoxelEngine {
 
 
 		// Render Scene
+		mainCamera->setViewMatrix();
+
 		defaultBlockShader->use();
 		mainCamera->updateProjectionMatrixUniform(defaultBlockShader->projectionLoc);
 		mainCamera->updateViewMatrixUniform(defaultBlockShader->viewLoc);
@@ -182,15 +239,8 @@ namespace VoxelEngine {
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		renderScene();
 		// Skybox Rendering
-		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-		skyboxShader->use();
-		mainCamera->updateProjectionMatrixUniform(skyboxShader->projectionLoc);
-		mainCamera->setViewMatrix();
-		mainCamera->updateViewMatrixUniform(skyboxShader->viewLoc);
-		skyboxShader->setVec3("cameraPos", mainCamera->cameraPos);
-		skyboxShader->setFloat("sunHeight", sunPos.y / sunMaxHeight);
+
 		renderSkybox();
-		glDepthFunc(GL_LESS); // set depth function back to default
 		//Debug Rendering
 	}
 
@@ -218,13 +268,35 @@ namespace VoxelEngine {
 
 	void WorldRenderer::onDrawDebug()
 	{
-		DebugRenderer::drawCube(sunPos, glm::vec3(1, 1, 0));
+		//DebugRenderer::drawCube(sunPos, glm::vec3(1, 1, 0));
 	}
 
 	void WorldRenderer::renderSkybox() 
 	{
+		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader->use();
+		mainCamera->updateProjectionMatrixUniform(skyboxShader->projectionLoc);
+		mainCamera->updateViewMatrixUniform(skyboxShader->viewLoc);
+		skyboxShader->setVec3("cameraPos", mainCamera->cameraPos);
+		skyboxShader->setFloat("sunHeight", sunPos.y / sunMaxHeight);
 		glBindVertexArray(skyboxVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDrawArrays(GL_TRIANGLES, 0, skyboxVertices.size()/3);
 		glBindVertexArray(0);
+
+		sunMoonShader->use();
+		mainCamera->updateProjectionMatrixUniform(sunMoonShader->projectionLoc);
+		mainCamera->updateViewMatrixUniform(sunMoonShader->viewLoc);
+		sunMoonShader->setVec3("cameraPos", mainCamera->cameraPos);
+		glm::mat4 model(1.0f);
+		model = glm::translate(model, mainCamera->cameraPos);
+		model = glm::rotate(model, -(world->getCurrentTime() / world->TIME_PER_DAY) * 2 * std::numbers::pi_v<float>, glm::vec3(0, 0, -1));
+		sunMoonShader->setMat4("model", model);
+		glBindVertexArray(sunMoonVAO);
+		glDrawArrays(GL_TRIANGLES, 0, sunMoonVertices.size()/3);
+		glBindVertexArray(0);
+
+
+		glDepthFunc(GL_LESS); // set depth function back to default
+
 	}
 }

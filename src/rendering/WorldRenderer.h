@@ -22,6 +22,7 @@ namespace VoxelEngine {
 		std::shared_ptr<Shader> defaultBlockShader;
 		std::shared_ptr<Shader> shadowMapShader;
 		std::unique_ptr<Shader> skyboxShader;
+		std::unique_ptr<Shader> sunMoonShader;
 		glm::vec3 sunPos;
 		glm::vec3 sunLightDirection;
 
@@ -35,6 +36,7 @@ namespace VoxelEngine {
 		unsigned int depthMap;
 
 		unsigned int skyboxVAO;
+		unsigned int sunMoonVAO;
 
 
 		boost::signals2::connection debugRendererConnection;
