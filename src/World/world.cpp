@@ -191,5 +191,8 @@ namespace VoxelEngine {
 	float World::getCurrentTime()
 	{
 		return std::fmod(totalTime,TIME_PER_DAY);
-	}\
+	}
+	float World::getTotalTime() {
+		return totalTime;
+	}
 }

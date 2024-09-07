@@ -58,7 +58,7 @@ vec3 starColor() {
 
 void main() {
 	
-	gl_Position = (projection * view * vec4(aPos+cameraPos,1.0)).xyww;
-    vertexPos = normalize(aPos);
+	gl_Position = (projection * view * vec4(5*aPos+cameraPos,1.0)).xyww;
+    vertexPos = 5*normalize(aPos);
 
 }

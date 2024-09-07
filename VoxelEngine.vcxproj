@@ -192,6 +192,8 @@
     <ClInclude Include="src\World\world.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\shaders\cloudFragmentShader.glsl" />
+    <None Include="src\shaders\cloudVertexShader.glsl" />
     <None Include="src\shaders\debugBlockFragmentShader.glsl" />
     <None Include="src\shaders\debugBlockVertexShader.glsl" />
     <None Include="src\shaders\fragmentShader.glsl" />

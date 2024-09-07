@@ -31,6 +31,7 @@ namespace VoxelEngine {
 		void tick(float deltaTime);
 
 		float getCurrentTime();
+		float getTotalTime();
 
 		std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>> chunk_map;
 		std::mutex chunkMap_mutex; //todo: make this private

@@ -11,8 +11,9 @@ TODO
 	MOVE ALL DEFINITIONS FROM HEADER TO CPP FILE
 
 	could clean up lights a little bit - e.g. increase resolution of shadow map
-	add skybox
+	could clean up skybox a little
 	https://gamedev.stackexchange.com/questions/21482/concerning-the-minecraft-skybox
+
  - instanced rendering
 
  - change way to store colors...

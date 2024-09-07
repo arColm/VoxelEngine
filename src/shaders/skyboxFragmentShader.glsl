@@ -37,9 +37,9 @@ float noise(vec3 x) {
 }
 
 vec3 starColor() {
-	float n = noise(vertexPos*60);
+	float n = noise(vertexPos*10);
     //n = n*2;
-    n = pow(n,40);
+    n = pow(n,50);
     return vec3(n);
 }
 
