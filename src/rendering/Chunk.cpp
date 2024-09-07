@@ -129,8 +129,10 @@ namespace VoxelEngine {
 		glBindVertexArray(0);
 		glDeleteBuffers(1, &positionVBO);
 		glDeleteBuffers(1, &colorVBO);
+		glDeleteBuffers(1, &normalsVBO);
 		glDeleteBuffers(1, &transparentPositionVBO);
 		glDeleteBuffers(1, &transparentColorVBO);
+		glDeleteBuffers(1, &transparentNormalsVBO);
 	}
 
 	void Chunk::renderOpaque(std::shared_ptr<Shader> shader) {

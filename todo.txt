@@ -9,6 +9,7 @@ Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 
 TODO
 	MOVE ALL DEFINITIONS FROM HEADER TO CPP FILE
+	FIX MEMORY LEAK WITH CHUNK GENERATION
 
 	could clean up lights a little bit - e.g. increase resolution of shadow map
 	could clean up skybox a little
