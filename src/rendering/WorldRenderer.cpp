@@ -176,7 +176,7 @@ namespace VoxelEngine {
 		glBindVertexArray(cloudVAO);
 
 		WorldRenderer::cloudDistance = mainCamera->viewDistance * Chunk::WIDTH*1.5f;
-		WorldRenderer::cloudHeight = cloudDistance * 0.5f;
+		WorldRenderer::cloudHeight = cloudDistance * 0.15f;
 
 		const std::array<GLfloat, 30> cloudPos = {
 			-cloudDistance,cloudHeight,cloudDistance, 0.f, 1.f,
@@ -314,8 +314,8 @@ namespace VoxelEngine {
 		mainCamera->updateViewMatrixUniform(sunMoonShader->viewLoc);
 		sunMoonShader->setVec3("cameraPos", mainCamera->cameraPos);
 		glm::mat4 model(1.0f);
-		model = glm::rotate(model, -(world->getCurrentTime() / world->TIME_PER_DAY) * 2 * std::numbers::pi_v<float>, glm::vec3(0, 0, -1));
 		model = glm::translate(model, mainCamera->cameraPos);
+		model = glm::rotate(model, -(world->getCurrentTime() / world->TIME_PER_DAY) * 2 * std::numbers::pi_v<float>, glm::vec3(0, 0, -1));
 		sunMoonShader->setMat4("model", model);
 		glBindVertexArray(sunMoonVAO);
 		glDrawArrays(GL_TRIANGLES, 0, sunMoonVertices.size() / 3);
@@ -342,6 +342,7 @@ namespace VoxelEngine {
 		model = glm::translate(model, mainCamera->cameraPos);
 		cloudShader->setMat4("model", model);
 		cloudShader->setFloat("time", world->getTotalTime());
+		cloudShader->setFloat("sunHeight", sunPos.y / sunMaxHeight);
 
 		glBindVertexArray(cloudVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);

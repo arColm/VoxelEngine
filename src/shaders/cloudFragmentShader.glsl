@@ -8,6 +8,7 @@ in vec2 uv_out;
 out vec4 FragColor;
 
 uniform float time;
+uniform float sunHeight;
 
 float mod289(float x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
 vec4 mod289(vec4 x){return x - floor(x * (1.0 / 289.0)) * 289.0;}
@@ -90,7 +91,7 @@ float layeredNoise(vec2 p, int octaves) {
     float persistence = 1.0;
     float maxAmplitude = 0.0;
     
-    float distanceToCenterSq = distanceToCenterSquared(p)+0.1;
+    float distanceToCenterSq = distanceToCenterSquared(p)+0.2;
 
     for(int i=0;i<octaves;i++) {
         maxAmplitude += amplitude;
@@ -105,5 +106,6 @@ float layeredNoise(vec2 p, int octaves) {
 void main() {
     float n = layeredNoise(uv_out*16 +vec2(time),5);
     float opacity = 4*(0.25-dot((uv_out-vec2(0.5,0.5)) * (uv_out-vec2(0.5,0.5)),vec2(1,1)));
+    opacity *= clamp(sunHeight*5,0.2,1.0);
 	FragColor = vec4(n) * vec4(1,1,1,opacity);
 }

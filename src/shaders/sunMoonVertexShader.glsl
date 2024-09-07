@@ -6,7 +6,6 @@ layout (location = 1) in vec3 aColor;
 
 out vec3 vertexColor;
 
-uniform vec3 cameraPos;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 model;
