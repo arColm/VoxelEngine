@@ -22,9 +22,9 @@ namespace VoxelEngine {
 			WIDTH = 32;
 
 		void load(std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map);
-		void renderOpaque(std::shared_ptr<Shader> shader);
-		void renderTransparent(std::shared_ptr<Shader> shader);
-		//void render(std::shared_ptr<Shader> shader);
+		void renderOpaque();
+		void renderTransparent();
+		void renderWater();
 		void addBlock(float x, float y,float z, BlockType block, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map);
 		void setBlock(float x, float y, float z, BlockType block);
 
@@ -38,8 +38,11 @@ namespace VoxelEngine {
 		int x, z;
 		GLuint opaqueVAO;
 		GLuint transparentVAO;
+		GLuint waterVAO;
+
 		int numOpaqueVertices;
 		int numTransparentVertices;
+		int numWaterVertices;
 		bool hasMesh;
 		//VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
 		std::array<std::array<std::array<VoxelEngine::BlockType,WIDTH>,HEIGHT>,WIDTH> blocks;
@@ -59,6 +62,10 @@ namespace VoxelEngine {
 		std::vector<GLfloat> transparentVertexPos;
 		std::vector<GLfloat> transparentVertexColor;
 		std::vector<GLfloat> transparentVertexNormals;
+
+		std::vector<GLfloat> waterVertexPos;
+		std::vector<GLfloat> waterVertexColor;
+		std::vector<GLfloat> waterVertexNormals;
 
 		void createVAO();
 	};

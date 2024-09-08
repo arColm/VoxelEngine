@@ -15,7 +15,8 @@ namespace VoxelEngine {
 		~WorldRenderer();
 
 		void renderFrame(); //does full render of 1 frame
-		void renderScene(); //renders scene once (does 1 render pass)
+		void renderSceneBlocks(); //renders scene once as blocks (does 1 render pass)
+		void renderWater(); //renders only water with water specific shader
 
 		std::shared_ptr<World> world;
 	private:
@@ -24,6 +25,7 @@ namespace VoxelEngine {
 		std::unique_ptr<Shader> skyboxShader;
 		std::unique_ptr<Shader> sunMoonShader;
 		std::unique_ptr<Shader> cloudShader;
+		std::unique_ptr<Shader> waterShader;
 		glm::vec3 sunPos;
 		glm::vec3 sunLightDirection;
 

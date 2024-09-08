@@ -15,8 +15,10 @@ namespace VoxelEngine {
 		Chunk::z = z;
 		Chunk::numOpaqueVertices = 0;
 		Chunk::numTransparentVertices = 0;
+		Chunk::numWaterVertices = 0;
 		Chunk::opaqueVAO = 0;
 		Chunk::transparentVAO = 0;
+		Chunk::waterVAO = 0;
 		Chunk::hasMesh = false;
 
 
@@ -34,6 +36,7 @@ namespace VoxelEngine {
 	Chunk::~Chunk() {
 		glDeleteVertexArrays(1, &opaqueVAO);
 		glDeleteVertexArrays(1, &transparentVAO);
+		glDeleteVertexArrays(1, &waterVAO);
 	}
 	void Chunk::load(std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map)
 	{
@@ -50,6 +53,7 @@ namespace VoxelEngine {
 	void Chunk::createVAO() {
 		Chunk::opaqueVAO = Loader::createVAO();
 		Chunk::transparentVAO = Loader::createVAO();
+		Chunk::waterVAO = Loader::createVAO();
 
 	}
 
@@ -126,6 +130,40 @@ namespace VoxelEngine {
 		transparentVertexColor.clear();
 		transparentVertexNormals.clear();
 
+		// water
+		// 
+		glBindVertexArray(waterVAO);
+		// position attribute
+		GLuint waterPositionVBO = Loader::createVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, waterPositionVBO);
+		glBufferData(GL_ARRAY_BUFFER, waterVertexPos.size() * sizeof(waterVertexPos.at(0)), waterVertexPos.data(), GL_STATIC_DRAW);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPos), vertexPos.data(), GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glEnableVertexAttribArray(0);
+
+		// color attribute
+		GLuint waterColorVBO = Loader::createVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, waterColorVBO);
+		glBufferData(GL_ARRAY_BUFFER, waterVertexColor.size() * sizeof(waterVertexColor.at(0)), waterVertexColor.data(), GL_STATIC_DRAW);
+
+
+		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glEnableVertexAttribArray(1);
+
+		// normals attribute
+		GLuint waterNormalsVBO = Loader::createVBO();
+		glBindBuffer(GL_ARRAY_BUFFER, waterNormalsVBO);
+		glBufferData(GL_ARRAY_BUFFER, waterVertexNormals.size() * sizeof(waterVertexNormals.at(0)), waterVertexNormals.data(), GL_STATIC_DRAW);
+
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		glEnableVertexAttribArray(2);
+
+		Chunk::numWaterVertices = waterVertexPos.size() / 3;
+		waterVertexPos.clear();
+		waterVertexColor.clear();
+		waterVertexNormals.clear();
+
 		glBindVertexArray(0);
 		glDeleteBuffers(1, &positionVBO);
 		glDeleteBuffers(1, &colorVBO);
@@ -133,31 +171,26 @@ namespace VoxelEngine {
 		glDeleteBuffers(1, &transparentPositionVBO);
 		glDeleteBuffers(1, &transparentColorVBO);
 		glDeleteBuffers(1, &transparentNormalsVBO);
+		glDeleteBuffers(1, &waterPositionVBO);
+		glDeleteBuffers(1, &waterColorVBO);
+		glDeleteBuffers(1, &waterNormalsVBO);
 	}
 
-	void Chunk::renderOpaque(std::shared_ptr<Shader> shader) {
-
-		//shader->use();
-
-		//glm::mat4 model = glm::mat4(1.0f);
-		//model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
+	void Chunk::renderOpaque() {
 		glBindVertexArray(opaqueVAO);
-		//glUniformMatrix4fv(shader->modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, numOpaqueVertices);
 		glBindVertexArray(0);
 	}
-	void Chunk::renderTransparent(std::shared_ptr<Shader> shader) {
-		//shader->use();
-
-		//glm::mat4 model = glm::mat4(1.0f);
-		//model = glm::translate(model, glm::vec3(WIDTH * x, 0.f, WIDTH * z));
-
+	void Chunk::renderTransparent() {
 		glBindVertexArray(transparentVAO);
-		//glUniformMatrix4fv(shader->modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		glDrawArrays(GL_TRIANGLES, 0, numTransparentVertices);
 		glBindVertexArray(0);
 	}
-
+	void Chunk::renderWater() {
+		glBindVertexArray(waterVAO);
+		glDrawArrays(GL_TRIANGLES, 0, numWaterVertices);
+		glBindVertexArray(0);
+	}
 	void Chunk::setBlock(float x, float y, float z, BlockType block) {
 		Chunk::blocks[(int)x][(int)y][(int)z] = block;
 	}
@@ -273,9 +306,16 @@ namespace VoxelEngine {
 			0,1,0,
 		};
 		if (color.w < 1.0f) {
-			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
-			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
-			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			if (block == BlockType::Water) {
+				waterVertexPos.insert(waterVertexPos.end(), newVertices.begin(), newVertices.end());
+				waterVertexColor.insert(waterVertexColor.end(), newColors.begin(), newColors.end());
+				waterVertexNormals.insert(waterVertexNormals.end(), normals.begin(), normals.end());
+			}
+			else {
+				transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
+				transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+				transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			}
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
@@ -311,9 +351,16 @@ namespace VoxelEngine {
 			-1,0,0,
 		};
 		if (color.w < 1.0f) {
-			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
-			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
-			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			if (block == BlockType::Water) {
+				waterVertexPos.insert(waterVertexPos.end(), newVertices.begin(), newVertices.end());
+				waterVertexColor.insert(waterVertexColor.end(), newColors.begin(), newColors.end());
+				waterVertexNormals.insert(waterVertexNormals.end(), normals.begin(), normals.end());
+			}
+			else {
+				transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
+				transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+				transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			}
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
@@ -349,9 +396,16 @@ namespace VoxelEngine {
 			1,0,0,
 		};
 		if (color.w < 1.0f) {
-			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
-			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
-			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			if (block == BlockType::Water) {
+				waterVertexPos.insert(waterVertexPos.end(), newVertices.begin(), newVertices.end());
+				waterVertexColor.insert(waterVertexColor.end(), newColors.begin(), newColors.end());
+				waterVertexNormals.insert(waterVertexNormals.end(), normals.begin(), normals.end());
+			}
+			else {
+				transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
+				transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+				transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			}
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
@@ -387,9 +441,16 @@ namespace VoxelEngine {
 			0,0,-1,
 		};
 		if (color.w < 1.0f) {
-			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
-			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
-			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			if (block == BlockType::Water) {
+				waterVertexPos.insert(waterVertexPos.end(), newVertices.begin(), newVertices.end());
+				waterVertexColor.insert(waterVertexColor.end(), newColors.begin(), newColors.end());
+				waterVertexNormals.insert(waterVertexNormals.end(), normals.begin(), normals.end());
+			}
+			else {
+				transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
+				transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+				transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			}
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
@@ -425,9 +486,16 @@ namespace VoxelEngine {
 			0,0,1,
 		};
 		if (color.w < 1.0f) {
-			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
-			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
-			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			if (block == BlockType::Water) {
+				waterVertexPos.insert(waterVertexPos.end(), newVertices.begin(), newVertices.end());
+				waterVertexColor.insert(waterVertexColor.end(), newColors.begin(), newColors.end());
+				waterVertexNormals.insert(waterVertexNormals.end(), normals.begin(), normals.end());
+			}
+			else {
+				transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
+				transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+				transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			}
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());
@@ -463,9 +531,16 @@ namespace VoxelEngine {
 			0,-1,0,
 		};
 		if (color.w < 1.0f) {
-			transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
-			transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
-			transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			if (block == BlockType::Water) {
+				waterVertexPos.insert(waterVertexPos.end(), newVertices.begin(), newVertices.end());
+				waterVertexColor.insert(waterVertexColor.end(), newColors.begin(), newColors.end());
+				waterVertexNormals.insert(waterVertexNormals.end(), normals.begin(), normals.end());
+			}
+			else {
+				transparentVertexPos.insert(transparentVertexPos.end(), newVertices.begin(), newVertices.end());
+				transparentVertexColor.insert(transparentVertexColor.end(), newColors.begin(), newColors.end());
+				transparentVertexNormals.insert(transparentVertexNormals.end(), normals.begin(), normals.end());
+			}
 		}
 		else {
 			opaqueVertexPos.insert(opaqueVertexPos.end(), newVertices.begin(), newVertices.end());

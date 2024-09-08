@@ -191,5 +191,7 @@
     <None Include="src\shaders\sunMoonVertexShader.glsl" />
     <None Include="src\shaders\cloudFragmentShader.glsl" />
     <None Include="src\shaders\cloudVertexShader.glsl" />
+    <None Include="src\shaders\waterFragmentShader.glsl" />
+    <None Include="src\shaders\waterVertexShader.glsl" />
   </ItemGroup>
 </Project>

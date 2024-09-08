@@ -86,6 +86,7 @@ namespace VoxelEngine {
 		WorldRenderer::skyboxShader = std::make_unique<Shader>("src/shaders/skyboxVertexShader.glsl", "src/shaders/skyboxFragmentShader.glsl");
 		WorldRenderer::sunMoonShader = std::make_unique<Shader>("src/shaders/sunMoonVertexShader.glsl", "src/shaders/sunMoonFragmentShader.glsl");
 		WorldRenderer::cloudShader = std::make_unique<Shader>("src/shaders/cloudVertexShader.glsl", "src/shaders/cloudFragmentShader.glsl");
+		WorldRenderer::waterShader = std::make_unique<Shader>("src/shaders/waterVertexShader.glsl", "src/shaders/waterFragmentShader.glsl");
 		WorldRenderer::world = world;
 
 
@@ -240,6 +241,7 @@ namespace VoxelEngine {
 	}
 	void WorldRenderer::renderFrame()
 	{
+		generateMeshes();
 		// Shadow Map Rendering
 		glm::mat4 lightSpaceMatrix = generateLightSpaceMatrix();
 
@@ -250,7 +252,8 @@ namespace VoxelEngine {
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		renderScene();
+		renderSceneBlocks();
+		renderWater();
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
@@ -272,26 +275,45 @@ namespace VoxelEngine {
 		defaultBlockShader->setVec3("sunLightDirection", sunLightDirection);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
-		renderScene();
+		renderSceneBlocks();
+
+		waterShader->use();
+		mainCamera->updateProjectionMatrixUniform(waterShader->projectionLoc);
+		mainCamera->updateViewMatrixUniform(waterShader->viewLoc);
+		waterShader->setVec3("cameraPos", mainCamera->cameraPos);
+		waterShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+		waterShader->setFloat("sunHeight", sunPos.y / sunMaxHeight);
+		waterShader->setFloat("time", world->getTotalTime());
+		waterShader->setVec3("sunLightDirection", sunLightDirection);
+
+		renderWater();
 		// Skybox Rendering
 
 		renderSkybox();
 		//Debug Rendering
 	}
 
-	void WorldRenderer::renderScene()
+
+	void WorldRenderer::renderSceneBlocks()
 	{
-		generateMeshes();
 		std::lock_guard<std::mutex> lock(world->chunkMap_mutex);
 		for (const auto& pair : world->chunk_map) {
 			if (pair.second->getHasMesh()) {
-				pair.second->renderOpaque(defaultBlockShader);
+				pair.second->renderOpaque();
 			}
 
 		}
 		for (const auto& pair : world->chunk_map) {
 			if (pair.second->getHasMesh()) {
-				pair.second->renderTransparent(defaultBlockShader);
+				pair.second->renderTransparent();
+			}
+		}
+	}
+
+	void WorldRenderer::renderWater() {
+		for (const auto& pair : world->chunk_map) {
+			if (pair.second->getHasMesh()) {
+				pair.second->renderWater();
 			}
 		}
 	}
