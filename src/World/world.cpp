@@ -11,6 +11,8 @@
 
 namespace VoxelEngine {
 
+	const float World::TIME_PER_DAY = 100.0f;
+	const float World::TICK_RATE = 20.0f;
 
 	World::World(IChunkGenerator* generator,int seed) {
 		World::generator = generator;
@@ -18,6 +20,7 @@ namespace VoxelEngine {
 		World::totalTime = 0;
 		World::accumulatedDeltaTime = 0;
 		World::invTickRate = 1.f / TICK_RATE;
+		World::invTimePerDay = 1.f / TIME_PER_DAY;
 
 		World::chunkLoaderConnection = mainCamera->enterNewChunkEvent.connect(
 			boost::bind(&World::loadChunks, this, boost::placeholders::_1, boost::placeholders::_2));

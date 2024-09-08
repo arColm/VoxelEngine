@@ -218,8 +218,8 @@ namespace VoxelEngine {
 		float shadowDistance = mainCamera->viewDistance * 16;
 		glm::mat4 lightProjection, lightView;
 		sunPos = mainCamera->cameraPos;
-		sunPos.x += std::cos(world->getCurrentTime() * 2 * world->invTickRate * std::numbers::pi_v<float>) * shadowDistance;
-		sunPos.y = std::sin(world->getCurrentTime() * 2 * world->invTickRate * std::numbers::pi_v<float>) * sunMaxHeight;
+		sunPos.x += std::cos(world->getCurrentTime() * 2 * world->invTimePerDay * std::numbers::pi_v<float>) * shadowDistance;
+		sunPos.y = std::sin(world->getCurrentTime() * 2 * world->invTimePerDay * std::numbers::pi_v<float>) * sunMaxHeight;
 
 		float near_plane = 1.0f, far_plane = 2000.5f;
 		lightProjection = glm::ortho(-shadowDistance, shadowDistance, -shadowDistance, shadowDistance, near_plane, far_plane);
@@ -241,7 +241,6 @@ namespace VoxelEngine {
 	}
 	void WorldRenderer::renderFrame()
 	{
-		generateMeshes();
 		// Shadow Map Rendering
 		glm::mat4 lightSpaceMatrix = generateLightSpaceMatrix();
 
@@ -296,6 +295,7 @@ namespace VoxelEngine {
 
 	void WorldRenderer::renderSceneBlocks()
 	{
+		generateMeshes();
 		std::lock_guard<std::mutex> lock(world->chunkMap_mutex);
 		for (const auto& pair : world->chunk_map) {
 			if (pair.second->getHasMesh()) {
@@ -311,6 +311,7 @@ namespace VoxelEngine {
 	}
 
 	void WorldRenderer::renderWater() {
+		generateMeshes();
 		for (const auto& pair : world->chunk_map) {
 			if (pair.second->getHasMesh()) {
 				pair.second->renderWater();

@@ -11,9 +11,10 @@ namespace VoxelEngine {
 
 	class World {
 	public:
-		const float TIME_PER_DAY= 20.0f;
-		const float TICK_RATE = 20.0f;
+		static const float TIME_PER_DAY;
+		static const float TICK_RATE;
 		float invTickRate;
+		float invTimePerDay;
 
 
 		World(IChunkGenerator* generator, int seed);
