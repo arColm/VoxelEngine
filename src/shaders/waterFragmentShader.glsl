@@ -7,6 +7,7 @@ out vec4 FragColor;
 in vec4 vertexColor;
 in vec4 FragPosLightSpace;
 in vec3 normal;
+in vec3 FragPos;
 
 //uniform vec3 objectColor;
 //uniform vec3 lightColor;
@@ -44,11 +45,17 @@ void main()
     // DIFFUSE
     float diffuseLight = max(dot(normal,-sunLightDirection),0.0);
 
+    //SPECULAR
+	vec3 lowerColor = mix(vec3(0.878,0.482,0.027),vec3(1.0),clamp(sunHeight,-0.1,1.0));
+    vec3 viewDir = normalize(cameraPos-FragPos);
+    vec3 reflectDir = reflect(sunLightDirection,normal);
+    float specularLight = pow(max(dot(viewDir,reflectDir),0.0),8);
 
     // FINAL LIGHT COLOR
-    vec3 light = ambientLight + ((1.0-ShadowCalculation(FragPosLightSpace)) * diffuseLight);
+    vec3 light = ambientLight + ((1.0-ShadowCalculation(FragPosLightSpace)) * (diffuseLight)) * lowerColor * clamp(sunHeight*5+0.5,0.0,1.0);
     //light = ambientLight+vec3(diffuseLight);
-    vec3 color = vertexColor.xyz * light;
+    vec3 color = vertexColor.xyz  * light;
+    //color =  light;
 	//FragColor = vec4(color,vertexColor.w);
     FragColor = vec4(color,vertexColor.w);
 };

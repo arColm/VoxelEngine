@@ -10,6 +10,7 @@ layout (location = 2) in vec3 aNormal;
 out vec4 vertexColor;
 out vec4 FragPosLightSpace;
 out vec3 normal;
+out vec3 FragPos;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -120,6 +121,7 @@ void main()
         -layeredNoise(aPos.xz +vec2(time),5)
         : 0;
 	vec3 pos = aPos + vec3(0,wave,0);
+    FragPos = pos;
 	gl_Position = projection * view * vec4(pos,1.0);
 	vertexColor = aColor + vec4(fogColor(pos),0.0);
     FragPosLightSpace = lightSpaceMatrix * vec4(pos, 1.0);
