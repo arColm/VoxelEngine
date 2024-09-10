@@ -46,6 +46,9 @@ namespace VoxelEngine {
 		float cloudHeight;
 		float cloudDistance;
 
+		float sunHeightNormalized;
+		glm::vec3 fogColor;
+
 
 		boost::signals2::connection debugRendererConnection;
 		void onDrawDebug();

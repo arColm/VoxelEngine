@@ -241,6 +241,15 @@ namespace VoxelEngine {
 	}
 	void WorldRenderer::renderFrame()
 	{
+		sunHeightNormalized = sunPos.y / sunMaxHeight;
+		if(sunHeightNormalized<=0) {
+			fogColor = glm::mix(glm::vec3(0.f), glm::vec3(0.878f, 0.482f, 0.027f), std::pow(std::clamp(sunHeightNormalized, -1.f, 0.f)+1,10));
+		}
+		else {
+			fogColor = glm::mix(glm::vec3(0.878f, 0.482f, 0.027f), glm::vec3(1.f), std::sqrt(std::clamp(sunHeightNormalized, 0.f, 1.0f)));
+		}
+
+
 		// Shadow Map Rendering
 		glm::mat4 lightSpaceMatrix = generateLightSpaceMatrix();
 
@@ -270,8 +279,9 @@ namespace VoxelEngine {
 		mainCamera->updateViewMatrixUniform(defaultBlockShader->viewLoc);
 		defaultBlockShader->setVec3("cameraPos", mainCamera->cameraPos);
 		defaultBlockShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-		defaultBlockShader->setFloat("sunHeight", sunPos.y/sunMaxHeight);
+		defaultBlockShader->setFloat("sunHeight", sunHeightNormalized);
 		defaultBlockShader->setVec3("sunLightDirection", sunLightDirection);
+		defaultBlockShader->setVec3("fogColor", fogColor);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, depthMap);
 		renderSceneBlocks();
@@ -281,9 +291,10 @@ namespace VoxelEngine {
 		mainCamera->updateViewMatrixUniform(waterShader->viewLoc);
 		waterShader->setVec3("cameraPos", mainCamera->cameraPos);
 		waterShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-		waterShader->setFloat("sunHeight", sunPos.y / sunMaxHeight);
+		waterShader->setFloat("sunHeight", sunHeightNormalized);
 		waterShader->setFloat("time", world->getTotalTime());
 		waterShader->setVec3("sunLightDirection", sunLightDirection);
+		waterShader->setVec3("fogColor", fogColor);
 
 		renderWater();
 		// Skybox Rendering
@@ -350,7 +361,8 @@ namespace VoxelEngine {
 		mainCamera->updateProjectionMatrixUniform(skyboxShader->projectionLoc);
 		mainCamera->updateViewMatrixUniform(skyboxShader->viewLoc);
 		skyboxShader->setVec3("cameraPos", mainCamera->cameraPos);
-		skyboxShader->setFloat("sunHeight", sunPos.y / sunMaxHeight);
+		skyboxShader->setFloat("sunHeight", sunHeightNormalized);
+		skyboxShader->setVec3("fogColor", fogColor);
 		glBindVertexArray(skyboxVAO);
 		glDrawArrays(GL_TRIANGLES, 0, skyboxVertices.size()/3);
 		glBindVertexArray(0);
@@ -365,7 +377,7 @@ namespace VoxelEngine {
 		model = glm::translate(model, mainCamera->cameraPos);
 		cloudShader->setMat4("model", model);
 		cloudShader->setFloat("time", world->getTotalTime());
-		cloudShader->setFloat("sunHeight", sunPos.y / sunMaxHeight);
+		cloudShader->setFloat("sunHeight", sunHeightNormalized);
 
 		glBindVertexArray(cloudVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);

@@ -7,6 +7,7 @@ in vec3 vertexPos;
 out vec4 FragColor;
 
 uniform float sunHeight;
+uniform vec3 fogColor;
 
 // 2D Random
 float random (in vec2 st) {
@@ -44,13 +45,15 @@ vec3 starColor() {
 }
 
 void main() {
-	vec3 lowerColor = mix(vec3(0.878,0.482,0.027),vec3(1.0),clamp(sunHeight,-0.1,1.0));
+	vec3 lowerColor = fogColor;
 	vec3 mainColor = mix(vec3(0.067,0.0588,0.211),vec3(0.196,0.8,0.914),vec3(clamp(sunHeight*2,-0.2,1.0)));
 	
 
     mainColor += mix(starColor(),vec3(0),vec3(clamp(sunHeight,-1,0)+1));
 
-	vec3 aggregateLowerColor = mix(mainColor,lowerColor,clamp(sunHeight+0.4,0.0,1.0));
+	//vec3 aggregateLowerColor = mix(mainColor,lowerColor,clamp(sunHeight+0.4,0.0,1.0));
+    // ABOVE IMPLEMENTATION BEFORE FOG
+    vec3 aggregateLowerColor = lowerColor;
 	
 	FragColor = vec4(mix(aggregateLowerColor,mainColor,vec3(clamp(vertexPos.y*3,0.0,1.0))),1.0);
     //FragColor = vec4(starColor(),1.0);

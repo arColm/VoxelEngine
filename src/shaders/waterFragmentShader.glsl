@@ -2,6 +2,7 @@
 
 #version 430 core
 
+const float fogDistanceSquared = 60000.0;
 out vec4 FragColor;
 
 in vec4 vertexColor;
@@ -15,6 +16,7 @@ uniform vec3 cameraPos;
 uniform sampler2D shadowMap;
 uniform float sunHeight;
 uniform vec3 sunLightDirection;
+uniform vec3 fogColor;
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
@@ -57,5 +59,13 @@ void main()
     vec3 color = vertexColor.xyz  * light;
     //color =  light;
 	//FragColor = vec4(color,vertexColor.w);
-    FragColor = vec4(color,vertexColor.w);
+    
+    // ADJUST FOR FOG
+	vec2 distanceVector = FragPos.xz - cameraPos.xz;
+    float fogColorPercent = clamp(dot(distanceVector,distanceVector)/fogDistanceSquared,0,1);
+    color = mix(color,fogColor,fogColorPercent);
+
+    float opacity = mix(vertexColor.w,1.0,fogColorPercent);
+
+    FragColor = vec4(color,opacity);
 };

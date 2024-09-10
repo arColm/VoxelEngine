@@ -2,11 +2,13 @@
 
 #version 430 core
 
+const float fogDistanceSquared = 60000.0; //TODO: MAKE THIS A UNIFORM
 out vec4 FragColor;
 
 in vec4 vertexColor;
 in vec4 FragPosLightSpace;
 in vec3 normal;
+in vec3 FragPos;
 
 //uniform vec3 objectColor;
 //uniform vec3 lightColor;
@@ -14,6 +16,7 @@ uniform vec3 cameraPos;
 uniform sampler2D shadowMap;
 uniform float sunHeight;
 uniform vec3 sunLightDirection;
+uniform vec3 fogColor;
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
@@ -50,5 +53,11 @@ void main()
     //light = ambientLight+vec3(diffuseLight);
     vec3 color = vertexColor.xyz * light;
 	//FragColor = vec4(color,vertexColor.w);
+
+    // ADJUST FOR FOG
+	vec2 distanceVector = FragPos.xz - cameraPos.xz;
+    color = mix(color,fogColor,clamp(dot(distanceVector,distanceVector)/fogDistanceSquared,0,1));
+
+
     FragColor = vec4(color,vertexColor.w);
 };

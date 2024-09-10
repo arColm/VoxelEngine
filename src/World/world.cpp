@@ -11,7 +11,7 @@
 
 namespace VoxelEngine {
 
-	const float World::TIME_PER_DAY = 100.0f;
+	const float World::TIME_PER_DAY = 30.0f;
 	const float World::TICK_RATE = 20.0f;
 
 	World::World(IChunkGenerator* generator,int seed) {
