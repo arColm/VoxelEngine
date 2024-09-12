@@ -26,7 +26,7 @@ namespace VoxelEngine {
 
 		//this is inaccurate, but gets changed instantly
 		glm::vec2 currentChunk = glm::vec2((int)cameraPos.x / Chunk::WIDTH, (int)cameraPos.z / Chunk::WIDTH);
-		int viewDistance = 12;
+		int viewDistance = 9;
 
 
 		//mouse

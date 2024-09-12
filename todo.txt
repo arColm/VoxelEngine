@@ -8,6 +8,44 @@ Each chunk is WIDTH * HEIGHT * WIDTH -- stored in a straight array
 
 
 TODO
+
+CHANGE RENDER DISTANCE TO SQUARE --
+
+ 0000000
+ 0111110
+ 01MMM10
+ 01MMM10
+ 01MMM10
+ 0111110
+ 0000000
+ 
+ 0 - terrain generated
+ 1 - decorated
+ M - mesh generated/generating
+
+On enter new chunk event:
+ 1. check if have to unload any chunks
+  a. mark chunks as "Unloaded"
+  b. add chunks to unloading_queue, remove from map
+ 2. check if have to add new chunks that are NOT IN MAP [view_distance + 2] -- corners filled
+  a. create new chunk objects and add to map, add to terrain_generation queue
+
+ 3. generate terrain for all chunks in terrain_generation queue
+  a. mark chunks as TerrainGenerated
+
+ 4. decorate chunks in map that are marked TerrainGenerated [view_distance + 1] -- corners filled
+  a. for trees:
+   i. determine where to place tree within chunk
+   ii. add tree blocks
+   iii. allow chunk to draw in neighboring chunks if leaves go over edges
+
+ b. mark chunk as WaitingForMesh
+ c. add chunk to ReadyForMesh queue
+
+ 5. generate meshes for chunks in rendering thread (already done)
+  a. mark as MeshGenerated
+
+
 	MOVE ALL DEFINITIONS FROM HEADER TO CPP FILE
 	WATER CAUSTICS
 

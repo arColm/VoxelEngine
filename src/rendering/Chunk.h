@@ -15,6 +15,13 @@
 namespace VoxelEngine {
 	class Chunk {
 	public:
+		static enum State {
+			Empty,
+			TerrainGenerated,
+			WaitingForMesh,
+			MeshGenerated,
+			Unloaded
+		};
 		Chunk(int x, int z);
 		~Chunk();
 
@@ -34,6 +41,9 @@ namespace VoxelEngine {
 		int getX();
 		int getZ();
 		bool getHasMesh();
+
+		void updateState(State newState);
+		State getState();
 	private:
 		int x, z;
 		GLuint opaqueVAO;
@@ -44,7 +54,8 @@ namespace VoxelEngine {
 		int numTransparentVertices;
 		int numWaterVertices;
 		bool hasMesh;
-		//VoxelEngine::BlockType blocks[WIDTH][HEIGHT][WIDTH];
+		State state;
+
 		std::array<std::array<std::array<VoxelEngine::BlockType,WIDTH>,HEIGHT>,WIDTH> blocks;
 
 		void addTop(GLfloat x, GLfloat y, GLfloat z, BlockType block);

@@ -23,7 +23,7 @@ namespace VoxelEngine {
 		World::invTimePerDay = 1.f / TIME_PER_DAY;
 
 		World::chunkLoaderConnection = mainCamera->enterNewChunkEvent.connect(
-			boost::bind(&World::loadChunks, this, boost::placeholders::_1, boost::placeholders::_2));
+			boost::bind(&World::handleEnterNewChunkEvent, this, boost::placeholders::_1, boost::placeholders::_2));
 	}
 
 	World::~World() {
@@ -31,9 +31,102 @@ namespace VoxelEngine {
 		std::cout << "disconnected";
 	}
 
+	bool isWithinLoadDistance(int loadDistance, glm::ivec2 origin, glm::ivec2 chunkLocation) {
+		return chunkLocation.x >= origin.x - loadDistance &&
+			chunkLocation.x <= origin.x + loadDistance &&
+			chunkLocation.y >= origin.y - loadDistance &&
+			chunkLocation.y <= origin.y + loadDistance;
+	}
+
+	void World::handleEnterNewChunkEvent(glm::ivec2 origin, int viewDistance) {
+		int loadDistance = viewDistance + 2;
+		int decorateDistance = loadDistance-1;
+		int maxChunksLoaded = (loadDistance) * (loadDistance + 1) * 5;
+		
+		// 1. check if have to unload any chunks
+		if (chunk_map.size() > maxChunksLoaded) {
+			std::lock_guard<std::mutex> lock(chunkMap_mutex); //consider only locking when erasing
+			for (auto it = chunk_map.cbegin(); it != chunk_map.cend();)
+			{
+				if (!isWithinLoadDistance(loadDistance,origin,glm::vec2(it->first.x,it->first.y)))
+				{
+					std::lock_guard<std::mutex> lock(chunkUnloadingQueue_mutex);
+					chunkUnloadingQueue.push(it->second);
+					it = chunk_map.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
+
+		}
+
+		//2. check if have to add new chunks that are NOT IN MAP[view_distance + 2]
+
+		std::queue<std::shared_ptr<VoxelEngine::Chunk>> newChunks;
+		for (int u = origin.x - loadDistance; u <= origin.x + loadDistance; u++) {
+			for (int v = origin.y - loadDistance; v <= origin.y + loadDistance; v++) {
+				glm::ivec2 chunkLoc(u, v);
+				if (chunk_map.find(chunkLoc) == chunk_map.end()) {
+					auto chunk = std::make_shared<Chunk>(chunkLoc.x, chunkLoc.y);
+					newChunks.push(chunk);
+				}
+			}
+		}
+
+
+		//3. generate terrain for all chunks in terrain_generation queue
+		while (!newChunks.empty()) {
+			std::shared_ptr<Chunk> chunk = newChunks.front(); newChunks.pop();
+			generator->generateTerrain(chunk);
+			//mark as terraingenerated
+			chunk->updateState(Chunk::State::TerrainGenerated);
+			std::lock_guard<std::mutex> lock(chunkMap_mutex);
+			addChunk(chunk->getX(), chunk->getZ(), chunk);
+		}
+
+
+		//4. decorate chunks in map that are marked TerrainGenerated [view_distance + 1] -- corners filled
+		for (int u = origin.x - decorateDistance; u <= origin.x + decorateDistance; u++) {
+			for (int v = origin.y - decorateDistance; v <= origin.y + decorateDistance; v++) {
+				glm::ivec2 chunkLoc(u, v);
+				auto chunkIt = chunk_map.find(chunkLoc);
+
+				if (chunkIt == chunk_map.end()) {
+					std::cout << "ERROR :: CHUNK NOT LOADED" << std::endl;
+					continue;
+				}
+
+
+				//POTENTIAL RACE CONDITION -- chunk may be deleted ?
+
+				auto chunk = chunkIt->second;
+				if (chunk->getState() == Chunk::State::TerrainGenerated) {
+					generator->decorateChunk(chunk,chunk_map);
+
+					chunk->updateState(Chunk::State::WaitingForMesh);
+					newChunks.push(chunk);
+				}
+			}
+		}
+
+		while (!newChunks.empty()) {
+			auto chunk = newChunks.front(); newChunks.pop();
+
+			chunk->load(&chunk_map);
+			std::lock_guard<std::mutex> lock(chunkQueue_mutex);
+			chunkQueue.push(chunk);
+
+		}
+
+		//loadChunks(origin, viewDistance);
+	}
+
+
+
 	void World::loadChunks(glm::ivec2 origin, int viewDistance) {
 		int maxChunksLoaded = (viewDistance + 1) * (viewDistance + 2) * 2;
-		maxChunksLoaded = 1;
 		//unload chunks?
 		if (chunk_map.size() > maxChunksLoaded) {
 			//unload chunks

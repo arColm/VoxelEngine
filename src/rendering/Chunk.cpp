@@ -32,6 +32,7 @@ namespace VoxelEngine {
 				}
 			}
 		}
+		Chunk::state = State::Empty;
 	}
 	Chunk::~Chunk() {
 		glDeleteVertexArrays(1, &opaqueVAO);
@@ -561,6 +562,13 @@ namespace VoxelEngine {
 	}
 	bool Chunk::getHasMesh() {
 		return hasMesh;
+	}
+	void Chunk::updateState(State newState)
+	{
+		Chunk::state = newState;
+	}
+	Chunk::State Chunk::getState() {
+		return state;
 	}
 }
 

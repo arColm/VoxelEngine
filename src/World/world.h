@@ -50,6 +50,8 @@ namespace VoxelEngine {
 		float totalTime;
 
 		float accumulatedDeltaTime;
+
+		void handleEnterNewChunkEvent(glm::ivec2 origin, int viewDistance);
 	};
 }
 

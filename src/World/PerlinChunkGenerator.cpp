@@ -15,8 +15,15 @@ namespace VoxelEngine {
 	int PerlinChunkGenerator::maxHeight = 40;
 	std::shared_ptr<Chunk> PerlinChunkGenerator::generateChunk(int x, int z) {
 		std::shared_ptr<Chunk> chunk = std::make_shared<Chunk>(x, z);
-		int WIDTH = Chunk::WIDTH;
 
+		return chunk;
+
+	}
+
+	void PerlinChunkGenerator::generateTerrain(const std::shared_ptr<Chunk>& chunk) {
+		int WIDTH = Chunk::WIDTH;
+		int x = chunk->getX();
+		int z = chunk->getZ();
 		std::vector<std::vector<float>> heightMap = PerlinNoise::GetLattice2D(x, z, WIDTH, numOctaves, lacunarity, persistence);
 
 		for (int xi = 0; xi < WIDTH; xi++) {
@@ -40,7 +47,7 @@ namespace VoxelEngine {
 					}
 				}
 				else {
-					for (int i = seaLevel-1; i > yi; i--) {
+					for (int i = seaLevel - 1; i > yi; i--) {
 						chunk->setBlock(xi, i, zi, BlockType::Water);
 					}
 				}
@@ -49,7 +56,8 @@ namespace VoxelEngine {
 				}
 			}
 		}
-		return chunk;
+	}
+	void PerlinChunkGenerator::decorateChunk(const std::shared_ptr<Chunk>& chunk, const std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>& chunk_map) {
 
 	}
 
@@ -67,4 +75,5 @@ namespace VoxelEngine {
 		ImGui::SliderInt("numOctaves", &numOctaves, 1, 7);            // Edit 1 float using a slider from 0.0f to 1.0f
 
 	}
+
 }
