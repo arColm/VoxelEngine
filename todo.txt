@@ -49,19 +49,16 @@ On enter new chunk event:
 	MOVE ALL DEFINITIONS FROM HEADER TO CPP FILE
 	WATER CAUSTICS
 
-	could clean up lights a little bit - e.g. increase resolution of shadow map
 	could clean up skybox a little
 	https://gamedev.stackexchange.com/questions/21482/concerning-the-minecraft-skybox
 
  - refactor Chunk getGroundHeight() function
+ - refactor placing tree function in worldrenderer
 
  - instanced rendering
 
  - change way to store colors...
-
- - fog to mask chunk loading
-
- - clouds (can just be noise!)
+ -- currently at 9 view Distance using 2.8gb ram ...
 
  - more block types
  - varying colors for a block type?

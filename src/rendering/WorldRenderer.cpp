@@ -215,7 +215,7 @@ namespace VoxelEngine {
 	}
 
 	glm::mat4 WorldRenderer::generateLightSpaceMatrix() {
-		float shadowDistance = mainCamera->viewDistance * 16;
+		float shadowDistance = mainCamera->viewDistance * Chunk::WIDTH;
 		glm::mat4 lightProjection, lightView;
 		sunPos = mainCamera->cameraPos;
 		sunPos.x += std::cos(world->getCurrentTime() * 2 * world->invTimePerDay * std::numbers::pi_v<float>) * shadowDistance;
