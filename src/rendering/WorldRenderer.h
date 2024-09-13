@@ -6,7 +6,7 @@ namespace VoxelEngine {
 
 	class WorldRenderer {
 	public:
-		static const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
+		static const unsigned int SHADOW_WIDTH = 4096, SHADOW_HEIGHT = 4096;
 		inline static const float sunMaxHeight = 400.f;
 		static float SCREEN_WIDTH;
 		static float SCREEN_HEIGHT;
