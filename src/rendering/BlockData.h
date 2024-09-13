@@ -10,7 +10,9 @@ namespace VoxelEngine {
 		Sand,
 		Water,
 		Snow,
-		Grass
+		Grass,
+		Wood,
+		Leaves
 	};
 	namespace BlockData {
 		//short id;

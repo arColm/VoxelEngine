@@ -22,6 +22,10 @@ namespace VoxelEngine {
 			return glm::vec4(0.82f,0.85f,0.90f,1.0f);
 		case BlockType::Grass:
 			return glm::vec4(0.27f, 0.52f, 0.33f, 1.0f);
+		case BlockType::Wood:
+			return glm::vec4(0.412f, 0.239f, 0.082f, 1.0f);
+		case BlockType::Leaves:
+			return glm::vec4(0.29f, 0.659f, 0.451f, 1.0f);
 		}
 	}
 	bool BlockData::getBlockTransparent(BlockType block) {
@@ -37,6 +41,10 @@ namespace VoxelEngine {
 		case BlockType::Snow:
 			return false;
 		case BlockType::Grass:
+			return false;
+		case BlockType::Wood:
+			return false;
+		case BlockType::Leaves:
 			return false;
 		}
 	}

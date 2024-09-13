@@ -24,10 +24,10 @@ public:
         return accumulator + (uint32_t)v;
     }
 
-    float Floats01A() { return (float)((uint32_t)(*this) & 255) / 255.f; };
-    float Floats01B() { return (float)(((uint32_t)(*this) >> 8) & 255) / 255.f; };
-    float Floats01C() { return (float)(((uint32_t)(*this) >> 16) & 255) / 255.f; };
-    float Floats01D() { return (float)(((uint32_t)(*this) >> 24) & 255) / 255.f; };
+    float Floats01A() { return (float)((uint32_t)(*this) & 255) / 256.f; };
+    float Floats01B() { return (float)(((uint32_t)(*this) >> 8) & 255) / 256.f; };
+    float Floats01C() { return (float)(((uint32_t)(*this) >> 16) & 255) / 256.f; };
+    float Floats01D() { return (float)(((uint32_t)(*this) >> 24) & 255) / 256.f; };
 
     xxHash eat(int data) { return rotateLeft(accumulator + (uint32_t)data * primeC, 11) * primeD; };
     xxHash eat(float data) { return rotateLeft(accumulator + (uint32_t)(data * primeC), 11) * primeD; };

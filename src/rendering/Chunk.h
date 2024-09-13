@@ -33,7 +33,7 @@ namespace VoxelEngine {
 		void renderTransparent();
 		void renderWater();
 		void addBlock(float x, float y,float z, BlockType block, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map);
-		void setBlock(float x, float y, float z, BlockType block);
+		void setBlock(float x, float y, float z, BlockType block, bool override = true);
 
 		void generateMesh();
 
@@ -44,6 +44,8 @@ namespace VoxelEngine {
 
 		void updateState(State newState);
 		State getState();
+
+		int getGroundHeight(int x, int z);
 	private:
 		int x, z;
 		GLuint opaqueVAO;

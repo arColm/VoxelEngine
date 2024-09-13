@@ -53,6 +53,8 @@ On enter new chunk event:
 	could clean up skybox a little
 	https://gamedev.stackexchange.com/questions/21482/concerning-the-minecraft-skybox
 
+ - refactor Chunk getGroundHeight() function
+
  - instanced rendering
 
  - change way to store colors...

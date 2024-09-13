@@ -192,8 +192,8 @@ namespace VoxelEngine {
 		glDrawArrays(GL_TRIANGLES, 0, numWaterVertices);
 		glBindVertexArray(0);
 	}
-	void Chunk::setBlock(float x, float y, float z, BlockType block) {
-		Chunk::blocks[(int)x][(int)y][(int)z] = block;
+	void Chunk::setBlock(float x, float y, float z, BlockType block, bool override) {
+		if(override || blocks[(int)x][(int)y][(int)z] == BlockType::Air) Chunk::blocks[(int)x][(int)y][(int)z] = block;
 	}
 
 	void Chunk::addBlock(float x,float y,float z, BlockType block, std::unordered_map<glm::ivec2, std::shared_ptr<Chunk>>* chunk_map) {
@@ -569,6 +569,20 @@ namespace VoxelEngine {
 	}
 	Chunk::State Chunk::getState() {
 		return state;
+	}
+
+	int Chunk::getGroundHeight(int x, int z) {
+		if (x >= Chunk::WIDTH || x < 0 || z >= Chunk::WIDTH || z < 0) return 0;
+		//TODO : REFACTOR THIS
+		
+		for (int y = HEIGHT - 1; y >= 0; y--) {
+			BlockType block = blocks[x][y][z];
+			if (block == BlockType::Grass ||
+				block == BlockType::Dirt) return y + 1;
+		}
+		return 0;
+
+
 	}
 }
 
