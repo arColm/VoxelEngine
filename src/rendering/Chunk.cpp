@@ -578,7 +578,8 @@ namespace VoxelEngine {
 		for (int y = HEIGHT - 1; y >= 0; y--) {
 			BlockType block = blocks[x][y][z];
 			if (block == BlockType::Grass ||
-				block == BlockType::Dirt) return y + 1;
+				block == BlockType::Dirt ||
+				block == BlockType::Snow) return y + 1;
 		}
 		return 0;
 
